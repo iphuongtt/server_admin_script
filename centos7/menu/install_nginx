@@ -31,5 +31,5 @@ systemctl enable nginx
 systemctl start nginx
 
 echo "========================================================="
-echo "||||      \e[0;34mINSTALL NGINX SUCCESSFUL\e[0m      ||||"
+echo "||||     \e[0;34m INSTALL NGINX SUCCESSFUL \e[0m     ||||"
 echo "========================================================="
