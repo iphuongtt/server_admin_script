@@ -21,10 +21,12 @@ unzip -q master.zip && rm -f master.zip
 cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup$current_time
 cp server-configs-nginx-master/nginx.conf /etc/nginx/nginx.conf
 cp server-configs-nginx-master/mime.types /etc/nginx/mime.types
-cp -R server-configs-nginx-master/sites-available /etc/nginx/sites-available
-cp -R server-configs-nginx-master/sites-enabled /etc/nginx/sites-enabled
-cp -R server-configs-nginx-master/h5bp /etc/nginx/h5bp
-
+cp -R server-configs-nginx-master/sites-available /etc/nginx/
+cp -R server-configs-nginx-master/sites-enabled /etc/nginx/
+cp -R server-configs-nginx-master/h5bp /etc/nginx/
+# Delete server-configs-nginx-master
+rm -rf ~/master.zip
+rf -rf ~/server-configs-nginx-master
 # Auto start nginx when server stared
 systemctl enable nginx
 systemctl start nginx
