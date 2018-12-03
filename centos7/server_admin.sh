@@ -2,7 +2,7 @@
 
 clear
 prompt="Chose your action:"
-options=("Create database","Install Mariadb 10.1") # End Options
+options=("Create database", "Install Mariadb 10.1") # End Options
 
 printf "=========================================================================\n"
 printf "                             Server Admin Menu\n"
