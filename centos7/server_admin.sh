@@ -17,9 +17,9 @@ $prompt"
 select opt in "${options[@]}" "Exit"; do 
 
     case "$REPLY" in
-	    1 ) /etc/server_admin/menu/create_database;;
-		2 ) /etc/server_admin/menu/install_mariadb;;
-		3 ) /etc/server_admin/menu/install_nginx;;
+	    1 ) /etc/server_admin/menu/create_database; break;;
+		2 ) /etc/server_admin/menu/install_mariadb; break;;
+		3 ) /etc/server_admin/menu/install_nginx; break;;
 	    # End Menu
 
 	    $(( ${#options[@]}+1 )) ) printf "\nBye\n\n"; break;;
