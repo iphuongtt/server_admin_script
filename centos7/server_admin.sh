@@ -1,6 +1,11 @@
 #!/bin/sh
 
 clear
+if [ $(id -u) != "0" ]; then
+    printf "You need to be root to perform this command. Run \"sudo su\" to become root!\n"
+    exit
+fi
+
 prompt="Chose your action:"
 options=("Create database", "Install Mariadb 10.1") # End Options
 
