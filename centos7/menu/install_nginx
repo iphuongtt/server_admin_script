@@ -25,7 +25,6 @@ cp -R server-configs-nginx-master/sites-available /etc/nginx/
 cp -R server-configs-nginx-master/sites-enabled /etc/nginx/
 cp -R server-configs-nginx-master/h5bp /etc/nginx/
 # Delete server-configs-nginx-master
-rm -rf ~/master.zip
 rf -rf ~/server-configs-nginx-master
 # Auto start nginx when server stared
 systemctl enable nginx
