@@ -264,7 +264,7 @@ select opt in "${options[@]}" "EXIT"; do
 		2 ) angular; break;;
 		3 ) spa; break;;
 	    # End Menu
-	    $(( ${#options[@]}+1 )) ) printf "\nBye\n\n"; break;;
+	    $(( ${#options[@]}+1 )) ) server-admin; break;;
 	    *) echo "Please, chose again";continue;;
 
     esac
