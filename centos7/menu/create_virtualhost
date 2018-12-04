@@ -106,6 +106,7 @@ if [ -f /etc/nginx/sites-enabled/$fileConfigName ]; then
 	else
 		read -p "Press enter to continue"
 		server-admin
+		exit
 	fi 
 fi
 
