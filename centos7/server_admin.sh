@@ -89,10 +89,10 @@ show_menus() {
 	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
 	echo -e "${BYellow} S E R V E R - A D M I N - M E N U ${Color_Off}"
 	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
-	echo "${BCyan}1. Create database${Color_Off}"
-	echo "${BCyan}2. Install Mariadb 10.1${Color_Off}"
+	echo -e "${BCyan}1. Create database${Color_Off}"
+	echo -e "${BCyan}2. Install Mariadb 10.1${Color_Off}"
 	echo -e "3. ${installNginx}"
-	echo "${BRed}4. Exit${Color_Off}"
+	echo -e "${BRed}4. Exit${Color_Off}"
 }
 
 read_options(){
