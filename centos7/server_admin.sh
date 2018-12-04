@@ -92,7 +92,8 @@ show_menus() {
 	echo -e "${BCyan}1. Create database${Color_Off}"
 	echo -e "${BCyan}2. Install Mariadb 10.1${Color_Off}"
 	echo -e "${installNginx}"
-	echo -e "${BRed}4. Exit${Color_Off}"
+	echo -e "${BCyan}4. Create virtual host${Color_Off}"
+	echo -e "${BRed}5. Exit${Color_Off}"
 }
 
 read_options(){
@@ -102,7 +103,8 @@ read_options(){
 		1) /etc/server_admin/menu/create_database ;;
 		2) /etc/server_admin/menu/install_mariadb ;;
 		3) /etc/server_admin/menu/install_nginx ;;
-		4) exit 0;;
+		4) /etc/server_admin/menu/create_virtualhost ;;
+		5) exit 0;;
 		*) echo -e "${RED}Error...${STD}" && sleep 2
 	esac
 }
