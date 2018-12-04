@@ -137,7 +137,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	echo -e "Path to ${BYellow}.crt${Color_Off} file: "
 	read crtFilePath
 
-	crtFilePathConvert=`echo $crtFilePath | sed -r "s/\~/\/home/\/$username/"`
+	crtFilePathConvert=`echo $crtFilePath | sed -r "s/\~/\/home\/$username/"`
 
 
 	if [ ! -f $crtFilePathConvert ]; then
@@ -150,7 +150,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	echo -e "Path to ${BYellow}.key${Color_Off} file: "
 	read keyFilePath
 
-	crtFilePathConvert=`echo $keyFilePath | sed -r "s/\~/\/home/\/$username/"`
+	crtFilePathConvert=`echo $keyFilePath | sed -r "s/\~/\/home\/$username/"`
 
 	if [ ! -f $crtFilePathConvert ]; then
 	  echo -e "${BRed}ERROR: $keyFilePath does not exit${Color_Off}"
