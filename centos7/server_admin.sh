@@ -100,10 +100,10 @@ read_options(){
 	local choice
 	read -p "Enter choice [ 1 - 5] " choice
 	case $choice in
-		1) /etc/server_admin/menu/create_database ;;
-		2) /etc/server_admin/menu/install_mariadb ;;
-		3) /etc/server_admin/menu/install_nginx ;;
-		4) /etc/server_admin/menu/create_virtualhost ;;
+		1) /etc/server_admin/menu/create_database; break ;;
+		2) /etc/server_admin/menu/install_mariadb; break ;;
+		3) /etc/server_admin/menu/install_nginx; break ;;
+		4) /etc/server_admin/menu/create_virtualhost; break ;;
 		5) exit 0;;
 		*) echo -e "${RED}Error...${Color_Off}"
 	esac
