@@ -72,6 +72,19 @@ On_IPurple='\033[0;105m'  # Purple
 On_ICyan='\033[0;106m'    # Cyan
 On_IWhite='\033[0;107m'   # White
 
+if [ -f /etc/nginx/nginx.conf ]; then
+  echo -e "${BRed}ERROR: NGINX does not installed${Color_Off}"
+  exit;
+fi
+
+checkdomain()
+{
+if [ -d "$1" ]; then
+  echo -e "${BRed}ERROR: Directory does not exists${Color_Off}"
+  exit;
+fi
+}
+
 php()
 {
 echo -n "Port: "
@@ -83,8 +96,21 @@ read domainName
 #fileConfigName=`$domainName | sed -r 's/(^|_|\s)([a-z])/\U\2/g'`
 fileConfigName="${domainName}.conf"
 
+if [ -f /etc/nginx/sites-enabled/$fileConfigName ]; then
+	read -p "Domain Name $domainName already exists. Do you want to remove?:  " -n 1 -r
+	if [[ $REPLY =~ ^[Yy]$ ]]; then
+		rm -rf /etc/nginx/sites-enabled/$fileConfigName
+		rm -rf /etc/nginx/sites-available/$fileConfigName
+	else
+		server-admin
+	fi 
+fi
+
+
 echo -n "Root Directory: "
 read rootDirectory
+
+checkdomain $rootDirectory
 
 read -p "Do you want to setup SSL?:  " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -211,7 +237,6 @@ else
 	echo -e "||||     \e[0;34m CREATE VIRTUAL HOST SUCCESSFUL \e[0m     ||||"
 	echo "========================================================="
 	sleep 5
-
 	server-admin
 fi
 }
