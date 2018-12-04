@@ -72,7 +72,9 @@ On_IPurple='\033[0;105m'  # Purple
 On_ICyan='\033[0;106m'    # Cyan
 On_IWhite='\033[0;107m'   # White
 
-if [ ! -f /etc/nginx/nginx.conf ]; then
+username=`whoami`
+
+if [ ! -f /lib/systemd/system/nginx.service ]; then
   echo -e "${BRed}ERROR: NGINX does not installed${Color_Off}"
   read -p "Press enter to continue"
   server-admin
@@ -125,7 +127,7 @@ read rootDirectory
 
 checkdomain $rootDirectory
 
-read -p "Do you want to setup SSL?:  " -n 1 -r
+read -r -p "Do you want to setup SSL?:  "
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 	echo -n "Port SSL: "
 	read portSSL
@@ -135,7 +137,10 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	echo -n "Path to ${BYellow}.crt${Color_Off} file: "
 	read crtFilePath
 
-	if [ ! -f $crtFilePath ]; then
+	crtFilePathConvert=`echo $crtFilePath | sed -r "s/\~/\/home/\/$username/"`
+
+
+	if [ ! -f $crtFilePathConvert ]; then
 	  echo -e "${BRed}ERROR: $crtFilePath does not exit${Color_Off}"
 	  read -p "Press enter to continue"
 	  server-admin
@@ -145,7 +150,9 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	echo -n "Path to ${BYellow}.key${Color_Off} file: "
 	read keyFilePath
 
-	if [ ! -f $keyFilePath ]; then
+	crtFilePathConvert=`echo $keyFilePath | sed -r "s/\~/\/home/\/$username/"`
+
+	if [ ! -f $crtFilePathConvert ]; then
 	  echo -e "${BRed}ERROR: $keyFilePath does not exit${Color_Off}"
 	  read -p "Press enter to continue"
 	  server-admin

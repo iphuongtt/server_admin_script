@@ -76,7 +76,7 @@ On_IWhite='\033[0;107m'   # White
 
 installNginx="${BCyan}3. INSTALL NGINX${Color_Off}"
 # check nginx is installed
-if [ -f /etc/nginx/nginx.conf ]; then
+if [ -f /lib/systemd/system/nginx.service ]; then
   installNginx="${BWhite}3. INSTALL NGINX${Color_Off}"
 fi
 if [ $(id -u) != "0" ]; then
