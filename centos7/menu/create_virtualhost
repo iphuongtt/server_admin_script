@@ -103,7 +103,6 @@ if [ -f /etc/nginx/sites-enabled/$fileConfigName ]; then
 	if [[ $REPLY =~ ^[Yy]$ ]]; then
 		rm -rf /etc/nginx/sites-enabled/$fileConfigName
 		rm -rf /etc/nginx/sites-available/$fileConfigName
-		echo "\n"
 	else
 		read -p "Press enter to continue"
 		server-admin
