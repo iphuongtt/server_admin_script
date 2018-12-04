@@ -160,7 +160,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	  exit;
 	fi
 
-	cat > "etc/nginx/sites-available/${fileConfigName}" <<END
+	cat > "/etc/nginx/sites-available/${fileConfigName}" <<END
 # Choose between www and non-www, listen on the *wrong* one and redirect to
 # the right one -- http://wiki.nginx.org/Pitfalls#Server_Name
 #
