@@ -104,7 +104,7 @@ server {
 
   # and redirect to the https host (declared below)
   # avoiding http://www -> https://www -> https:// chain.
-  return 301 https://${domainName}$request_uri;
+  return 301 https://${domainName}\$request_uri;
 }
 
 server {
@@ -117,7 +117,7 @@ server {
   include h5bp/directive-only/ssl.conf;
 
   # and redirect to the non-www host (declared below)
-  return 301 https://${domainName}$request_uri;
+  return 301 https://${domainName}\$request_uri;
 }
 
 server {
@@ -162,7 +162,7 @@ else
 	  server_name www.${domainName};
 
 	  # and redirect to the non-www host (declared below)
-	  return 301 $scheme://${domainName}$request_uri;
+	  return 301 \$scheme://${domainName}\$request_uri;
 	}
 
 	server {
