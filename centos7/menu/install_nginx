@@ -24,6 +24,7 @@ cp server-configs-nginx-master/mime.types /etc/nginx/mime.types
 cp -R server-configs-nginx-master/sites-available /etc/nginx/
 cp -R server-configs-nginx-master/sites-enabled /etc/nginx/
 cp -R server-configs-nginx-master/h5bp /etc/nginx/
+mkdir /etc/nginx/ssl
 # Delete server-configs-nginx-master
 rm -rf ~/server-configs-nginx-master
 # Auto start nginx when server stared

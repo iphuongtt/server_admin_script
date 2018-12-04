@@ -75,6 +75,7 @@ On_IWhite='\033[0;107m'   # White
 if [ ! -f /etc/nginx/nginx.conf ]; then
   echo -e "${BRed}ERROR: NGINX does not installed${Color_Off}"
   read -p "Press enter to continue"
+  server-admin
   exit;
 fi
 
@@ -83,8 +84,16 @@ checkdomain()
 if [ ! -d $1 ]; then
   echo -e "${BRed}ERROR: Directory does not exists${Color_Off}"
   read -p "Press enter to continue"
+  server-admin
   exit;
 fi
+}
+
+checkAndCreateSslDir()
+{
+if [ ! -d /etc/nginx/ssl ]; then
+  mkdir /etc/nginx/ssl
+fi	
 }
 
 php()
@@ -120,6 +129,28 @@ read -p "Do you want to setup SSL?:  " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 	echo -n "Port SSL: "
 	read portSSL
+
+	checkAndCreateSslDir
+
+	echo -n "Path to ${BYellow}.crt${Color_Off} file: "
+	read crtFilePath
+
+	if [ ! -f $crtFilePath ]; then
+	  echo -e "${BRed}ERROR: $crtFilePath does not exit${Color_Off}"
+	  read -p "Press enter to continue"
+	  server-admin
+	  exit;
+	fi
+
+	echo -n "Path to ${BYellow}.key${Color_Off} file: "
+	read keyFilePath
+
+	if [ ! -f $keyFilePath ]; then
+	  echo -e "${BRed}ERROR: $keyFilePath does not exit${Color_Off}"
+	  read -p "Press enter to continue"
+	  server-admin
+	  exit;
+	fi
 
 	cat > "etc/nginx/sites-available/${fileConfigName}" <<END
 # Choose between www and non-www, listen on the *wrong* one and redirect to
@@ -175,6 +206,9 @@ server {
 
   # Include the basic h5bp config set
   include h5bp/basic.conf;
+
+  ssl_certificate      $crtFilePath;
+  ssl_certificate_key  $keyFilePath;
 }
 END
 else
