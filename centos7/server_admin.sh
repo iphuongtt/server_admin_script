@@ -86,9 +86,9 @@ fi
 
 show_menus() {
 	clear
-	echo -e "${IGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
-	echo -e "${IYellow} S E R V E R - A D M I N - M E N U ${Color_Off}"
-	echo -e "${IGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
+	echo -e "${Green}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
+	echo -e "${Yellow} S E R V E R - A D M I N - M E N U ${Color_Off}"
+	echo -e "${Green}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
 	echo "1. Create database"
 	echo "2. Install Mariadb 10.1"
 	echo -e "3. ${installNginx}"
