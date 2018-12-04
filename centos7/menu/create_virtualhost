@@ -134,7 +134,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 
 	checkAndCreateSslDir
 
-	echo -n "Path to ${BYellow}.crt${Color_Off} file: "
+	echo -e "Path to ${BYellow}.crt${Color_Off} file: "
 	read crtFilePath
 
 	crtFilePathConvert=`echo $crtFilePath | sed -r "s/\~/\/home/\/$username/"`
@@ -147,7 +147,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	  exit;
 	fi
 
-	echo -n "Path to ${BYellow}.key${Color_Off} file: "
+	echo -e "Path to ${BYellow}.key${Color_Off} file: "
 	read keyFilePath
 
 	crtFilePathConvert=`echo $keyFilePath | sed -r "s/\~/\/home/\/$username/"`
