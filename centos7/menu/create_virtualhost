@@ -86,9 +86,6 @@ fileConfigName="${domainName}.conf"
 echo -n "Root Directory: "
 read rootDirectory
 
-echo -n "Root Directory: "
-read rootDirectory
-
 read -p "Do you want to setup SSL?:  " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 	echo -n "Port SSL: "
@@ -203,7 +200,7 @@ else
 END
 	ln -s /etc/nginx/sites-available/$fileConfigName /etc/nginx/sites-enabled/$fileConfigName
 fi 
-systemclt restart nginx
+systemctl restart nginx
 echo "========================================================="
 echo -e "||||     \e[0;34m CREATE VIRTUAL HOST SUCCESSFUL \e[0m     ||||"
 echo "========================================================="
