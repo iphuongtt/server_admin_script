@@ -77,7 +77,7 @@ On_IWhite='\033[0;107m'   # White
 installNginx="${BCyan}3. Install Nginx${Color_Off}"
 # check nginx is installed
 if [ -f /etc/nginx/nginx.conf ]; then
-  installNginx="3. Install Nginx"
+  installNginx="${BWhite}3. Install Nginx${Color_Off}"
 fi
 if [ $(id -u) != "0" ]; then
     printf "You need to be root to perform this command. Run \"sudo su\" to become root!\n"
@@ -91,7 +91,7 @@ show_menus() {
 	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
 	echo -e "${BCyan}1. Create database${Color_Off}"
 	echo -e "${BCyan}2. Install Mariadb 10.1${Color_Off}"
-	echo -e "3. ${installNginx}"
+	echo -e "${installNginx}"
 	echo -e "${BRed}4. Exit${Color_Off}"
 }
 
