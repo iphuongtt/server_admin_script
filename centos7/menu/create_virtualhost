@@ -72,7 +72,7 @@ On_IPurple='\033[0;105m'  # Purple
 On_ICyan='\033[0;106m'    # Cyan
 On_IWhite='\033[0;107m'   # White
 
-if [ -f /etc/nginx/nginx.conf ]; then
+if [ ! -f /etc/nginx/nginx.conf ]; then
   echo -e "${BRed}ERROR: NGINX does not installed${Color_Off}"
   read -p "Press enter to continue"
   exit;
