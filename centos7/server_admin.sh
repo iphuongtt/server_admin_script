@@ -98,18 +98,18 @@ show_menus() {
 
 read_options(){
 	local choice
-	read -p "Enter choice [ 1 - 3] " choice
+	read -p "Enter choice [ 1 - 5] " choice
 	case $choice in
 		1) /etc/server_admin/menu/create_database ;;
 		2) /etc/server_admin/menu/install_mariadb ;;
 		3) /etc/server_admin/menu/install_nginx ;;
 		4) /etc/server_admin/menu/create_virtualhost ;;
 		5) exit 0;;
-		*) echo -e "${RED}Error...${STD}" && sleep 2
+		*) echo -e "${RED}Error...${Color_Off}"
 	esac
 }
 
-trap '' SIGINT SIGQUIT SIGTSTP
+#trap '' SIGINT SIGQUIT SIGTSTP
 
 while true
 do
