@@ -238,12 +238,14 @@ if [[ $? -ne 0 ]]; then
 	systemctl status nginx
 	read -p "Press enter to continue"
 	server-admin
+	exit
 else
 	echo "========================================================="
 	echo -e "||||     \e[0;34m CREATE VIRTUAL HOST SUCCESSFUL \e[0m     ||||"
 	echo "========================================================="
 	read -p "Press enter to continue"
 	server-admin
+	exit
 fi
 }
 
@@ -254,10 +256,8 @@ clear
 prompt="Which type virtual host do you want to create:"
 options=("PHP application" "Angular application" "SPA with PHP and Angular or ReactJs application") # End Options
 
-PS3="
-$prompt"
-select opt in "${options[@]}" "Exit"; do 
-
+echo $prompt
+select opt in "${options[@]}" "EXIT"; do 
     case "$REPLY" in
 	    1 ) php; break;;
 		2 ) angular; break;;
