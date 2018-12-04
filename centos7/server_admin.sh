@@ -74,10 +74,10 @@ On_IPurple='\033[0;105m'  # Purple
 On_ICyan='\033[0;106m'    # Cyan
 On_IWhite='\033[0;107m'   # White
 
-installNginx="Install Nginx"
+installNginx="${BCyan}3. Install Nginx${Color_Off}"
 # check nginx is installed
 if [ -f /etc/nginx/nginx.conf ]; then
-  installNginx="${BCyan}Install Nginx${Color_Off}"
+  installNginx="3. Install Nginx"
 fi
 if [ $(id -u) != "0" ]; then
     printf "You need to be root to perform this command. Run \"sudo su\" to become root!\n"
@@ -89,10 +89,10 @@ show_menus() {
 	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
 	echo -e "${BYellow} S E R V E R - A D M I N - M E N U ${Color_Off}"
 	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
-	echo "1. Create database"
-	echo "2. Install Mariadb 10.1"
+	echo "${BCyan}1. Create database${Color_Off}"
+	echo "${BCyan}2. Install Mariadb 10.1${Color_Off}"
 	echo -e "3. ${installNginx}"
-	echo "4. Exit"
+	echo "${BRed}4. Exit${Color_Off}"
 }
 
 read_options(){
