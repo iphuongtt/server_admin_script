@@ -201,12 +201,19 @@ END
 	ln -s /etc/nginx/sites-available/$fileConfigName /etc/nginx/sites-enabled/$fileConfigName
 fi 
 systemctl restart nginx
-echo "========================================================="
-echo -e "||||     \e[0;34m CREATE VIRTUAL HOST SUCCESSFUL \e[0m     ||||"
-echo "========================================================="
-sleep 5
+if [[ $? -ne 0 ]]; then
+	echo "========================================================="
+	echo -e "||||     ${BRed}ERRR:${Color_Off}     ||||"
+	echo "========================================================="
+	systemctl status nginx
+else
+	echo "========================================================="
+	echo -e "||||     \e[0;34m CREATE VIRTUAL HOST SUCCESSFUL \e[0m     ||||"
+	echo "========================================================="
+	sleep 5
 
-server-admin
+	server-admin
+fi
 }
 
 
