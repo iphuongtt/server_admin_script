@@ -72,6 +72,9 @@ On_IPurple='\033[0;105m'  # Purple
 On_ICyan='\033[0;106m'    # Cyan
 On_IWhite='\033[0;107m'   # White
 
+who=`who`
+username=`awk '{print $1;}' <<< "$who"` #Get Real username login
+
 if [ ! -f /lib/systemd/system/nginx.service ]; then
   echo -e "${BRed}ERROR: NGINX does not installed${Color_Off}"
   read -p "Press enter to continue"
@@ -135,7 +138,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	echo -n -e "Path to ${BYellow}.crt${Color_Off} file: "
 	read crtFilePath
 
-	crtFilePathConvert=`echo $crtFilePath | sed -r "s/\~/\/home\/$USER/"`
+	crtFilePathConvert=`echo $crtFilePath | sed -r "s/\~/\/home\/$username/"`
 
 
 	if [ ! -f $crtFilePathConvert ]; then
@@ -148,7 +151,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	echo -n -e "Path to ${BYellow}.key${Color_Off} file: "
 	read keyFilePath
 
-	crtFilePathConvert=`echo $keyFilePath | sed -r "s/\~/\/home\/$USER/"`
+	crtFilePathConvert=`echo $keyFilePath | sed -r "s/\~/\/home\/$username/"`
 
 	if [ ! -f $crtFilePathConvert ]; then
 	  echo -e "${BRed}ERROR: $keyFilePath does not exit${Color_Off}"
