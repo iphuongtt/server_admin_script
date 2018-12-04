@@ -74,6 +74,7 @@ On_IWhite='\033[0;107m'   # White
 
 if [ -f /etc/nginx/nginx.conf ]; then
   echo -e "${BRed}ERROR: NGINX does not installed${Color_Off}"
+  read -p "Press enter to continue"
   exit;
 fi
 
@@ -81,6 +82,7 @@ checkdomain()
 {
 if [ -d "$1" ]; then
   echo -e "${BRed}ERROR: Directory does not exists${Color_Off}"
+  read -p "Press enter to continue"
   exit;
 fi
 }
@@ -102,6 +104,7 @@ if [ -f /etc/nginx/sites-enabled/$fileConfigName ]; then
 		rm -rf /etc/nginx/sites-enabled/$fileConfigName
 		rm -rf /etc/nginx/sites-available/$fileConfigName
 	else
+		read -p "Press enter to continue"
 		server-admin
 	fi 
 fi
@@ -232,11 +235,13 @@ if [[ $? -ne 0 ]]; then
 	echo -e "||||     ${BRed}ERRR:${Color_Off}     ||||"
 	echo "========================================================="
 	systemctl status nginx
+	read -p "Press enter to continue"
+	server-admin
 else
 	echo "========================================================="
 	echo -e "||||     \e[0;34m CREATE VIRTUAL HOST SUCCESSFUL \e[0m     ||||"
 	echo "========================================================="
-	sleep 5
+	read -p "Press enter to continue"
 	server-admin
 fi
 }
