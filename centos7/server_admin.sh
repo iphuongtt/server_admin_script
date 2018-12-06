@@ -94,6 +94,7 @@ show_menus() {
 	echo -e "${installNginx}"
 	echo -e "${BCyan}4. CREATE VIRTUAL HOST${Color_Off}"
 	echo -e "${BCyan}5. LIST ALL VIRTUAL HOST${Color_Off}"
+	echo -e "${BCyan}6. LIST DATABASES${Color_Off}"
 	echo -e "${BRed}6. EXIT${Color_Off}"
 }
 
@@ -106,7 +107,8 @@ read_options(){
 		3) /etc/server_admin/menu/install_nginx; break ;;
 		4) /etc/server_admin/menu/create_virtualhost; break ;;
 		5) /etc/server_admin/menu/list_domain; break ;;
-		6) exit 0;;
+		6) /etc/server_admin/menu/list_databases; break ;;
+		7) exit 0;;
 		*) echo -e "${RED}Error...${Color_Off}"
 	esac
 }

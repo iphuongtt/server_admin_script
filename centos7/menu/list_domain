@@ -1,4 +1,8 @@
 #!/bin/sh
+
+printf "=========================================================================\n"
+printf "                             LIST VIRTUALHOST\n"
+printf "=========================================================================\n"
 grep -RiI server_name /etc/nginx/sites-enabled/ 
 read -p "Press enter to continue"
 server-admin

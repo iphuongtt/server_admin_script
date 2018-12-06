@@ -5,8 +5,8 @@ try_time=0
 create_database()
 {
 let try_time+=1
-read root_password
-mysql -u root -p$root_password < /tmp/config.temp
+read -s root_password
+mysql -u root -p $root_password < /tmp/config.temp
 if [[ $try_time > 3 ]]; then
 	echo "Too many attempts, try again later"
 	exit;
@@ -50,7 +50,7 @@ done
 get_password()
 {
 echo -n "Enter your password then press [ENTER]: "
-while read password
+while read -s password
 do
 if [ "$password" != "" ]; then
     break
@@ -60,7 +60,7 @@ done
 }
 
 
-if [ "`systemctl is-active mysql.service`" == "active" ]; then
+if [ "`systemctl is-active mariadb.service`" == "active" ]; then
 printf "=========================================================================\n"
 printf "                             Create Database\n"
 printf "=========================================================================\n"
