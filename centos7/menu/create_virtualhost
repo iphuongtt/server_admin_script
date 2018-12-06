@@ -199,69 +199,37 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	inputParamsSSL
 #SSL DOMAIN CONFIG
 	cat > "/etc/nginx/sites-available/${fileConfigName}" <<END
-# Choose between www and non-www, listen on the *wrong* one and redirect to
-# the right one -- http://wiki.nginx.org/Pitfalls#Server_Name
-#
 server {
   listen [::]:${port};
   listen ${port};
-
-  # listen on both hosts
   server_name ${domainName} www.${domainName};
-
-  # and redirect to the https host (declared below)
-  # avoiding http://www -> https://www -> https:// chain.
   return 301 https://${domainName}\$request_uri;
 }
 
 server {
   listen [::]:${portSSL} ssl http2;
   listen ${portSSL} ssl http2;
-
-  # listen on the wrong host
   server_name www.${domainName};
-
   include h5bp/directive-only/ssl.conf;
-
-  # and redirect to the non-www host (declared below)
   return 301 https://${domainName}\$request_uri;
 }
 
 server {
-
-  # listen [::]:${portSSL} ssl http2 accept_filter=dataready;  # for FreeBSD
-  # listen ${portSSL} ssl http2 accept_filter=dataready;  # for FreeBSD
-  # listen [::]:${portSSL} ssl http2 deferred;  # for Linux
-  # listen ${portSSL} ssl http2 deferred;  # for Linux
   listen [::]:${portSSL} ssl http2;
   listen ${portSSL} ssl http2;
-
-  # The host name to respond to
   server_name ${domainName};
-
   index index.php index.html index.htm;
-
   include h5bp/directive-only/ssl.conf;
-
-  # Path for static files
   root $rootDirectory
-
   location / {
   	try_files \$uri \$uri/ /index.php?\$args;
   }
-
-
-  #Specify a charset
   charset utf-8;
-
-  # Custom 404 page
   error_page 404 /404.html;
   error_page 500 502 503 504 /50x.html;
   location = /50x.html {
     root $rootDirectory;
   }
-
-
   location ~ \.php\$ {
     try_files \$uri =404;
     fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
@@ -269,14 +237,10 @@ server {
     fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
     include fastcgi_params;
   }
-
   location ~ /\.ht {
     deny all;
   }
-
-  # Include the basic h5bp config set
   include h5bp/basic.conf;
-
   ssl_certificate      $crtFilePath;
   ssl_certificate_key  $keyFilePath;
   gzip on;
@@ -288,45 +252,22 @@ server {
 END
 else
 	cat > "/etc/nginx/sites-available/${fileConfigName}" <<END
-	# www to non-www redirect -- duplicate content is BAD:
-	# https://github.com/h5bp/html5-boilerplate/blob/5370479476dceae7cc3ea105946536d6bc0ee468/.htaccess#L362
-	# Choose between www and non-www, listen on the *wrong* one and redirect to
-	# the right one -- http://wiki.nginx.org/Pitfalls#Server_Name
 	server {
-	  # don't forget to tell on which port this server listens
 	  listen [::]:${port};
 	  listen ${port};
-
-	  # listen on the www host
 	  server_name www.${domainName};
-
-	  # and redirect to the non-www host (declared below)
 	  return 301 \$scheme://${domainName}\$request_uri;
 	}
 
 	server {
-	  # listen [::]:${port} accept_filter=httpready; # for FreeBSD
-	  # listen ${port} accept_filter=httpready; # for FreeBSD
-	  # listen [::]:${port} deferred; # for Linux
-	  # listen ${port} deferred; # for Linux
 	  listen [::]:${port};
 	  listen ${port};
-
-	  # The host name to respond to
 	  server_name ${domainName};
-
 	  index index.php index.html index.htm;
-
-	  # Path for static files
 	  root ${rootDirectory};
-
-	  # Specify a charset
 	  charset utf-8;
-
-	  # Custom 404 page
 	  error_page 404 /404.html;
 	  error_page 500 502 503 504 /50x.html;
-
 	  location ~ \.php\$ {
 	    try_files \$uri =404;
 	    fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
@@ -334,12 +275,9 @@ else
 	    fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
 	    include fastcgi_params;
 	  }
-
 	  location ~ /\.ht {
 	    deny all;
 	  }
-
-	  # Include the basic h5bp config set
 	  include h5bp/basic.conf;
 	  gzip on;
 	  gzip_vary on;
@@ -361,70 +299,36 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	inputParamsSSL
 
 	cat > "/etc/nginx/sites-available/${fileConfigName}" <<END
-# Choose between www and non-www, listen on the *wrong* one and redirect to
-# the right one -- http://wiki.nginx.org/Pitfalls#Server_Name
-#
 server {
   listen [::]:${port};
   listen ${port};
-
-  # listen on both hosts
   server_name ${domainName} www.${domainName};
-
-  # and redirect to the https host (declared below)
-  # avoiding http://www -> https://www -> https:// chain.
   return 301 https://${domainName}\$request_uri;
 }
-
 server {
   listen [::]:${portSSL} ssl http2;
   listen ${portSSL} ssl http2;
-
-  # listen on the wrong host
   server_name www.${domainName};
-
   include h5bp/directive-only/ssl.conf;
-
-  # and redirect to the non-www host (declared below)
   return 301 https://${domainName}\$request_uri;
 }
 
 server {
-
-  # listen [::]:${portSSL} ssl http2 accept_filter=dataready;  # for FreeBSD
-  # listen ${portSSL} ssl http2 accept_filter=dataready;  # for FreeBSD
-  # listen [::]:${portSSL} ssl http2 deferred;  # for Linux
-  # listen ${portSSL} ssl http2 deferred;  # for Linux
   listen [::]:${portSSL} ssl http2;
   listen ${portSSL} ssl http2;
-
-  # The host name to respond to
   server_name ${domainName};
-
   index index.html index.htm;
-
   include h5bp/directive-only/ssl.conf;
-
-  # Path for static files
   root $rootDirectory;
-
-  #Specify a charset
   charset utf-8;
-
-  # Custom 404 page
   error_page 404 /404.html;
-
-  # Include the basic h5bp config set
   include h5bp/basic.conf;
-
   location ~ /\.ht {
     deny all;
   }
-
   location ~ /\.php {
     deny all;
   }
-
   ssl_certificate      $crtFilePath;
   ssl_certificate_key  $keyFilePath;
   gzip on;
@@ -436,54 +340,27 @@ server {
 END
 else
 	cat > "/etc/nginx/sites-available/${fileConfigName}" <<END
-# www to non-www redirect -- duplicate content is BAD:
-# https://github.com/h5bp/html5-boilerplate/blob/5370479476dceae7cc3ea105946536d6bc0ee468/.htaccess#L362
-# Choose between www and non-www, listen on the *wrong* one and redirect to
-# the right one -- http://wiki.nginx.org/Pitfalls#Server_Name
 server {
-  # don't forget to tell on which port this server listens
   listen [::]:${port};
   listen ${port};
-
-  # listen on the www host
   server_name www.${domainName};
-
-  # and redirect to the non-www host (declared below)
   return 301 \$scheme://${domainName}\$request_uri;
 }
-
 server {
-  # listen [::]:${port} accept_filter=httpready; # for FreeBSD
-  # listen ${port} accept_filter=httpready; # for FreeBSD
-  # listen [::]:${port} deferred; # for Linux
-  # listen ${port} deferred; # for Linux
   listen [::]:${port};
   listen ${port};
-
-  # The host name to respond to
   server_name ${domainName};
-
   index index.html index.htm;
-
-  # Path for static files
   root ${rootDirectory};
-
-  # Specify a charset
   charset utf-8;
-
-  # Custom 404 page
   error_page 404 /404.html;
   error_page 500 502 503 504 /50x.html;
-
   location ~ /\.ht {
     deny all;
   }
-
   location ~ /\.php {
     deny all;
   }
-
-  # Include the basic h5bp config set
   include h5bp/basic.conf;
   gzip on;
   gzip_vary on;
@@ -516,62 +393,32 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	inputParamsSSL
 
 	cat > "/etc/nginx/sites-available/${fileConfigName}" <<END
-# Choose between www and non-www, listen on the *wrong* one and redirect to
-# the right one -- http://wiki.nginx.org/Pitfalls#Server_Name
-#
 server {
   listen [::]:${port};
   listen ${port};
-
-  # listen on both hosts
   server_name ${domainName} www.${domainName};
-
-  # and redirect to the https host (declared below)
-  # avoiding http://www -> https://www -> https:// chain.
   return 301 https://${domainName}\$request_uri;
 }
-
 server {
   listen [::]:${portSSL} ssl http2;
   listen ${portSSL} ssl http2;
-
-  # listen on the wrong host
   server_name www.${domainName};
-
   include h5bp/directive-only/ssl.conf;
-
-  # and redirect to the non-www host (declared below)
   return 301 https://${domainName}\$request_uri;
 }
-
 server {
-
-  # listen [::]:${portSSL} ssl http2 accept_filter=dataready;  # for FreeBSD
-  # listen ${portSSL} ssl http2 accept_filter=dataready;  # for FreeBSD
-  # listen [::]:${portSSL} ssl http2 deferred;  # for Linux
-  # listen ${portSSL} ssl http2 deferred;  # for Linux
   listen [::]:${portSSL} ssl http2;
   listen ${portSSL} ssl http2;
-
-  # The host name to respond to
   server_name ${domainName};
-
-  # Path for static files
   root ${rootDirectory};
-
   index index.php index.html index.htm;
-
-
   index index.php index.html index.htm;
-
   location / {
     try_files \$uri \$uri/ /index.html;
   }
-
   location ^~ /${locationServer} {
      alias ${rootDirectoryApi};
      try_files \$uri \$uri/ @api;
-
      location ~ \.php {
         try_files \$uri =404;
         fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
@@ -583,23 +430,14 @@ server {
   location @api {
     rewrite /${locationServer}/(.*)$ /${locationServer}/index.php?/\$1 last;
   }
-
   location ~ /\.ht {
     deny all;
   }
-
   include h5bp/directive-only/ssl.conf;
-
-  #Specify a charset
   charset utf-8;
-
-  # Custom 404 page
   error_page 404 /404.html;
   error_page 500 502 503 504 /50x.html;
-
-  # Include the basic h5bp config set
   include h5bp/basic.conf;
-
   ssl_certificate      $crtFilePath;
   ssl_certificate_key  $keyFilePath;
   gzip on;
@@ -611,45 +449,25 @@ server {
 END
 else
 	cat > "/etc/nginx/sites-available/${fileConfigName}" <<END
-# www to non-www redirect -- duplicate content is BAD:
-# https://github.com/h5bp/html5-boilerplate/blob/5370479476dceae7cc3ea105946536d6bc0ee468/.htaccess#L362
-# Choose between www and non-www, listen on the *wrong* one and redirect to
-# the right one -- http://wiki.nginx.org/Pitfalls#Server_Name
 server {
   # don't forget to tell on which port this server listens
   listen [::]:${port};
   listen ${port};
-
-  # listen on the www host
   server_name www.${domainName};
-
-  # and redirect to the non-www host (declared below)
   return 301 \$scheme://${domainName}\$request_uri;
 }
-
 server {
-  # listen [::]:${port} accept_filter=httpready; # for FreeBSD
-  # listen ${port} accept_filter=httpready; # for FreeBSD
-  # listen [::]:${port} deferred; # for Linux
-  # listen ${port} deferred; # for Linux
   listen [::]:${port};
   listen ${port};
-  # The host name to respond to
   server_name ${domainName};
-
-  # Path for static files
   root ${rootDirectory};
-
   index index.php index.html index.htm;
-
   location / {
     try_files \$uri \$uri/ /index.html;
   }
-
   location ^~ /${locationServer} {
      alias ${rootDirectoryApi};
      try_files \$uri \$uri/ @api;
-
      location ~ \.php {
         try_files \$uri =404;
         fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
@@ -661,19 +479,12 @@ server {
   location @api {
     rewrite /${locationServer}/(.*)$ /${locationServer}/index.php?/\$1 last;
   }
-
   location ~ /\.ht {
     deny all;
   }
-
-  # Specify a charset
   charset utf-8;
-
-  # Custom 404 page
   error_page 404 /404.html;
   error_page 500 502 503 504 /50x.html;
-
-  # Include the basic h5bp config set
   include h5bp/basic.conf;
   gzip on;
   gzip_vary on;
