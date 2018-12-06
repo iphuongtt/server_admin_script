@@ -414,7 +414,7 @@ echo
 
 get_root_password
 
-
+get_list_databases
 
 cleanup
 
