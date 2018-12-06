@@ -80,6 +80,8 @@ portSSL=443
 crtFilePath=""
 keyFilePath=""
 rootDirectory=""
+crtFilePathConvert=""
+keyFilePathConvert=""
 
 
 if [ ! -f /lib/systemd/system/nginx.service ]; then
@@ -149,7 +151,7 @@ crtFilePathConvert=`echo $crtFilePath | sed -r "s/\~/\/home\/$username/"`
 
 
 if [ ! -f $crtFilePathConvert ]; then
-  echo -e "${BRed}ERROR: $crtFilePath does not exit${Color_Off}"
+  echo -e "${BRed}ERROR: $crtFilePathConvert does not exit${Color_Off}"
   read -p "Press enter to continue"
   server-admin
   exit;
@@ -161,7 +163,7 @@ read keyFilePath
 keyFilePathConvert=`echo $keyFilePath | sed -r "s/\~/\/home\/$username/"`
 
 if [ ! -f $keyFilePathConvert ]; then
-  echo -e "${BRed}ERROR: $keyFilePath does not exit${Color_Off}"
+  echo -e "${BRed}ERROR: $keyFilePathConvert does not exit${Color_Off}"
   read -p "Press enter to continue"
   server-admin
   exit;
@@ -241,8 +243,8 @@ server {
     deny all;
   }
   include h5bp/basic.conf;
-  ssl_certificate      $crtFilePath;
-  ssl_certificate_key  $keyFilePath;
+  ssl_certificate      $crtFilePathConvert;
+  ssl_certificate_key  $keyFilePathConvert;
   gzip on;
   gzip_vary on;
   gzip_min_length 10240;
@@ -329,8 +331,8 @@ server {
   location ~ /\.php {
     deny all;
   }
-  ssl_certificate      $crtFilePath;
-  ssl_certificate_key  $keyFilePath;
+  ssl_certificate      $crtFilePathConvert;
+  ssl_certificate_key  $keyFilePathConvert;
   gzip on;
   gzip_vary on;
   gzip_min_length 10240;
@@ -438,8 +440,8 @@ server {
   error_page 404 /404.html;
   error_page 500 502 503 504 /50x.html;
   include h5bp/basic.conf;
-  ssl_certificate      $crtFilePath;
-  ssl_certificate_key  $keyFilePath;
+  ssl_certificate      $crtFilePathConvert;
+  ssl_certificate_key  $keyFilePathConvert;
   gzip on;
   gzip_vary on;
   gzip_min_length 10240;
