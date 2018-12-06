@@ -1,0 +1,16 @@
+#!/bin/sh
+nginx_domains(){
+    domains=`find /etc/nginx/sites-enabled -type f -name "*.conf" -print0 | xargs -0 egrep '^(\s|\t)*server_name' | sed -r 's/(.*server_name\s*|;)//g'`
+    ports=`find /etc/nginx/sites-enabled -type f -name "*.conf" -print0 | xargs -0 egrep '^(\s|\t)*listen' | sed -r 's/(.*listen\s*|;)//g'`
+    for domain in $domains; do 
+       echo $domain; 
+    done
+
+    for port in $ports; do 
+       echo $port; 
+    done
+}
+
+nginx_domains
+read -p "Press enter to continue"
+server-admin

@@ -93,18 +93,20 @@ show_menus() {
 	echo -e "${BCyan}2. INSTALL MARIADB 10.1${Color_Off}"
 	echo -e "${installNginx}"
 	echo -e "${BCyan}4. CREATE VIRTUAL HOST${Color_Off}"
-	echo -e "${BRed}5. EXIT${Color_Off}"
+	echo -e "${BCyan}5. LIST ALL VIRTUAL HOST${Color_Off}"
+	echo -e "${BRed}6. EXIT${Color_Off}"
 }
 
 read_options(){
 	local choice
-	read -p "Enter choice [ 1 - 5] " choice
+	read -p "Enter choice [ 1 - 6] " choice
 	case $choice in
 		1) /etc/server_admin/menu/create_database; break ;;
 		2) /etc/server_admin/menu/install_mariadb; break ;;
 		3) /etc/server_admin/menu/install_nginx; break ;;
 		4) /etc/server_admin/menu/create_virtualhost; break ;;
-		5) exit 0;;
+		5) /etc/server_admin/menu/list_domain; break ;;
+		6) exit 0;;
 		*) echo -e "${RED}Error...${Color_Off}"
 	esac
 }
