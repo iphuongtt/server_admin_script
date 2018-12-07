@@ -369,7 +369,7 @@ get_list_databases(){
     i=0
     while read -r line
     do
-        
+        echo "$line"
     done < <(do_query "SHOW DATABASES;")
     if [ $? -eq 0 ]; then
         echo " ... Success!"
