@@ -384,10 +384,9 @@ get_list_databases2(){
     readarray databases < <(do_query "SHOW DATABASES;")
     if [ $? -eq 0 ]; then
         for ((i=0; i<${#databases[@]}; ++i)) ; do
-            #indexDb[$i]=${databases[$i]}
-            echo ${databases[$i]}
+            indexDb[i]=i
         done
-        #echo $indexDb[@]
+        echo $indexDb[@]
         prompt="Chose database you want to backup:"
         echo $prompt
         PS3="Select a number (1-4): "
