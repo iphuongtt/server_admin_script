@@ -379,10 +379,7 @@ get_list_databases(){
 
 get_list_databases2(){
     echo " - Dropping test database..."
-    while read -r line
-    do
-        echo "$line"
-    done <<< $(do_query "SHOW DATABASES;")
+    do_query "SHOW DATABASES;"
     if [ $? -eq 0 ]; then
         echo " ... Success!"
     else
@@ -416,15 +413,6 @@ clean_and_exit() {
 prepare
 set_echo_compat
 
-echo
-echo "NOTE: RUNNING ALL PARTS OF THIS SCRIPT IS RECOMMENDED FOR ALL MariaDB"
-echo "      SERVERS IN PRODUCTION USE!  PLEASE READ EACH STEP CAREFULLY!"
-echo
-echo "In order to log into MariaDB to secure it, we'll need the current"
-echo "password for the root user.  If you've just installed MariaDB, and"
-echo "you haven't set the root password yet, the password will be blank,"
-echo "so you should just press enter here."
-echo
 
 get_root_password
 
@@ -433,9 +421,3 @@ get_list_databases
 get_list_databases2
 
 #cleanup
-
-echo
-echo "All done!  If you've completed all of the above steps, your MariaDB"
-echo "installation should now be secure."
-echo
-echo "Thanks for using MariaDB!"
