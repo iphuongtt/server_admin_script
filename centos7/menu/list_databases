@@ -432,7 +432,7 @@ get_list_databases
 
 get_list_databases2
 
-cleanup
+#cleanup
 
 echo
 echo "All done!  If you've completed all of the above steps, your MariaDB"
