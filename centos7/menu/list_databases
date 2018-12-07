@@ -403,8 +403,6 @@ clean_and_exit() {
 prepare
 set_echo_compat
 
-get_list_databases
-
 echo
 echo "NOTE: RUNNING ALL PARTS OF THIS SCRIPT IS RECOMMENDED FOR ALL MariaDB"
 echo "      SERVERS IN PRODUCTION USE!  PLEASE READ EACH STEP CAREFULLY!"
