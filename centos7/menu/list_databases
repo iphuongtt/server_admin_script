@@ -366,7 +366,10 @@ remove_test_database() {
 
 get_list_databases(){
     echo " - Dropping test database..."
-    do_query "SHOW DATABASES;"
+    while read -r line
+    do
+        echo "$line"
+    done <<< $(do_query "SHOW DATABASES;")
     if [ $? -eq 0 ]; then
         echo " ... Success!"
     else
