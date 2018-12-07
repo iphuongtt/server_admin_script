@@ -366,9 +366,10 @@ remove_test_database() {
 
 get_list_databases(){
     echo " - Dropping test database..."
+    i=0
     while read -r line
     do
-        echo "$line"
+        
     done < <(do_query "SHOW DATABASES;")
     if [ $? -eq 0 ]; then
         echo " ... Success!"
@@ -379,7 +380,9 @@ get_list_databases(){
 
 get_list_databases2(){
     echo " - Dropping test database..."
-    do_query "SHOW DATABASES;"
+  
+    readarray a < <(do_query "SHOW DATABASES;")
+    echo ${a[@]}
     if [ $? -eq 0 ]; then
         echo " ... Success!"
     else
@@ -416,8 +419,6 @@ set_echo_compat
 
 get_root_password
 
-get_list_databases
-
-#get_list_databases2
+get_list_databases2
 
 #cleanup
