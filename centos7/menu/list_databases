@@ -513,9 +513,9 @@ get_list_databases3(){
               goodFolderName=`echo $backupDirPathConvert | sed "s/^\(.*\)\/$/\1/"`
               backupFileName="$goodFolderName/$databaseName.$current_time.bak"
               if [ $databaseName == "All databases" ]; then
-                mysqldump --all-databases > $backupFileName -u root -p $rootpass
+                mysqldump  -u root -p --all-databases > $backupFileName
               else
-                mysqldump --databases $databaseName > $backupFileName -u root -p $rootpass
+                mysqldump  -u root -p --databases $databaseName > $backupFileName
               fi
               if [ $? -eq 0 ]; then
                 echo "===================================================================================="
