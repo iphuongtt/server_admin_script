@@ -5,5 +5,5 @@ if [ $(id -u) != "0" ]; then
 fi
 mkdir -p /etc/server_admin/menu/
 cp server_admin.sh /bin/server-admin && chmod +x /bin/server-admin
-cp menu/* /etc/server_admin/menu/
+cp ~/server_admin_scripts/centos7/menu/* /etc/server_admin/menu/
 chmod +x /etc/server_admin/menu/*
