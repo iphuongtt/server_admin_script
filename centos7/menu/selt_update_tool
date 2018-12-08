@@ -86,7 +86,7 @@ do
   printf "\b${sp:i++%${#sp}:1}"
 done
 printf "\b"
-printf "\n"
+#printf "\n"
 if [ $? -eq 1 ]; then
 	echo -e "${BRed}Please check your internet connection...${Color_Off}"
 	read -p "Press enter to continue"
