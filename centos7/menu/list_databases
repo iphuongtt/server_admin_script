@@ -495,7 +495,7 @@ backup_database(){
           fi
       done
       totalNumber=`expr ${#databases[@]} + 1`
-      echo "TotalNumber:$totalNumber"
+      echo "TotalNumber"
       prompt="Chose database you want to backup:"
       echo $prompt
 
@@ -513,7 +513,6 @@ backup_database(){
               exit
             else
               databaseName=${databases[REPLY-1]};
-              echo "db:${databases[REPLY-1]}"
               echo -n -e "Path to save backup folder: "
               read backupDirPath
 
