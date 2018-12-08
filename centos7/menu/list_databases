@@ -505,36 +505,42 @@ backup_database(){
             echo "Wrong number plese try again!"
             cleanup
           else
-            databaseName=${databases[REPLY-1]};
-            echo -n -e "Path to save backup folder: "
-            read backupDirPath
-
-            backupDirPathConvert=`echo $backupDirPath | sed -r "s/\~/\/home\/$username/"`
-
-            if [ ! -d $backupDirPathConvert ]; then
-              echo -e "${BRed}ERROR: $backupDirPathConvert does not exit${Color_Off}"
-              read -p "Press enter to continue"
+            if [ $REPLY -eq totalNumber + 1 ]; then
               cleanup
               server-admin
-              exit;
+              exit
             else
-              goodFolderName=`echo $backupDirPathConvert | sed "s/^\(.*\)\/$/\1/"`
-              backupFileName="$goodFolderName/$databaseName.$current_time.bak"
-              if [ $databaseName == "All databases" ]; then
-                mysqldump --defaults-file=$config --all-databases > $backupFileName
-              else
-                mysqldump --defaults-file=$config --databases $databaseName > $backupFileName
-              fi
-              if [ $? -eq 0 ]; then
-                cleanup
-                clear
-                echo "===================================================================================="
-                echo -e "         ${BGreen} BACKUP DATABASE: $databaseName SUCCESSFUL${Color_Off}"
-                echo -e "         ${BBlue} Your backup file: $backupFileName${Color_Off}"
-                echo "===================================================================================="
+              databaseName=${databases[REPLY-1]};
+              echo -n -e "Path to save backup folder: "
+              read backupDirPath
+
+              backupDirPathConvert=`echo $backupDirPath | sed -r "s/\~/\/home\/$username/"`
+
+              if [ ! -d $backupDirPathConvert ]; then
+                echo -e "${BRed}ERROR: $backupDirPathConvert does not exit${Color_Off}"
                 read -p "Press enter to continue"
+                cleanup
                 server-admin
                 exit;
+              else
+                goodFolderName=`echo $backupDirPathConvert | sed "s/^\(.*\)\/$/\1/"`
+                backupFileName="$goodFolderName/$databaseName.$current_time.bak"
+                if [ $databaseName == "All databases" ]; then
+                  mysqldump --defaults-file=$config --all-databases > $backupFileName
+                else
+                  mysqldump --defaults-file=$config --databases $databaseName > $backupFileName
+                fi
+                if [ $? -eq 0 ]; then
+                  cleanup
+                  clear
+                  echo "===================================================================================="
+                  echo -e "         ${BGreen} BACKUP DATABASE: $databaseName SUCCESSFUL${Color_Off}"
+                  echo -e "         ${BBlue} Your backup file: $backupFileName${Color_Off}"
+                  echo "===================================================================================="
+                  read -p "Press enter to continue"
+                  server-admin
+                  exit;
+                fi
               fi
             fi
             break;
