@@ -1,0 +1,14 @@
+#!/bin/bash
+rm -rf ~/server_admin_script
+
+cd ~
+
+git pull https://github.com/iphuongtt/server_admin_script.git server_admin_script
+
+cd server_admin_script/centos7
+
+bash install.sh
+
+rm -rf ~/server_admin_script
+
+server-admin

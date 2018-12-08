@@ -95,7 +95,8 @@ show_menus() {
 	echo -e "${BCyan}4. CREATE VIRTUAL HOST${Color_Off}"
 	echo -e "${BCyan}5. LIST ALL VIRTUAL HOST${Color_Off}"
 	echo -e "${BCyan}6. LIST DATABASES${Color_Off}"
-	echo -e "${BRed}6. EXIT${Color_Off}"
+	echo -e "${BCyan}7. SELF UPDATE TOOL${Color_Off}"
+	echo -e "${BRed}8. EXIT${Color_Off}"
 }
 
 read_options(){
@@ -108,7 +109,8 @@ read_options(){
 		4) /etc/server_admin/menu/create_virtualhost; break ;;
 		5) /etc/server_admin/menu/list_domain; break ;;
 		6) /etc/server_admin/menu/list_databases; break ;;
-		7) exit 0;;
+		7) /etc/server_admin/menu/selt_update_tool; break ;;
+		8) exit 0;;
 		*) echo -e "${RED}Error...${Color_Off}"
 	esac
 }
