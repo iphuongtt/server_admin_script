@@ -524,8 +524,9 @@ backup_database(){
                 exit;
               else
                 goodFolderName=`echo $backupDirPathConvert | sed "s/^\(.*\)\/$/\1/"`
-                backupFileName="$goodFolderName/$databaseName.$current_time.bak"
+                backupFileName="$goodFolderName/$databaseName.$current_time.sql"
                 if [ $databaseName == "All databases" ]; then
+                  backupFileName="$goodFolderName/all_databases.$current_time.sql"
                   mysqldump --defaults-file=$config --all-databases > $backupFileName
                 else
                   mysqldump --defaults-file=$config --databases $databaseName > $backupFileName
