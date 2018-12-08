@@ -92,6 +92,7 @@ config=".my.cnf.$$"
 command=".mysql.$$"
 
 trap "interrupt" 1 2 3 6 15
+who=`who`
 username=`awk '{print $1;}' <<< "$who"` #Get Real username login
 rootpass=""
 echo_n=
@@ -501,8 +502,7 @@ get_list_databases3(){
             echo -n -e "Path to save backup folder: "
             read backupDirPath
 
-            backupDirPathConvert=`echo $backupDirPath | sed -r "s/\~/\/home\/$username"`
-
+            backupDirPathConvert=`echo $backupDirPath | sed -r "s/\~/\/home\/$username/"`
 
             if [ ! -d $backupDirPathConvert ]; then
               echo -e "${BRed}ERROR: $backupDirPathConvert does not exit${Color_Off}"
@@ -510,8 +510,7 @@ get_list_databases3(){
               server-admin
               exit;
             else
-              goodFolderName=`echo $backupDirPathConvert | sed -r 's/^\(.*\)\/$/\1/'`
-              echo $goodFolderName
+              goodFolderName=`echo $backupDirPathConvert | sed "s/^\(.*\)\/$/\1/"`
               backupFileName="$goodFolderName/$databaseName.$current_time.bak"
               if [ $databaseName == "All databases" ]; then
                 mysqldump --all-databases > $backupFileName -u root -p $rootpass
