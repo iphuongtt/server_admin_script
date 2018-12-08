@@ -94,7 +94,7 @@ show_menus() {
 	echo -e "${installNginx}"
 	echo -e "${BCyan}4. CREATE VIRTUAL HOST${Color_Off}"
 	echo -e "${BCyan}5. LIST ALL VIRTUAL HOST${Color_Off}"
-	echo -e "${BCyan}6. LIST DATABASES${Color_Off}"
+	echo -e "${BCyan}6. BACKUP DATABASES${Color_Off}"
 	echo -e "${BCyan}7. SELF UPDATE TOOL${Color_Off}"
 	echo -e "${BRed}8. EXIT${Color_Off}"
 }
