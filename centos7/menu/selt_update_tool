@@ -74,15 +74,14 @@ On_IWhite='\033[0;107m'   # White
 
 echo -e "${BGreen}Cloning code...${Color_Off}"
 git clone https://github.com/iphuongtt/server_admin_script.git ~/server_admin_script
-echo $?
-if [ $? -eq 0 ]; then
+if [ $? -eq 1 ]; then
 	echo -e "${BRed}Please check your internet connection...${Color_Off}"
 	read -p "Press enter to continue"
 	server-admin
 fi
 echo -e "${BGreen}Install server-admin tool...${Color_Off}"
 bash ~/server_admin_script/centos7/install.sh
-if [ $? -eq 0 ]; then
+if [ $? -eq 1 ]; then
 	echo -e "${BGreen}Delete folder code...${Color_Off}"
 	rm -rf ~/server_admin_script
 	echo -e "${BRed}Please contact to developer to developer...${Color_Off}"
