@@ -505,7 +505,7 @@ backup_database(){
             echo "Wrong number plese try again!"
             cleanup
           else
-            if [ $REPLY -eq totalNumber + 1 ]; then
+            if [ $REPLY -eq $totalNumber ]; then
               cleanup
               server-admin
               exit
