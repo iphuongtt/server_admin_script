@@ -74,6 +74,7 @@ On_IWhite='\033[0;107m'   # White
 
 echo -e "${BGreen}Cloning code...${Color_Off}"
 git clone https://github.com/iphuongtt/server_admin_script.git ~/server_admin_script
+echo $?
 if [ $? -eq 0 ]; then
 	echo -e "${BRed}Please check your internet connection...${Color_Off}"
 	read -p "Press enter to continue"
