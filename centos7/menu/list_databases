@@ -501,7 +501,7 @@ get_list_databases3(){
             echo -n -e "Path to save backup folder: "
             read backupDirPath
 
-            backupDirPathConvert=`echo $backupDirPath | sed -r "s/\~/\/home\/$username/"`
+            backupDirPathConvert=`echo $backupDirPath | sed -r "s/\~/\/home\/$username"`
 
 
             if [ ! -d $backupDirPathConvert ]; then
@@ -510,12 +510,12 @@ get_list_databases3(){
               server-admin
               exit;
             else
-              goodFolderName=`$backupDirPathConvert | sed 's/^\(.*\)\/$/\1/'`
+              goodFolderName=`"$backupDirPathConvert" | sed 's/^\(.*\)\/$/\1/'`
               backupFileName="$goodFolderName/$databaseName.$current_time.bak"
               if [ databaseName == "All databases"]; then
-                mysqldump --all-databases > $backupFileName
+                mysqldump --all-databases > $backupFileName -u root -p $rootpass
               else
-                mysqldump --databases $databaseName > $backupFileName
+                mysqldump --databases $databaseName > $backupFileName -u root -p $rootpass
               fi
               if [ $? -eq 0 ]; then
                 echo "===================================================================================="
