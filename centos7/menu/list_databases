@@ -490,7 +490,6 @@ backup_database(){
       index=0
       for ((i=0; i<${#dirs[@]}; ++i)) ; do
           if [ "${dirs[i]}" != "" ]; then
-            echo "dbname:${dirs[i]}|"
             databases[index]=${dirs[i]}
             let index+=1
           fi
@@ -499,7 +498,7 @@ backup_database(){
       prompt="Chose database you want to backup:"
       echo $prompt
 
-      databases[{#databases[@]}]="All databases"
+      databases[${#databases[@]}]="All databases"
       let totalNumber+=1
       PS3="Select a number (1-$totalNumber): "
       select opt in "${databases[@]}" "EXIT"; do
