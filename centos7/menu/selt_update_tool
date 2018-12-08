@@ -74,13 +74,13 @@ On_IWhite='\033[0;107m'   # White
 
 #!/bin/bash
 # your real command here, instead of sleep
-
-echo -e "${BGreen}Downloading source code...${Color_Off}"
+#echo -e -n "${BGreen}Downloading source code...${Color_Off}"
 git clone -q https://github.com/iphuongtt/server_admin_script.git ~/server_admin_script &
 PID=$!
 i=1
 sp="/-\|"
-echo -n ' '
+#echo -n ' '
+echo -e -n "${BGreen}Downloading source code...${Color_Off} "
 while [ -d /proc/$PID ]
 do
   printf "\b${sp:i++%${#sp}:1}"
