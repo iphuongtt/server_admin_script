@@ -5,7 +5,7 @@ git clone https://github.com/iphuongtt/server_admin_script.git ~/server_admin_sc
 echo "Install server-admin tool..."
 bash ~/server_admin_script/centos7/install.sh
 echo "Delete folder code..."
-rm -rf ~/server_admin_script
+#rm -rf ~/server_admin_script
 echo "Done"
 read -p "Press enter to continue"
 
