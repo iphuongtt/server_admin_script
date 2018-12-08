@@ -382,11 +382,11 @@ get_list_databases2(){
     echo " - Dropping test database..."
   
     readarray databases < <(do_query "SHOW DATABASES;")
+    echo 
     if [ $? -eq 0 ]; then
         for ((i=0; i<${#databases[@]}; ++i)) ; do
             indexDb[i]=$i
         done
-        echo ${indexDb[@]}
         prompt="Chose database you want to backup:"
         echo $prompt
         PS3="Select a number (1-4): "
@@ -401,6 +401,29 @@ get_list_databases2(){
     fi  
 }
 
+
+get_list_databases3(){
+  readarray -t dirs < <(find /var/lib/mysql/ -maxdepth 1 -type d -printf '%P\n')
+  if [ $? -eq 0 ]; then
+      index=0
+      for ((i=0; i<${#dirs[@]}; ++i)) ; do
+          if [ ! ${dirs[i]} -eq "" ]; then
+            ${databases[$index]}=${dirs[i]}
+          fi
+      done
+      prompt="Chose database you want to backup:"
+      echo $prompt
+      PS3="Select a number (1-4): "
+      select opt in "${databases[@]}" "EXIT"; do
+          databaseName=${databases[$REPLY+1]}
+      done
+
+      echo $databaseName
+      echo " ... Success!"
+  else
+      echo " ... Failed!  Not critical, keep moving..."
+  fi
+}
 
 interrupt() {
     echo
@@ -430,6 +453,6 @@ set_echo_compat
 
 get_root_password
 
-get_list_databases2
+get_list_databases3
 
 #cleanup
