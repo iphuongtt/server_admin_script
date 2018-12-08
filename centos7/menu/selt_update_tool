@@ -78,6 +78,7 @@ echo $?
 if [ $? -eq 0 ]; then
 	echo -e "${BRed}Please check your internet connection...${Color_Off}"
 	read -p "Press enter to continue"
+	server-admin
 fi
 echo -e "${BGreen}Install server-admin tool...${Color_Off}"
 bash ~/server_admin_script/centos7/install.sh
@@ -86,11 +87,11 @@ if [ $? -eq 0 ]; then
 	rm -rf ~/server_admin_script
 	echo -e "${BRed}Please contact to developer to developer...${Color_Off}"
 	read -p "Press enter to continue"
+	server-admin
 else
 	echo -e "${BGreen}Delete folder code...${Color_Off}"
 	rm -rf ~/server_admin_script
 	echo -e "${ICyan}Update successful!${Color_Off}"
 	read -p "Press enter to continue"
+	server-admin
 fi
-
-server-admin
