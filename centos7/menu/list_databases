@@ -497,6 +497,7 @@ backup_database(){
       prompt="Chose database you want to backup:"
       echo $prompt
       totalNumber=`expr ${#databases[@]} + 1`
+      echo "TotalNumber:$totalNumber"
       databases[totalNumber]="All databases"
       let totalNumber+=1
       PS3="Select a number (1-$totalNumber): "
@@ -528,7 +529,6 @@ backup_database(){
                 backupFileName="$goodFolderName/$databaseName.$current_time.sql"
                 if [ "$databaseName" == "All databases" ]; then
                   backupFileName="$goodFolderName/all_databases.$current_time.sql"
-                  echo $backupFileName
                   mysqldump --defaults-file=$config --all-databases > $backupFileName
                 else
                   mysqldump --defaults-file=$config --databases $databaseName > $backupFileName
