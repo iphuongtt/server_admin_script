@@ -488,7 +488,7 @@ get_list_databases3(){
   if [ $? -eq 0 ]; then
       index=0
       for ((i=0; i<${#dirs[@]}; ++i)) ; do
-          if [ ${dirs[i]} != "" ]; then
+          if [ "${dirs[i]}" != "" ]; then
             databases[index]=${dirs[i]}
             let index+=1
           fi
@@ -519,14 +519,14 @@ get_list_databases3(){
               goodFolderName=`echo $backupDirPathConvert | sed "s/^\(.*\)\/$/\1/"`
               backupFileName="$goodFolderName/$databaseName.$current_time.bak"
               if [ $databaseName == "All databases" ]; then
-                mysqldump --all-databases > $backupFileName
+                mysqldump --defaults-file=$config --all-databases > $backupFileName
               else
-                mysqldump --databases $databaseName > $backupFileName
+                mysqldump --defaults-file=$config --databases $databaseName > $backupFileName
               fi
               if [ $? -eq 0 ]; then
                 echo "===================================================================================="
-                echo -e "||||     ${BGreen} BACKUP DATABASE: $databaseName SUCCESSFUL${Color_Off}     ||||"
-                echo -e "||||     ${BBlue} Your backup file: $backupFileName${Color_Off}   ||||"
+                echo -e "         ${BGreen} BACKUP DATABASE: $databaseName SUCCESSFUL${Color_Off}"
+                echo -e "         ${BBlue} Your backup file: $backupFileName${Color_Off}"
                 echo "===================================================================================="
               fi
             fi
