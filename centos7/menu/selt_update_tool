@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 # Reset
 Color_Off='\033[0m'       # Text Reset
 
@@ -72,28 +72,19 @@ On_IPurple='\033[0;105m'  # Purple
 On_ICyan='\033[0;106m'    # Cyan
 On_IWhite='\033[0;107m'   # White
 
-function spinner() {
-    local info="$1"
-    local pid=$!
-    local delay=0.75
-    local spinstr='|/-\'
-    while kill -0 $pid 2> /dev/null; do
-        local temp=${spinstr#?}
-        printf " [%c]  $info" "$spinstr"
-        local spinstr=$temp${spinstr%"$temp"}
-        sleep $delay
-        local reset="\b\b\b\b\b\b"
-        for ((i=1; i<=$(echo $info | wc -c); i++)); do
-            reset+="\b"
-        done
-        printf $reset
-    done
-    printf "    \b\b\b\b"
-}
+#!/bin/bash
+# your real command here, instead of sleep
 
 echo -e "${BGreen}Downloading source code...${Color_Off}"
-(git clone -q https://github.com/iphuongtt/server_admin_script.git ~/server_admin_script) &
-spinner "performing long running task..."
+git clone -q https://github.com/iphuongtt/server_admin_script.git ~/server_admin_script &
+PID=$!
+i=1
+sp="/-\|"
+echo -n ' '
+while [ -d /proc/$PID ]
+do
+  printf "\b${sp:i++%${#sp}:1}"
+done
 if [ $? -eq 1 ]; then
 	echo -e "${BRed}Please check your internet connection...${Color_Off}"
 	read -p "Press enter to continue"
