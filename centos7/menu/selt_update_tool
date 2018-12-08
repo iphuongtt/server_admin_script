@@ -72,7 +72,7 @@ On_IPurple='\033[0;105m'  # Purple
 On_ICyan='\033[0;106m'    # Cyan
 On_IWhite='\033[0;107m'   # White
 
-echo -e "${BGreen}Cloning code...${Color_Off}"
+echo -e "${BGreen}Download source code...${Color_Off}"
 git clone -q https://github.com/iphuongtt/server_admin_script.git ~/server_admin_script
 if [ $? -eq 1 ]; then
 	echo -e "${BRed}Please check your internet connection...${Color_Off}"
@@ -90,7 +90,7 @@ if [ $? -eq 1 ]; then
 	server-admin
 	exit
 else
-	echo -e "${BGreen}Delete folder code...${Color_Off}"
+	echo -e "${BGreen}Delete folder source code...${Color_Off}"
 	rm -rf ~/server_admin_script
 	echo -e "${ICyan}Update successful!${Color_Off}"
 	read -p "Press enter to continue"
