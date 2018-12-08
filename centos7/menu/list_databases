@@ -510,7 +510,7 @@ get_list_databases3(){
               server-admin
               exit;
             else
-              goodFolderName=`"$backupDirPathConvert" | sed 's/^\(.*\)\/$/\1/'`
+              goodFolderName=`echo $backupDirPathConvert | sed 's/^\(.*\)\/$/\1/'`
               backupFileName="$goodFolderName/$databaseName.$current_time.bak"
               if [ databaseName == "All databases"]; then
                 mysqldump --all-databases > $backupFileName -u root -p $rootpass
