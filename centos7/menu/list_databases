@@ -407,15 +407,21 @@ get_list_databases3(){
   if [ $? -eq 0 ]; then
       index=0
       for ((i=0; i<${#dirs[@]}; ++i)) ; do
-          if [ ! ${dirs[i]} -eq "" ]; then
-            ${databases[$index]}=${dirs[i]}
+          if [ ${dirs[i]} != "" ]; then
+            databases[index]=${dirs[i]}
+            let index+=1
           fi
       done
       prompt="Chose database you want to backup:"
       echo $prompt
-      PS3="Select a number (1-4): "
+      totalNumber=${#databases[@]}+1
+      PS3="Select a number (1-$totalNumber): "
       select opt in "${databases[@]}" "EXIT"; do
-          databaseName=${databases[$REPLY+1]}
+          if [ $REPLY -lt 1 -o $REPLY -gt $totalNumber ]; then
+            echo "Wrong number plese try again!"
+          else
+            databaseName=${databases[REPLY-1]};break;
+          fi
       done
 
       echo $databaseName
