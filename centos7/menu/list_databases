@@ -511,6 +511,7 @@ backup_database(){
               exit
             else
               databaseName=${databases[REPLY-1]};
+              echo $databaseName
               echo -n -e "Path to save backup folder: "
               read backupDirPath
 
