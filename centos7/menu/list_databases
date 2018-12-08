@@ -483,7 +483,7 @@ get_list_databases2(){
 }
 
 
-get_list_databases3(){
+backup_database(){
   clear
   readarray -t dirs < <(find /var/lib/mysql/ -maxdepth 1 -type d -printf '%P\n')
   if [ $? -eq 0 ]; then
@@ -503,9 +503,9 @@ get_list_databases3(){
       select opt in "${databases[@]}" "EXIT"; do
           if [ $REPLY -lt 1 -o $REPLY -gt $totalNumber ]; then
             echo "Wrong number plese try again!"
+            cleanup
           else
             databaseName=${databases[REPLY-1]};
-
             echo -n -e "Path to save backup folder: "
             read backupDirPath
 
@@ -514,6 +514,7 @@ get_list_databases3(){
             if [ ! -d $backupDirPathConvert ]; then
               echo -e "${BRed}ERROR: $backupDirPathConvert does not exit${Color_Off}"
               read -p "Press enter to continue"
+              cleanup
               server-admin
               exit;
             else
@@ -525,10 +526,15 @@ get_list_databases3(){
                 mysqldump --defaults-file=$config --databases $databaseName > $backupFileName
               fi
               if [ $? -eq 0 ]; then
+                cleanup
+                clear
                 echo "===================================================================================="
                 echo -e "         ${BGreen} BACKUP DATABASE: $databaseName SUCCESSFUL${Color_Off}"
                 echo -e "         ${BBlue} Your backup file: $backupFileName${Color_Off}"
                 echo "===================================================================================="
+                read -p "Press enter to continue"
+                server-admin
+                exit;
               fi
             fi
             break;
@@ -567,6 +573,4 @@ set_echo_compat
 
 get_root_password
 
-get_list_databases3
-
-cleanup
+backup_database
