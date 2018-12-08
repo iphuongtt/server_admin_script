@@ -496,11 +496,10 @@ backup_database(){
           fi
       done
       totalNumber=`expr ${#databases[@]} + 1`
-      echo "TotalNumber:$totalNumber"
       prompt="Chose database you want to backup:"
       echo $prompt
 
-      databases[totalNumber]="All databases"
+      databases[{#databases[@]}]="All databases"
       let totalNumber+=1
       PS3="Select a number (1-$totalNumber): "
       select opt in "${databases[@]}" "EXIT"; do
