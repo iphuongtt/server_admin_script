@@ -414,7 +414,7 @@ get_list_databases3(){
       done
       prompt="Chose database you want to backup:"
       echo $prompt
-      totalNumber=${#databases[@]}+1
+      totalNumber=`expr ${#databases[@]} + 1`
       PS3="Select a number (1-$totalNumber): "
       select opt in "${databases[@]}" "EXIT"; do
           if [ $REPLY -lt 1 -o $REPLY -gt $totalNumber ]; then
