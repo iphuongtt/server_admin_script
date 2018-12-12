@@ -197,7 +197,18 @@ user_config_dir=/etc/vsftpd/vsftpd_user_conf
 END
 
 
-finish
+
+finish &
+PID=$!
+i=1
+sp="/-\|"
+#echo -n ' '
+echo -e -n "${BGreen}Configuring vsftpd...${Color_Off} "
+while [ -d /proc/$PID ]
+do
+  printf "\b${sp:i++%${#sp}:1}"
+done
+printf "\n"
 
 if [ $? -eq 1 ]; then
     clear
