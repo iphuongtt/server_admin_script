@@ -178,3 +178,13 @@ setsebool -P ftpd_full_access on
 mkdir /home/ftpuser/vftp
 chown -R ftpuser /home/ftpuser/vftp/
 chmod 755 -R /home/ftpuser/vftp
+
+
+clear
+echo "===================================================================================="
+echo -e "         ${BGreen} USER: $username${Color_Off}"
+echo -e "         ${BBlue} PASSWORD: $password${Color_Off}"
+echo "===================================================================================="
+read -p "Press enter to continue"
+server-admin
+exit;
