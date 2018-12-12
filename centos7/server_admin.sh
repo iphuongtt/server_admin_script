@@ -74,10 +74,10 @@ On_IPurple='\033[0;105m'  # Purple
 On_ICyan='\033[0;106m'    # Cyan
 On_IWhite='\033[0;107m'   # White
 
-installNginx="${BCyan}3. INSTALL NGINX${Color_Off}"
+installNginx="${BCyan}3.  INSTALL NGINX${Color_Off}"
 # check nginx is installed
 if [ -f /lib/systemd/system/nginx.service ]; then
-  installNginx="${BWhite}3. INSTALL NGINX${Color_Off}"
+  installNginx="${BWhite}3.  INSTALL NGINX${Color_Off}"
 fi
 if [ $(id -u) != "0" ]; then
     printf "You need to be root to perform this command. Run \"sudo su\" to become root!\n"
@@ -89,17 +89,17 @@ show_menus() {
 	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
 	echo -e "${BYellow} S E R V E R - A D M I N - M E N U ${Color_Off}"
 	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
-	echo -e "${BCyan}1. CREATE DATABASE${Color_Off}"
-	echo -e "${BCyan}2. INSTALL MARIADB 10.1${Color_Off}"
+	echo -e "${BCyan}1.  CREATE DATABASE${Color_Off}"
+	echo -e "${BCyan}2.  INSTALL MARIADB 10.1${Color_Off}"
 	echo -e "${installNginx}"
-	echo -e "${BCyan}4. CREATE VIRTUAL HOST${Color_Off}"
-	echo -e "${BCyan}5. LIST ALL VIRTUAL HOST${Color_Off}"
-	echo -e "${BCyan}6. BACKUP DATABASES${Color_Off}"
-	echo -e "${BCyan}7. SELF UPDATE TOOL${Color_Off}"
-	echo -e "${BCyan}8. INSTALL VSFTP${Color_Off}"
-	echo -e "${BCyan}9. MOUNT FOLDER TO FPT ACCOUTN${Color_Off}"
+	echo -e "${BCyan}4.  CREATE VIRTUAL HOST${Color_Off}"
+	echo -e "${BCyan}5.  LIST ALL VIRTUAL HOST${Color_Off}"
+	echo -e "${BCyan}6.  BACKUP DATABASES${Color_Off}"
+	echo -e "${BCyan}7.  SELF UPDATE TOOL${Color_Off}"
+	echo -e "${BCyan}8.  INSTALL VSFTP${Color_Off}"
+	echo -e "${BCyan}9.  MOUNT FOLDER TO FPT ACCOUTN${Color_Off}"
 	echo -e "${BCyan}10. UNMOUNT FOLDER FROM FPT ACCOUTN${Color_Off}"
-	echo -e "${BRed}11. EXIT${Color_Off}"
+	echo -e "${BRed}11.  EXIT${Color_Off}"
 }
 
 read_options(){

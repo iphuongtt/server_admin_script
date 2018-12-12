@@ -131,19 +131,23 @@ get_password() {
 finish() {
 	systemctl enable vsftpd
 	if [ $? -eq 1 ]; then
+		echo -e -n "${BRed}Enable vsftpd error${Color_Off} "
         return 1
     fi
 	#Restart vsftpd
 	systemctl restart vsftpd
 	if [ $? -eq 1 ]; then
+		echo -e -n "${BRed}Start vsftpd error${Color_Off} "
         return 1
     fi
 	setsebool -P ftpd_full_access on
 	if [ $? -eq 1 ]; then
+		echo -e -n "${BRed}Enable ftpd_full_access error${Color_Off} "
         return 1
     fi
 	mkdir /home/ftpuser/vftp
 	if [ $? -eq 1 ]; then
+		echo -e -n "${BRed}Create folder /home/ftpuser/vftp error${Color_Off} "
         return 1
     fi
 	chown -R ftpuser /home/ftpuser/vftp/
@@ -217,7 +221,7 @@ if [ $? -eq 1 ]; then
 	server-admin
 	exit;
 else
-	read -p "Error. Press enter to continue"
+	read -p "Press enter to continue"
 	server-admin
 	exit;
 fi
