@@ -194,7 +194,7 @@ user_config_dir=/etc/vsftpd/vsftpd_user_conf
 END
 
 
-
+printf "\n"
 finish &
 PID=$!
 i=1
