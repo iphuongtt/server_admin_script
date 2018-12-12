@@ -73,7 +73,7 @@ On_IPurple='\033[0;105m'  # Purple
 On_ICyan='\033[0;106m'    # Cyan
 On_IWhite='\033[0;107m'   # White
 
-yum update -y &
+yum update -y -q &
 PID=$!
 i=1
 sp="/-\|"
@@ -92,7 +92,7 @@ passwd ftpuser
 #Add ftpuser to ftp group
 usermod -a -G ftp ftpuser
 
-yum install -y vsftpd &
+yum install -y -q vsftpd &
 PID=$!
 i=1
 sp="/-\|"
