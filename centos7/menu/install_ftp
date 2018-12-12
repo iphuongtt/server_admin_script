@@ -97,7 +97,7 @@ PID=$!
 i=1
 sp="/-\|"
 #echo -n ' '
-echo -e -n "${BGreen}Updating system...${Color_Off} "
+echo -e -n "${BGreen}Installing vsftpd...${Color_Off} "
 while [ -d /proc/$PID ]
 do
   printf "\b${sp:i++%${#sp}:1}"
@@ -135,7 +135,7 @@ cat > "/etc/vsftpd/user.txt" <<END
 $username 
 $password
 END
-db_load -T -t hash -f /etc/vsftpd/user.txt vsftpd-virtual-user.db
+db_load -T -t hash -f /etc/vsftpd/user.txt /etc/vsftpd/vsftpd-virtual-user.db
 chmod 600 /etc/vsftpd/vsftpd-virtual-user.db
 cat > "/etc/pam.d/vsftpd.virtual" <<END
 #%PAM-1.0
