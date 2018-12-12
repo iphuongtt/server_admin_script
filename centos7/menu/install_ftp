@@ -73,7 +73,17 @@ On_IPurple='\033[0;105m'  # Purple
 On_ICyan='\033[0;106m'    # Cyan
 On_IWhite='\033[0;107m'   # White
 
-yum update -y
+yum update -y &
+PID=$!
+i=1
+sp="/-\|"
+#echo -n ' '
+echo -e -n "${BGreen}Updating system...${Color_Off} "
+while [ -d /proc/$PID ]
+do
+  printf "\b${sp:i++%${#sp}:1}"
+done
+printf "\n"
 
 #Add ftp user
 useradd ftpuser
@@ -81,7 +91,19 @@ passwd ftpuser
 
 #Add ftpuser to ftp group
 usermod -a -G ftp ftpuser
-yum install -y vsftpd
+
+yum install -y vsftpd &
+PID=$!
+i=1
+sp="/-\|"
+#echo -n ' '
+echo -e -n "${BGreen}Updating system...${Color_Off} "
+while [ -d /proc/$PID ]
+do
+  printf "\b${sp:i++%${#sp}:1}"
+done
+printf "\n"
+
 systemctl stop vsftpd
 
 get_user_name() {
@@ -148,6 +170,7 @@ guest_enable=YES
 guest_username=ftpuser
 user_config_dir=/etc/vsftpd/vsftpd_user_conf
 END
+
 systemctl enable vsftpd
 #Restart vsftpd
 systemctl restart vsftpd
