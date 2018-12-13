@@ -12,7 +12,7 @@ get_user_name() {
 		fi
 		echo -n "Username should not be blank, enter your username: "
 	done
-	if is_folder_exists $username; then
+	if is_folder_exists /home/ftpuser/vftp/$username; then
 		read -p "Username already exists. Do you want to try a different name?:  " -n 1 -r
 		if [[ $REPLY =~ ^[Yy]$ ]]; then
 			get_user_name
