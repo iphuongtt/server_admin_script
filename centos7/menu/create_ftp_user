@@ -18,6 +18,7 @@ get_user_name() {
 			printf "\n"
 			get_user_name
 		else
+			server_admin
 			exit
 		fi
 	fi 

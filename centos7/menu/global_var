@@ -1,4 +1,4 @@
 #!/bin/bash
 
-who=`who`
-logon_username=`awk '{print $1;}' <<< "$who"` #Get Real username login
+
+logon_username=` id -u -n`
