@@ -57,6 +57,6 @@ folderName=`basename $pathConvert`
 
 mkdir /home/ftpuser/vftp/$username/$folderName
 
-mount --bind $folderConvert /home/ftpuser/vftp/$username/$folderName 
+mount --bind $pathConvert /home/ftpuser/vftp/$username/$folderName 
 
-sed -i -e "$ a $folderConvert /home/ftpuser/vftp/$username/$folderName none bind 0 0" /etc/fstab
+sed -i -e "$ a $pathConvert /home/ftpuser/vftp/$username/$folderName none bind 0 0" /etc/fstab
