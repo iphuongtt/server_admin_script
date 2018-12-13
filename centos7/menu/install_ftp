@@ -78,6 +78,16 @@ enable_firewall() {
 	firewall-cmd --reload
 }
 
+install_vsftpd() {
+	if [ -f /lib/systemd/system/vsftpd.service ]; then
+	  	yum update -y -q vsftpd
+	else
+		yum install -y -q vsftpd
+	fi
+}
+
+
+
 yum update -y -q &
 PID=$!
 i=1
@@ -88,6 +98,7 @@ while [ -d /proc/$PID ]
 do
   printf "\b${sp:i++%${#sp}:1}"
 done
+echo -e "${BBlue} Done${Color_Off}"
 printf "\n"
 
 #Add ftp user
@@ -97,7 +108,7 @@ passwd ftpuser
 #Add ftpuser to ftp group
 usermod -a -G ftp ftpuser
 
-yum install -y -q vsftpd &
+install_vsftpd &
 PID=$!
 i=1
 sp="/-\|"
@@ -107,6 +118,7 @@ while [ -d /proc/$PID ]
 do
   printf "\b${sp:i++%${#sp}:1}"
 done
+echo -e "${BBlue} Done${Color_Off}"
 printf "\n"
 
 enable_firewall &
@@ -119,6 +131,7 @@ while [ -d /proc/$PID ]
 do
   printf "\b${sp:i++%${#sp}:1}"
 done
+echo -e "${BBlue} Done${Color_Off}"
 printf "\n"
 
 systemctl stop vsftpd
@@ -179,6 +192,7 @@ $username
 $password
 END
 db_load -T -t hash -f /etc/vsftpd/user.txt /etc/vsftpd/vsftpd-virtual-user.db
+rm -rf /etc/vsftpd/user.txt
 chmod 600 /etc/vsftpd/vsftpd-virtual-user.db
 cat > "/etc/pam.d/vsftpd.virtual" <<END
 #%PAM-1.0
