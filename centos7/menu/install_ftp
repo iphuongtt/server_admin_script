@@ -74,8 +74,8 @@ On_ICyan='\033[0;106m'    # Cyan
 On_IWhite='\033[0;107m'   # White
 
 enable_firewall() {
-	firewall-cmd --permanent --add-port=21/tcp
-	firewall-cmd --reload
+	firewall-cmd -q --permanent --add-port=21/tcp
+	firewall-cmd -q --reload
 }
 
 install_vsftpd() {
@@ -88,7 +88,7 @@ install_vsftpd() {
 
 create_user() {
 	id -u ftpuser
-	if [ $? -eq 0 ]; then
+	if [ $? -eq 1 ]; then
 		#Add ftp user
 		useradd ftpuser
 		passwd ftpuser
