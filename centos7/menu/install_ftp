@@ -73,6 +73,11 @@ On_IPurple='\033[0;105m'  # Purple
 On_ICyan='\033[0;106m'    # Cyan
 On_IWhite='\033[0;107m'   # White
 
+enable_firewall() {
+	firewall-cmd --permanent --add-port=21/tcp
+	firewall-cmd --reload
+}
+
 yum update -y -q &
 PID=$!
 i=1
@@ -98,6 +103,18 @@ i=1
 sp="/-\|"
 #echo -n ' '
 echo -e -n "${BGreen}Installing vsftpd...${Color_Off} "
+while [ -d /proc/$PID ]
+do
+  printf "\b${sp:i++%${#sp}:1}"
+done
+printf "\n"
+
+enable_firewall &
+PID=$!
+i=1
+sp="/-\|"
+#echo -n ' '
+echo -e -n "${BGreen}Enabling firewall for vsftpd...${Color_Off} "
 while [ -d /proc/$PID ]
 do
   printf "\b${sp:i++%${#sp}:1}"
