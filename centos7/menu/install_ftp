@@ -181,8 +181,6 @@ finish() {
 		echo -e -n "${BRed}Enable vsftpd error${Color_Off} "
         return 1
     fi
-	#Restart vsftpd
-	systemctl restart vsftpd
 	if [ $? -eq 1 ]; then
 		echo -e -n "${BRed}Start vsftpd error${Color_Off} "
         return 1
@@ -198,6 +196,8 @@ finish() {
 	fi
 	chown -R ftpuser /home/ftpuser/vftp/
 	chmod 755 -R /home/ftpuser/vftp
+	#Restart vsftpd
+	systemctl restart vsftpd
 	return 0
 }
 
@@ -222,14 +222,18 @@ cp /etc/vsftpd/vsftpd.conf /etc/vsftpd/vsftpd.conf.origin
 echo '' > /etc/vsftpd/vsftpd.conf
 cat > "/etc/vsftpd/vsftpd.conf" <<END
 listen=YES
+#Disallow anonymous logins; this allows unidentified users to access files via FTP. Ensure that the anonymous_enable setting to NO:
 anonymous_enable=NO
+#Enable local users to login, this will allow your regular user accounts to function as FTP accounts. Change the local_enable setting to YES:
 local_enable=YES
+#If you want local user to be able to write to a directory, then change the write_enable setting to YES:
 write_enable=YES
 local_umask=022
 nopriv_user=ftpuser
 virtual_use_local_privs=YES
 guest_enable=YES
 local_root=/home/ftpuser/vftp
+#Local users will be ‘chroot jailed’ and they will be denied access to any other part of the server. Set the chroot_local_user setting to YES:
 chroot_local_user=NO
 allow_writeable_chroot=YES
 ls_recurse_enable=YES
@@ -256,9 +260,10 @@ while [ -d /proc/$PID ]
 do
   printf "\b${sp:i++%${#sp}:1}"
 done
+echo -e "${BBlue} Done${Color_Off}"
 printf "\n"
 
-if [ $? -eq 1 ]; then
+if [ $? -eq 0 ]; then
     clear
 	echo "===================================================================================="
 	echo -e "         ${BGreen} USER: $username${Color_Off}"
