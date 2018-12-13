@@ -46,7 +46,7 @@ rm -rf /etc/vsftpd/user.txt
 chmod 600 /etc/vsftpd/vsftpd-virtual-user.db
 
 mkdir /home/ftpuser/vftp/$username
-chown -R ftp:ftpuser /home/ftpuser/vftp/$username
+chown -R ftpuser:ftp /home/ftpuser/vftp/$username
 chmod -R 755 /home/ftpuser/vftp/$username
 systemctl restart vsftpd
 

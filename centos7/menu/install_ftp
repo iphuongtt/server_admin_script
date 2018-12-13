@@ -123,7 +123,7 @@ finish() {
     if [ ! -d /home/ftpuser/vftp ]; then
 	  mkdir /home/ftpuser/vftp
 	fi
-	chown -R ftpuser /home/ftpuser/vftp/
+	chown -R ftpuser:ftp /home/ftpuser/vftp/
 	chmod 755 -R /home/ftpuser/vftp
 	#Restart vsftpd
 	systemctl restart vsftpd
