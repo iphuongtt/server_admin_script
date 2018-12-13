@@ -87,12 +87,11 @@ install_vsftpd() {
 }
 
 create_user() {
-	id -u ftpuser
-	if [ $? -eq 1 ]; then
-		#Add ftp user
+	if ! id -u ftpuser > /dev/null 2>&1; then
+	   	#Add ftp user
 		useradd ftpuser
 		passwd ftpuser
-    fi
+	fi
     #Add ftpuser to ftp group
 	usermod -a -G ftp ftpuser
 }
