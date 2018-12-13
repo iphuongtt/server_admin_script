@@ -86,6 +86,17 @@ install_vsftpd() {
 	fi
 }
 
+create_user() {
+	id -u ftpuser
+	if [ $? -eq 0 ]; then
+		#Add ftp user
+		useradd ftpuser
+		passwd ftpuser
+    fi
+    #Add ftpuser to ftp group
+	usermod -a -G ftp ftpuser
+}
+
 
 
 yum update -y -q &
@@ -101,12 +112,19 @@ done
 echo -e "${BBlue} Done${Color_Off}"
 printf "\n"
 
-#Add ftp user
-useradd ftpuser
-passwd ftpuser
 
-#Add ftpuser to ftp group
-usermod -a -G ftp ftpuser
+create_user &
+PID=$!
+i=1
+sp="/-\|"
+#echo -n ' '
+echo -e -n "${BGreen}Creating user...${Color_Off} "
+while [ -d /proc/$PID ]
+do
+  printf "\b${sp:i++%${#sp}:1}"
+done
+echo -e "${BBlue} Done${Color_Off}"
+printf "\n"
 
 install_vsftpd &
 PID=$!
