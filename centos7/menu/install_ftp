@@ -162,11 +162,10 @@ finish() {
 		echo -e -n "${BRed}Enable ftpd_full_access error${Color_Off} "
         return 1
     fi
-	mkdir /home/ftpuser/vftp
-	if [ $? -eq 1 ]; then
-		echo -e -n "${BRed}Create folder /home/ftpuser/vftp error${Color_Off} "
-        return 1
-    fi
+
+    if [ ! -d /home/ftpuser/vftp ]; then
+	  mkdir /home/ftpuser/vftp
+	fi
 	chown -R ftpuser /home/ftpuser/vftp/
 	chmod 755 -R /home/ftpuser/vftp
 	return 0
