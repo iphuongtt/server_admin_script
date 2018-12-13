@@ -117,7 +117,7 @@ PID=$!
 i=1
 sp="/-\|"
 #echo -n ' '
-echo -e -n "${BGreen}Creating user...${Color_Off} "
+echo -e -n "${BGreen}Creating fpt user...${Color_Off} "
 while [ -d /proc/$PID ]
 do
   printf "\b${sp:i++%${#sp}:1}"
@@ -154,7 +154,7 @@ printf "\n"
 systemctl stop vsftpd
 
 get_user_name() {
-	echo -n "Enter your username then press [ENTER]: "
+	echo -n "Enter ftp account's username then press [ENTER]: "
 	while read username
 	do
 	if [ "$username" != "" ]; then
@@ -165,7 +165,7 @@ get_user_name() {
 }
 
 get_password() {
-	echo -n "Enter your password then press [ENTER]: "
+	echo -n "Enter ftp account's password then press [ENTER]: "
 	while read -s password
 	do
 	if [ "$password" != "" ]; then
@@ -176,7 +176,7 @@ get_password() {
 }
 
 finish() {
-	systemctl enable vsftpd
+	systemctl enable vsftpd -q
 	if [ $? -eq 1 ]; then
 		echo -e -n "${BRed}Enable vsftpd error${Color_Off} "
         return 1
@@ -205,11 +205,11 @@ get_user_name
 get_password
 
 cat > "/etc/vsftpd/user.txt" <<END
-$username 
+$username
 $password
 END
 db_load -T -t hash -f /etc/vsftpd/user.txt /etc/vsftpd/vsftpd-virtual-user.db
-rm -rf /etc/vsftpd/user.txt
+#rm -rf /etc/vsftpd/user.txt
 chmod 600 /etc/vsftpd/vsftpd-virtual-user.db
 cat > "/etc/pam.d/vsftpd.virtual" <<END
 #%PAM-1.0
