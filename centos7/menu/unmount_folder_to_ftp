@@ -20,7 +20,7 @@ input_username() {
 			printf "\n"
 			input_username
 		else
-			server_admin
+			server-admin
 			exit
 		fi
 	fi
@@ -42,7 +42,7 @@ input_folder() {
 			printf "\n"
 			input_folder
 		else
-			server_admin
+			server-admin
 			exit
 		fi
 	fi 
