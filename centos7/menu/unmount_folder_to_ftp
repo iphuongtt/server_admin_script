@@ -28,17 +28,16 @@ input_username() {
 
 
 input_folder() {
-	echo -n "Enter folder path to mount: "
-	while read path
+	echo -n "Enter folder name to unmount: "
+	while read folderName
 	do
-		if [ "$path" != "" ]; then
+		if [ "$folderName" != "" ]; then
 		    break
 		fi
-		echo -n "Path should not be blank, enter your path: "
+		echo -n "Folder name should not be blank, enter your folder name: "
 	done
-	pathConvert=`echo $path | sed -r "s/\~/\/home\/$logon_username/"`
-	if ! is_folder_exists $pathConvert; then
-		read -p "$pathConvert does not exists. Do you want to try again?:  " -n 1 -r
+	if ! is_folder_exists /home/ftpuser/vftp/$username/$folderName; then
+		read -p "/home/ftpuser/vftp/$username/$folderName does not exists. Do you want to try again?:  " -n 1 -r
 		if [[ $REPLY =~ ^[Yy]$ ]]; then
 			printf "\n"
 			input_folder
@@ -52,8 +51,6 @@ input_folder() {
 input_username
 
 input_folder
- 
-folderName=`basename $pathConvert`
 
 umount /home/ftpuser/vftp/$username/$folderName 
 
