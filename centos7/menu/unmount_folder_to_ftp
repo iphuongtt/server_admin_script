@@ -56,7 +56,7 @@ umount /home/ftpuser/vftp/$username/$folderName
 
 sed -i -e "/home/ftpuser/vftp/$username/$folderName none bind 0 0/d" /etc/fstab
 
-if [ $? -eq 1 ]; then
+if [ $? -eq 0 ]; then
 	clear
 	echo "===================================================================================="
 	echo -e "         ${BGreen} Unmounted: /home/ftpuser/vftp/$username/$folderName${Color_Off}"
