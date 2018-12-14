@@ -38,12 +38,13 @@ input_folder() {
 	done
 	pathConvert=`echo $path | sed -r "s/\~/\/home\/$logon_username/"`
 	if ! is_folder_exists $pathConvert; then
+		printf "\n"
 		read -p "$pathConvert does not exists. Do you want to try again?:  " -n 1 -r
 		if [[ $REPLY =~ ^[Yy]$ ]]; then
 			printf "\n"
 			input_folder
 		else
-			server_admin
+			server-admin
 			exit
 		fi
 	fi 
