@@ -23,6 +23,18 @@ install_php() {
 	yum --enablerepo=remi,remi-php$php_install install php-fpm php-common -y -q
 	yum --enablerepo=remi,remi-php$php_install install php-opcache php-pecl-apcu php-cli php-pear php-pdo php-mysqlnd php-pgsql php-pecl-mongodb php-pecl-redis php-pecl-memcache php-pecl-memcached php-gd php-mbstring php-mcrypt php-xml php-pecl-zip php-odbc -y -q
 }
+config_php() {
+	cp /etc/php.ini /etc/php.ini.backup$current_time
+	sed -i 's/cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php.ini # This causes the PHP interpreter to only try the literal path given and to stop processing if the file is not found.
+
+	# Config php-fpm
+	cp /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.conf.backup$current_time
+	sed -i 's/user = apache/user = nginx/' /etc/php-fpm.d/www.conf
+	sed -i 's/group = apache/group = nginx/' /etc/php-fpm.d/www.conf
+	sed -i 's/listen.owner = nobody/listen.owner = nginx/' /etc/php-fpm.d/www.conf
+	sed -i 's/listen.group = nobody/listen.group = nginx/' /etc/php-fpm.d/www.conf
+	sed -i 's/listen = 127.0.0.1:9000/listen = /var/run/php-fpm/php-fpm.sock/' /etc/php-fpm.d/www.conf
+}
 clear
 printf "=========================================================================\n"
 printf "Begin installation... \n"
@@ -53,7 +65,7 @@ PID=$!
 i=1
 sp="/-\|"
 #echo -n ' '
-echo -e -n "${BGreen}Updating system...${Color_Off} "
+echo -e -n "${BGreen}Install epel...${Color_Off} "
 while [ -d /proc/$PID ]
 do
   printf "\b${sp:i++%${#sp}:1}"
@@ -66,7 +78,7 @@ PID=$!
 i=1
 sp="/-\|"
 #echo -n ' '
-echo -e -n "${BGreen}Updating system...${Color_Off} "
+echo -e -n "${BGreen}Configuring firewall...${Color_Off} "
 while [ -d /proc/$PID ]
 do
   printf "\b${sp:i++%${#sp}:1}"
@@ -79,7 +91,7 @@ PID=$!
 i=1
 sp="/-\|"
 #echo -n ' '
-echo -e -n "${BGreen}Updating system...${Color_Off} "
+echo -e -n "${BGreen}Install Php...${Color_Off} "
 while [ -d /proc/$PID ]
 do
   printf "\b${sp:i++%${#sp}:1}"
@@ -88,20 +100,22 @@ echo -e "${BBlue} Done${Color_Off}"
 printf "\n"
 
 # Config Php
-cp /etc/php.ini /etc/php.ini.backup$current_time
-sed -i 's/cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php.ini # This causes the PHP interpreter to only try the literal path given and to stop processing if the file is not found.
+config_php &
+PID=$!
+i=1
+sp="/-\|"
+#echo -n ' '
+echo -e -n "${BGreen}Configuring Php...${Color_Off} "
+while [ -d /proc/$PID ]
+do
+  printf "\b${sp:i++%${#sp}:1}"
+done
+echo -e "${BBlue} Done${Color_Off}"
+printf "\n"
 
-# Config php-fpm
-cp /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.conf.backup$current_time
-sed -i 's/user = apache/user = nginx/' /etc/php-fpm.d/www.conf
-sed -i 's/group = apache/group = nginx/' /etc/php-fpm.d/www.conf
-sed -i 's/listen.owner = nobody/listen.owner = nginx/' /etc/php-fpm.d/www.conf
-sed -i 's/listen.group = nobody/listen.group = nginx/' /etc/php-fpm.d/www.conf
-sed -i 's/listen = 127.0.0.1:9000/listen = /var/run/php-fpm/php-fpm.sock/' /etc/php-fpm.d/www.conf
-
-systemctl enable php-fpm
+systemctl enable php-fpm -q
 if [ $? -eq 0 ]; then
-	systemctl start php-fpm
+	systemctl start php-fpm -q
 	if [ $? -eq 0 ]; then
 		clear
 		echo "===================================================================================="
