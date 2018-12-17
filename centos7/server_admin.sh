@@ -14,6 +14,11 @@ if [ $(id -u) != "0" ]; then
     exit
 fi
 
+return_menu() {
+	server-admin
+	exit
+}
+
 show_menus() {
 	clear
 	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
@@ -53,7 +58,7 @@ read_options(){
 	esac
 }
 
-#trap '' SIGINT SIGQUIT SIGTSTP
+trap 'return_menu' SIGINT SIGQUIT SIGTSTP
 
 while true
 do

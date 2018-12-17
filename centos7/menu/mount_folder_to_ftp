@@ -99,7 +99,7 @@ if [ $? -eq 0 ]; then
 	if [ $? -eq 0 ]; then
 		clear
 		echo "===================================================================================="
-		echo -e "         ${BGreen} Mounted: $pathConvert to /home/ftpuser/vftp/$username/$folderName {Color_Off}"
+		echo -e "         ${BGreen} Mounted: $pathConvert to /home/ftpuser/vftp/$username/$folderName ${Color_Off}"
 		echo "===================================================================================="
 		read -p "Press enter to continue"
 		server-admin
