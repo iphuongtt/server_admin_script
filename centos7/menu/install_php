@@ -91,7 +91,7 @@ PID=$!
 i=1
 sp="/-\|"
 #echo -n ' '
-echo -e -n "${BGreen}Install Php...${Color_Off} "
+echo -e -n "${BGreen}Install Php $php_version...${Color_Off} "
 while [ -d /proc/$PID ]
 do
   printf "\b${sp:i++%${#sp}:1}"
