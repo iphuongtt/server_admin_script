@@ -18,3 +18,18 @@ do
 done
 echo -e "${BBlue} Done${Color_Off}"
 printf "\n"
+
+
+if [ $? -eq 0 ]; then
+	clear
+	echo "===================================================================================="
+	echo -e "         ${BGreen}REMOVED ALL PHP VERSION SUCCESSFUL${Color_Off}"
+	echo "===================================================================================="
+	read -p "Press enter to continue"
+	server-admin
+	exit;
+else
+	read -p "Press enter to continue"
+	server-admin
+	exit;
+fi
