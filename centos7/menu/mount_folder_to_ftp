@@ -20,7 +20,7 @@ input_username() {
 			printf "\n"
 			input_username
 		else
-			server_admin
+			server-admin
 			exit
 		fi
 	fi
@@ -65,7 +65,7 @@ mount_folder_name() {
 			printf "\n"
 			mount_folder_name
 		else
-			server_admin
+			server-admin
 			exit
 		fi
 	fi
@@ -83,7 +83,7 @@ if is_folder_exists /home/ftpuser/vftp/$username/$folderName; then
 		printf "\n"
 		mount_folder_name
 	else
-		server_admin
+		server-admin
 		exit
 	fi
 fi
