@@ -54,17 +54,22 @@ input_folder
 
 umount /home/ftpuser/vftp/$username/$folderName 
 
-sed -i -e "\/home\/ftpuser\/vftp\/$username\/$folderName none bind 0 0/d" /etc/fstab
-
 if [ $? -eq 0 ]; then
-	rm -rf /home/ftpuser/vftp/$username/$folderName
-	clear
-	echo "===================================================================================="
-	echo -e "         ${BGreen} Unmounted: /home/ftpuser/vftp/$username/$folderName${Color_Off}"
-	echo "===================================================================================="
-	read -p "Press enter to continue"
-	server-admin
-	exit;
+	sed -i -e "\/home\/ftpuser\/vftp\/$username\/$folderName none bind 0 0/d" /etc/fstab
+	if [ $? -eq 0 ]; then
+		rm -rf /home/ftpuser/vftp/$username/$folderName
+		clear
+		echo "===================================================================================="
+		echo -e "         ${BGreen} Unmounted: /home/ftpuser/vftp/$username/$folderName${Color_Off}"
+		echo "===================================================================================="
+		read -p "Press enter to continue"
+		server-admin
+		exit;
+	else
+		read -p "Error, Press enter to continue"
+		server-admin
+		exit;
+	fi
 else
 	read -p "Error, Press enter to continue"
 	server-admin

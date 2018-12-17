@@ -50,30 +50,67 @@ input_folder() {
 	fi 
 }
 
+mount_folder_name() {
+	echo -n "Enter mount folder name: "
+	while read folderName
+	do
+		if [ "$folderName" != "" ]; then
+		    break
+		fi
+		echo -n "Path should not be blank, enter your folderName: "
+	done
+	if is_folder_exists /home/ftpuser/vftp/$username/$folderName; then
+		read -p "/home/ftpuser/vftp/$username/$folderName already exists. Do you want to mount with other name?:  " -n 1 -r
+		if [[ $REPLY =~ ^[Yy]$ ]]; then
+			printf "\n"
+			mount_folder_name
+		else
+			server_admin
+			exit
+		fi
+	fi
+}
+
 input_username
 
 input_folder
  
 folderName=`basename $pathConvert`
 
+if is_folder_exists /home/ftpuser/vftp/$username/$folderName; then
+	read -p "/home/ftpuser/vftp/$username/$folderName already exists. Do you want to mount with other name?:  " -n 1 -r
+	if [[ $REPLY =~ ^[Yy]$ ]]; then
+		printf "\n"
+		mount_folder_name
+	else
+		server_admin
+		exit
+	fi
+fi
+
 mkdir /home/ftpuser/vftp/$username/$folderName
 
 chown -R ftpuser:ftp /home/ftpuser/vftp/$username/$folderName
 
-mount --bind $pathConvert /home/ftpuser/vftp/$username/$folderName 
-
-sed -i -e "$ a $pathConvert /home/ftpuser/vftp/$username/$folderName none bind 0 0" /etc/fstab
+mount --bind $pathConvert /home/ftpuser/vftp/$username/$folderName
 
 if [ $? -eq 0 ]; then
-	clear
-	echo "===================================================================================="
-	echo -e "         ${BGreen} Mounted: $pathConvert to /home/ftpuser/vftp/$username/$folderName {Color_Off}"
-	echo "===================================================================================="
-	read -p "Press enter to continue"
-	server-admin
-	exit;
+	sed -i -e "$ a $pathConvert /home/ftpuser/vftp/$username/$folderName none bind 0 0" /etc/fstab
+	if [ $? -eq 0 ]; then
+		clear
+		echo "===================================================================================="
+		echo -e "         ${BGreen} Mounted: $pathConvert to /home/ftpuser/vftp/$username/$folderName {Color_Off}"
+		echo "===================================================================================="
+		read -p "Press enter to continue"
+		server-admin
+		exit;
+	else
+		read -p "Error, Press enter to continue"
+		server-admin
+		exit;
+	fi
 else
 	read -p "Error, Press enter to continue"
 	server-admin
 	exit;
-fi
+fi 
