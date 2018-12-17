@@ -36,12 +36,13 @@ show_menus() {
 	echo -e "${BCyan}10. UNMOUNT FOLDER FROM FPT ACCOUTN${Color_Off}"
 	echo -e "${BCyan}11. CREATE FTP ACCOUNT${Color_Off}"
 	echo -e "${BCyan}12. INSTALL PHP${Color_Off}"
-	echo -e "${BRed}13.  EXIT${Color_Off}"
+	echo -e "${BCyan}13. REMOVE ALL PHP${Color_Off}"
+	echo -e "${BRed}14.  EXIT${Color_Off}"
 }
 
 read_options(){
 	local choice
-	read -p "Enter choice [ 1 - 13] " choice
+	read -p "Enter choice [ 1 - 14] " choice
 	case $choice in
 		1) /etc/server_admin/menu/create_database; break ;;
 		2) /etc/server_admin/menu/install_mariadb; break ;;
@@ -55,7 +56,8 @@ read_options(){
 		10) /etc/server_admin/menu/unmount_folder_to_ftp; break ;;
 		11) /etc/server_admin/menu/create_ftp_user; break ;;
 		12) /etc/server_admin/menu/install_php; break ;;
-		13) exit 0;;
+		13) /etc/server_admin/menu/remove_all_php; break ;;
+		14) exit 0;;
 		*) echo -e "${RED}Error...${Color_Off}"
 	esac
 }
