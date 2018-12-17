@@ -8,20 +8,20 @@ clear
 
 install_epel() {
 	# Install epel
-	yum install epel-release yum-utils -y
-	yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm -y
+	yum install epel-release yum-utils -y -q
+	yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm -y -q
 }
 
 config_firewall() {
-	firewall-cmd --permanent --zone=public --add-service=http
-	firewall-cmd --permanent --zone=public --add-service=https
-	firewall-cmd --reload
+	firewall-cmd --permanent --zone=public --add-service=http -q
+	firewall-cmd --permanent --zone=public --add-service=https -q
+	firewall-cmd --reload -q
 }
 
 install_php() {
-	yum-config-manager --enable remi-php$php_install
-	yum --enablerepo=remi,remi-php$php_install install php-fpm php-common -y
-	yum --enablerepo=remi,remi-php$php_install install php-opcache php-pecl-apcu php-cli php-pear php-pdo php-mysqlnd php-pgsql php-pecl-mongodb php-pecl-redis php-pecl-memcache php-pecl-memcached php-gd php-mbstring php-mcrypt php-xml php-pecl-zip php-odbc -y
+	yum-config-manager --enable remi-php$php_install -q
+	yum --enablerepo=remi,remi-php$php_install install php-fpm php-common -y -q
+	yum --enablerepo=remi,remi-php$php_install install php-opcache php-pecl-apcu php-cli php-pear php-pdo php-mysqlnd php-pgsql php-pecl-mongodb php-pecl-redis php-pecl-memcache php-pecl-memcached php-gd php-mbstring php-mcrypt php-xml php-pecl-zip php-odbc -y -q
 }
 clear
 printf "=========================================================================\n"
