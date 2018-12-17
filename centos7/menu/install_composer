@@ -1,0 +1,9 @@
+#!/bin/sh
+
+clear
+
+. /etc/server_admin/menu/color.sh
+
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+composer

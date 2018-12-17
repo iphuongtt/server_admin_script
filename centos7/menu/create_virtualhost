@@ -508,9 +508,9 @@ echo $prompt
 PS3="Select a number (1-4): "
 select opt in "${options[@]}" "EXIT"; do 
     case "$REPLY" in
-	    1 ) php; break;;
-		2 ) angular; break;;
-		3 ) spa; break;;
+	    1) php; break;;
+		  2) angular; break;;
+		  3) spa; break;;
 	    # End Menu
 	    $(( ${#options[@]}+1 )) ) server-admin; break;;
 	    *) echo "Please, chose again";continue;;
