@@ -107,6 +107,9 @@ if [ $? -eq 0 ]; then
 		echo "===================================================================================="
 		echo -e "         ${BGreen}INSTALL PHP $php_version SUCCESSFUL${Color_Off}"
 		echo "===================================================================================="
+		read -p "Press enter to continue"
+		server-admin
+		exit;
 	else
 		read -p "Press enter to continue"
 		server-admin
