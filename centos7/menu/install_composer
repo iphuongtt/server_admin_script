@@ -27,7 +27,6 @@ download_composer() {
 }
 
 install_composer() {
-	echo "aaa"
 	php composer-setup.php --install-dir=/usr/local/bin --filename=composer	 &
 	PID=$!
 	i=1
@@ -60,6 +59,10 @@ if [ ! -f /lib/systemd/system/php-fpm.service ]; then
 		/etc/server_admin/menu/install_php
 		exit
 	else
-		download_composer
+		read -p "Can not install Composer. Press enter to continue"
+		server-admin
+		exit;	
 	fi
+else
+	download_composer
 fi
