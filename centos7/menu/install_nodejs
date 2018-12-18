@@ -1,0 +1,59 @@
+#!/bin/bash
+
+clear
+
+. /etc/server_admin/menu/color.sh
+
+install_nodejs() {
+	tar /home/root/xzvf node-v* && cd /home/root/node-v*
+	if [ $? -eq 0 ]; then
+		sudo yum install gcc gcc-c++ -y -q
+		if [ $? -eq 0 ]; then
+			./configure
+			if [ $? -eq 0 ]; then
+				make
+				if [ $? -eq 0 ]; then
+					sudo make install
+				else
+					read -p "Press enter to continue"
+					server-admin
+					exit
+				fi
+			else
+				read -p "Press enter to continue"
+				server-admin
+				exit
+			fi
+		else
+			read -p "Press enter to continue"
+			server-admin
+			exit
+		fi
+	else
+		read -p "Press enter to continue"
+		server-admin
+		exit
+	fi
+	if [ $? -eq 0 ]; then
+}
+
+echo -e "You should go to\n"
+echo -e "${BBlue}https://nodejs.org/download/release/latest/${Color_Off}\n"
+echo "To get latest version of nodejs (.tar.gz file) \n"
+
+echo -n -e "Paste url of nodejs latest build:: "
+read nodejs_url
+
+wget -q -P /home/root $nodejs_url &
+PID=$!
+i=1
+sp="/-\|"
+#echo -n ' '
+echo -e -n "${BGreen}Downloading nodejs...${Color_Off} "
+while [ -d /proc/$PID ]
+do
+  printf "\b${sp:i++%${#sp}:1}"
+done
+echo -e "${BBlue} Done${Color_Off}"
+printf "\n"
+
