@@ -37,7 +37,8 @@ show_menus() {
 	echo -e "${BCyan}11. CREATE FTP ACCOUNT${Color_Off}"
 	echo -e "${BCyan}12. INSTALL PHP${Color_Off}"
 	echo -e "${BCyan}13. REMOVE ALL PHP${Color_Off}"
-	echo -e "${BRed}14.  EXIT${Color_Off}"
+	echo -e "${BRed}14. CHANGE YOUR IP SERVER${Color_Off}"
+	echo -e "${BRed}15.  EXIT${Color_Off}"
 }
 
 read_options(){
@@ -57,7 +58,8 @@ read_options(){
 		11) /etc/server_admin/menu/create_ftp_user; break ;;
 		12) /etc/server_admin/menu/install_php; break ;;
 		13) /etc/server_admin/menu/remove_all_php; break ;;
-		14) exit 0;;
+		14) /etc/server_admin/menu/change_ip; break ;;
+		15) exit 0;;
 		*) echo -e "${RED}Error...${Color_Off}"
 	esac
 }
