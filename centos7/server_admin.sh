@@ -38,12 +38,13 @@ show_menus() {
 	echo -e "${BCyan}12. INSTALL PHP${Color_Off}"
 	echo -e "${BCyan}13. REMOVE ALL PHP${Color_Off}"
 	echo -e "${BRed}14. CHANGE YOUR IP SERVER${Color_Off}"
-	echo -e "${BRed}15.  EXIT${Color_Off}"
+	echo -e "${BRed}15. INSTALL COMPOSER${Color_Off}"
+	echo -e "${BRed}16.  EXIT${Color_Off}"
 }
 
 read_options(){
 	local choice
-	read -p "Enter choice [ 1 - 14] " choice
+	read -p "Enter choice [ 1 - 16] " choice
 	case $choice in
 		1) /etc/server_admin/menu/create_database; break ;;
 		2) /etc/server_admin/menu/install_mariadb; break ;;
@@ -59,7 +60,8 @@ read_options(){
 		12) /etc/server_admin/menu/install_php; break ;;
 		13) /etc/server_admin/menu/remove_all_php; break ;;
 		14) /etc/server_admin/menu/change_ip; break ;;
-		15) exit 0;;
+		15) /etc/server_admin/menu/install_composer; break ;;
+		16) exit 0;;
 		*) echo -e "${RED}Error...${Color_Off}"
 	esac
 }

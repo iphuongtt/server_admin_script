@@ -4,6 +4,61 @@ clear
 
 . /etc/server_admin/menu/color.sh
 
-php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-composer
+download_composer() {
+	php -q -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &
+	PID=$!
+	i=1
+	sp="/-\|"
+	#echo -n ' '
+	echo -e -n "${BGreen}Downloading composer...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	if [ $? -eq 0 ]; then
+		echo -e "${BBlue} Done${Color_Off}"
+		printf "\n"
+		install_composer
+	else
+		read -p "Press enter to continue"
+		server-admin
+		exit;
+    fi
+}
+
+install_composer() {
+	php composer-setup.php --install-dir=/usr/local/bin --filename=composer	 &
+	PID=$!
+	i=1
+	sp="/-\|"
+	#echo -n ' '
+	echo -e -n "${BGreen}Installing composer...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	if [ $? -eq 0 ]; then
+		echo -e "${BBlue} Done${Color_Off}"
+		printf "\n"
+		echo "===================================================================================="
+		echo -e "         INSTALL COMPOSER SUCCESSFUL"
+		echo "===================================================================================="
+		read -p "Press enter to continue"
+		server-admin
+		exit;
+	else
+		read -p "Press enter to continue"
+		server-admin
+		exit;
+    fi
+}
+
+if [ -f /lib/systemd/system/php-fpm.service ]; then
+  read -p "PHP is required but is not installed. Do you want to install PHP?:  " -n 1 -r
+	if [[ $REPLY =~ ^[Yy]$ ]]; then
+		/etc/server_admin/menu/install_php
+		exit
+	else
+		download_composer
+	fi
+fi

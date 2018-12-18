@@ -51,7 +51,18 @@ changeip()
 read -p "Do you really want to change your server ip (type: i sure)?  "
 if [[ "$REPLY" == "i sure" ]]; then
 	printf "\n"
-	changeip
+	changeip &
+	PID=$!
+	i=1
+	sp="/-\|"
+	#echo -n ' '
+	echo -e -n "${BGreen}Changing your ip server...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
 else
 	server-admin
 	exit
