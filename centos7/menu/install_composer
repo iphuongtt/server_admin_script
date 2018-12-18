@@ -27,6 +27,7 @@ download_composer() {
 }
 
 install_composer() {
+	echo "aaa"
 	php composer-setup.php --install-dir=/usr/local/bin --filename=composer	 &
 	PID=$!
 	i=1
