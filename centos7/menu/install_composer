@@ -38,11 +38,8 @@ install_composer() {
 	  printf "\b${sp:i++%${#sp}:1}"
 	done
 	if [ $? -eq 0 ]; then
-		echo -e "${BBlue} Done${Color_Off}"
-		printf "\n"
-		echo "===================================================================================="
-		echo -e "         INSTALL COMPOSER SUCCESSFUL"
-		echo "===================================================================================="
+		clear
+		composer
 		read -p "Press enter to continue"
 		server-admin
 		exit;
