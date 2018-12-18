@@ -39,7 +39,7 @@ install_composer() {
 	done
 	if [ $? -eq 0 ]; then
 		clear;
-		eval `composer`
+		composer
 		read -p "Press enter to continue"
 		server-admin
 		exit;
@@ -65,11 +65,11 @@ if [ ! -f /usr/local/bin/composer ]; then
 		download_composer
 	fi
 else
-	echo -e -n "${BGreen}Composer has been installed...${Color_Off} "
-	printf "\n"
-	echo -e -n "${BGreen}Updating composer...${Color_Off} "
-	printf "\n"
-	eval `composer self-update`
+	echo -e -n "${BGreen}Composer has been installed...${Color_Off} ";
+	printf "\n";
+	echo -e -n "${BGreen}Updating composer...${Color_Off} ";
+	printf "\n";
+	composer self-update
 	read -p "Press enter to continue"
 	server-admin
 	exit;	
