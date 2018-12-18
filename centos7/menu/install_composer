@@ -38,8 +38,8 @@ install_composer() {
 	  printf "\b${sp:i++%${#sp}:1}"
 	done
 	if [ $? -eq 0 ]; then
-		clear
-		composer
+		clear;
+		composer;
 		read -p "Press enter to continue"
 		server-admin
 		exit;
