@@ -39,7 +39,7 @@ install_composer() {
 	done
 	if [ $? -eq 0 ]; then
 		clear;
-		composer;
+		eval `composer`
 		read -p "Press enter to continue"
 		server-admin
 		exit;
@@ -69,7 +69,7 @@ else
 	printf "\n"
 	echo -e -n "${BGreen}Updating composer...${Color_Off} "
 	printf "\n"
-	composer self-update;
+	eval `composer self-update`
 	read -p "Press enter to continue"
 	server-admin
 	exit;	
