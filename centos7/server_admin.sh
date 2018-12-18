@@ -38,7 +38,7 @@ show_menus() {
 	echo -e "${BCyan}12. INSTALL PHP${Color_Off}"
 	echo -e "${BCyan}13. REMOVE ALL PHP${Color_Off}"
 	echo -e "${BRed}14. CHANGE YOUR IP SERVER${Color_Off}"
-	echo -e "${BRed}15. INSTALL COMPOSER${Color_Off}"
+	echo -e "${BCyan}15. INSTALL COMPOSER${Color_Off}"
 	echo -e "${BRed}16.  EXIT${Color_Off}"
 }
 
