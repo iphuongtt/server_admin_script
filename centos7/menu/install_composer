@@ -66,8 +66,10 @@ if [ ! -f /usr/local/bin/composer ]; then
 	fi
 else
 	echo -e -n "${BGreen}Composer has been installed...${Color_Off} "
+	printf "\n"
 	echo -e -n "${BGreen}Updating composer...${Color_Off} "
-	composer self-update
+	printf "\n"
+	composer self-update;
 	read -p "Press enter to continue"
 	server-admin
 	exit;	
