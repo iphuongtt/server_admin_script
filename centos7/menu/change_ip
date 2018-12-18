@@ -48,7 +48,7 @@ changeip()
 	fi
 }
 
-read -p "Do you really want to change your server ip (type: i sure)?  " -n 1 -r
+read -p "Do you really want to change your server ip (type: i sure)?  "
 if [[ "$REPLY" == "i sure" ]]; then
 	printf "\n"
 	changeip
