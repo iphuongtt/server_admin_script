@@ -50,16 +50,20 @@ install_composer() {
     fi
 }
 
-if [ ! -f /lib/systemd/system/php-fpm.service ]; then
-  read -p "PHP is required but is not installed. Do you want to install PHP?:  " -n 1 -r
-	if [[ $REPLY =~ ^[Yy]$ ]]; then
-		/etc/server_admin/menu/install_php
-		exit
+if [ -f /usr/local/bin/composer ]; then
+	if [ ! -f /lib/systemd/system/php-fpm.service ]; then
+	  read -p "PHP is required but is not installed. Do you want to install PHP?:  " -n 1 -r
+		if [[ $REPLY =~ ^[Yy]$ ]]; then
+			/etc/server_admin/menu/install_php
+			exit
+		else
+			read -p "Can not install Composer. Press enter to continue"
+			server-admin
+			exit;	
+		fi
 	else
-		read -p "Can not install Composer. Press enter to continue"
-		server-admin
-		exit;	
+		download_composer
 	fi
 else
-	download_composer
+	composer self-update
 fi
