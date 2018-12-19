@@ -5,50 +5,37 @@ clear
 . /etc/server_admin/menu/color.sh
 . /etc/server_admin/menu/global_var
 
-installed=0
+installed_nvm=0
+installed_nodejs=0
 
-install_nodejs() {
-	mkdir /home/root/temp$current_time
-	tar -xzf /home/root/node-v* -C /home/root/temp$current_time > /dev/null 2>&1 && rm -rf /home/root/node-v* && cd /home/root/temp$current_time/node-v*
+install_nvm() {
+	wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 	if [ $? -eq 0 ]; then
-		sudo yum install gcc gcc-c++ -y -q
+		source ~/.bash_profile
 		if [ $? -eq 0 ]; then
-			./configure
-			if [ $? -eq 0 ]; then
-				make
-				if [ $? -eq 0 ]; then
-					sudo make install
-					if [ $? -eq 0 ]; then
-						installed=1
-					else
-						installed=0
-					fi
-				else
-					installed=0
-				fi
-			else
-				installed=0
-			fi
+			installed_nvm=1
 		else
-			installed=0
+			installed_nvm=0
 		fi
 	else
-		installed=0
+		installed_nvm=0	
 	fi
 }
 
-echo -e "You should go to\n"
-echo -e "${BBlue}https://nodejs.org/download/release/latest/${Color_Off}\n"
-echo -e "To get latest version of nodejs (.tar.gz file) \n"
+install_nodejs() {
+	nvm install node
+	if [ $? -eq 0 ]; then
+		install_nodejs=1
+	else
+		install_nodejs=0	
+	fi
+}
 
-echo -n -e "Paste url of nodejs latest build:: "
-read nodejs_url
-
-wget -q -P /home/root $nodejs_url &
+install_nvm &
 PID=$!
 i=1
 sp="/-\|"
-echo -e -n "${BGreen}Downloading nodejs...${Color_Off} "
+echo -e -n "${BGreen}Installing Node Version Manager...${Color_Off} "
 while [ -d /proc/$PID ]
 do
   printf "\b${sp:i++%${#sp}:1}"
@@ -56,27 +43,31 @@ done
 echo -e "${BBlue} Done${Color_Off}"
 printf "\n"
 
-install_nodejs &
-PID=$!
-i=1
-sp="/-\|"
-echo -e -n "${BGreen}Installing nodejs...${Color_Off} "
-while [ -d /proc/$PID ]
-do
-  printf "\b${sp:i++%${#sp}:1}"
-done
-if [ $installed -eq 1 ]; then
-	rm -rf /home/root/temp$current_time
-	echo -e "${BBlue} Done${Color_Off}"
-	printf "\n"
-	echo "===================================================================================="
-	echo -e "         ${BGreen}INSTALL NODEJS SUCCESSFUL${Color_Off}"
-	echo "===================================================================================="
-	read -p "Press enter to continue"
-	server-admin
-	exit;
+if [ $installed_nvm -eq 1 ]; then
+	install_nodejs &
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Installing NodeJS...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	if [ $installed_nodejs -eq 1 ]; then
+		echo -e "${BBlue} Done${Color_Off}"
+		printf "\n"
+		echo "===================================================================================="
+		echo -e "         ${BGreen}INSTALL NODEJS SUCCESSFUL${Color_Off}"
+		echo "===================================================================================="
+		read -p "Press enter to continue"
+		server-admin
+		exit;
+	else
+		read -p "Press enter to continue"
+		server-admin
+		exit
+	fi
 else
-	rm -rf /home/root/temp$current_time
 	read -p "Press enter to continue"
 	server-admin
 	exit

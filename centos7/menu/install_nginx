@@ -1,18 +1,61 @@
-#!/bin/sh
+#!/bin/bash
 
-yum update -y
-# Install epel
-yum install epel-release yum-utils -y
-yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm -y
+. /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/function.sh
+. /etc/server_admin/menu/global_var
+
+install_epel() {
+	# Install epel
+	yum install epel-release yum-utils -y -q
+	yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm -y -q
+}
+
+config_firewall() {
+	firewall-cmd --permanent --zone=public --add-service=http
+	firewall-cmd --permanent --zone=public --add-service=https
+	firewall-cmd --reload
+}
+
+update_system
+install_epel &
+PID=$!
+i=1
+sp="/-\|"
+#echo -n ' '
+echo -e -n "${BGreen}Installing epel...${Color_Off} "
+while [ -d /proc/$PID ]
+do
+  printf "\b${sp:i++%${#sp}:1}"
+done
+echo -e "${BBlue} Done${Color_Off}"
+printf "\n"
+
 # Install nginx
-yum install nginx -y
+yum install nginx -y -q &
+PID=$!
+i=1
+sp="/-\|"
+#echo -n ' '
+echo -e -n "${BGreen}Installing Nginx...${Color_Off} "
+while [ -d /proc/$PID ]
+do
+  printf "\b${sp:i++%${#sp}:1}"
+done
+echo -e "${BBlue} Done${Color_Off}"
+printf "\n"
 
-firewall-cmd --permanent --zone=public --add-service=http
-firewall-cmd --permanent --zone=public --add-service=https
-firewall-cmd --reload
-
-current_time=`date '+%Y-%m-%d_%H_%M_%S'`
-server_ip=`hostname -I`
+config_firewall &
+PID=$!
+i=1
+sp="/-\|"
+#echo -n ' '
+echo -e -n "${BGreen}Configuring firewall...${Color_Off} "
+while [ -d /proc/$PID ]
+do
+  printf "\b${sp:i++%${#sp}:1}"
+done
+echo -e "${BBlue} Done${Color_Off}"
+printf "\n"
 
 yum install -y unzip wget
 cd ~
