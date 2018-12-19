@@ -27,7 +27,7 @@ update_system() {
 }
 
 install_common_package() {
-	yum wget epel-release yum-utils http://rpms.remirepo.net/enterprise/remi-release-7.rpm unzip -y -q &
+	yum install wget epel-release yum-utils http://rpms.remirepo.net/enterprise/remi-release-7.rpm unzip -y -q &
 	PID=$!
 	i=1
 	sp="/-\|"

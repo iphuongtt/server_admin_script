@@ -15,4 +15,6 @@ cp ~/server_admin_script/centos7/server_admin.sh /bin/server-admin && chmod +x /
 cp ~/server_admin_script/centos7/menu/* /etc/server_admin/menu/
 chmod +x /etc/server_admin/menu/*
 
+update_system
+
 install_common_package
