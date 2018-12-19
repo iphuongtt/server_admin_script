@@ -63,10 +63,9 @@ while [ -d /proc/$PID ]
 do
   printf "\b${sp:i++%${#sp}:1}"
 done
-echo -e "${BBlue} Done${Color_Off}"
-printf "\n"
 if [ $? -eq 0 ]; then
-	clear
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
 	echo "===================================================================================="
 	echo -e "         ${BGreen}INSTALL NODEJS SUCCESSFUL${Color_Off}"
 	echo "===================================================================================="
