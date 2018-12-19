@@ -4,6 +4,8 @@ clear
 
 . /etc/server_admin/menu/color.sh
 
+installed=0
+
 install_nodejs() {
 	tar -xzf /home/root/node-v* > /dev/null 2>&1 && cd /home/root/node-v*
 	if [ $? -eq 0 ]; then
@@ -15,21 +17,21 @@ install_nodejs() {
 				if [ $? -eq 0 ]; then
 					sudo make install
 					if [ $? -eq 0 ]; then
-						return 0
+						installed=1
 					else
-						return 1
+						installed=0
 					fi
 				else
-					return 1
+					installed=0
 				fi
 			else
-				return 1
+				installed=0
 			fi
 		else
-			return 1
+			installed=0
 		fi
 	else
-		return 1
+		installed=0
 	fi
 }
 
@@ -52,8 +54,6 @@ done
 echo -e "${BBlue} Done${Color_Off}"
 printf "\n"
 
-rm -rf /home/root/node-v*
-
 install_nodejs &
 PID=$!
 i=1
@@ -63,7 +63,8 @@ while [ -d /proc/$PID ]
 do
   printf "\b${sp:i++%${#sp}:1}"
 done
-if [ $? -eq 0 ]; then
+if [ $installed -eq 1 ]; then
+	rm -rf /home/root/node-v*
 	echo -e "${BBlue} Done${Color_Off}"
 	printf "\n"
 	echo "===================================================================================="
@@ -73,6 +74,7 @@ if [ $? -eq 0 ]; then
 	server-admin
 	exit;
 else
+	rm -rf /home/root/node-v*
 	read -p "Press enter to continue"
 	server-admin
 	exit
