@@ -5,7 +5,7 @@ clear
 . /etc/server_admin/menu/color.sh
 
 install_nodejs() {
-	tar /home/root/xzvf node-v* && cd /home/root/node-v*
+	tar -xzf /home/root/node-v* > /dev/null 2>&1 && cd /home/root/node-v*
 	if [ $? -eq 0 ]; then
 		sudo yum install gcc gcc-c++ -y -q
 		if [ $? -eq 0 ]; then
@@ -15,37 +15,21 @@ install_nodejs() {
 				if [ $? -eq 0 ]; then
 					sudo make install
 					if [ $? -eq 0 ]; then
-						clear
-						echo "===================================================================================="
-						echo -e "         ${BGreen}INSTALL NODEJS SUCCESSFUL${Color_Off}"
-						echo "===================================================================================="
-						read -p "Press enter to continue"
-						server-admin
-						exit;
+						return 0
 					else
-						read -p "Press enter to continue"
-						server-admin
-						exit
+						return 1
 					fi
 				else
-					read -p "Press enter to continue"
-					server-admin
-					exit
+					return 1
 				fi
 			else
-				read -p "Press enter to continue"
-				server-admin
-				exit
+				return 1
 			fi
 		else
-			read -p "Press enter to continue"
-			server-admin
-			exit
+			return 1
 		fi
 	else
-		read -p "Press enter to continue"
-		server-admin
-		exit
+		return 1
 	fi
 }
 
@@ -68,6 +52,8 @@ done
 echo -e "${BBlue} Done${Color_Off}"
 printf "\n"
 
+rm -rf /home/root/node-v*
+
 install_nodejs &
 PID=$!
 i=1
@@ -79,3 +65,16 @@ do
 done
 echo -e "${BBlue} Done${Color_Off}"
 printf "\n"
+if [ $? -eq 0 ]; then
+	clear
+	echo "===================================================================================="
+	echo -e "         ${BGreen}INSTALL NODEJS SUCCESSFUL${Color_Off}"
+	echo "===================================================================================="
+	read -p "Press enter to continue"
+	server-admin
+	exit;
+else
+	read -p "Press enter to continue"
+	server-admin
+	exit
+fi
