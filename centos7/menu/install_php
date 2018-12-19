@@ -6,12 +6,6 @@ clear
 . /etc/server_admin/menu/function.sh
 . /etc/server_admin/menu/global_var
 
-install_epel() {
-	# Install epel
-	yum install epel-release yum-utils -y -q
-	yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm -y -q
-}
-
 config_firewall() {
 	firewall-cmd --permanent --zone=public --add-service=http -q
 	firewall-cmd --permanent --zone=public --add-service=https -q
@@ -59,19 +53,6 @@ select opt in "${options[@]}"; do
 done
 
 update_system
-
-install_epel &
-PID=$!
-i=1
-sp="/-\|"
-#echo -n ' '
-echo -e -n "${BGreen}Install epel...${Color_Off} "
-while [ -d /proc/$PID ]
-do
-  printf "\b${sp:i++%${#sp}:1}"
-done
-echo -e "${BBlue} Done${Color_Off}"
-printf "\n"
 
 config_firewall &
 PID=$!

@@ -4,12 +4,6 @@
 . /etc/server_admin/menu/function.sh
 . /etc/server_admin/menu/global_var
 
-install_epel() {
-	# Install epel
-	yum install epel-release yum-utils -y -q
-	yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm -y -q
-}
-
 config_firewall() {
 	firewall-cmd --permanent --zone=public --add-service=http
 	firewall-cmd --permanent --zone=public --add-service=https
@@ -17,18 +11,6 @@ config_firewall() {
 }
 
 update_system
-install_epel &
-PID=$!
-i=1
-sp="/-\|"
-#echo -n ' '
-echo -e -n "${BGreen}Installing epel...${Color_Off} "
-while [ -d /proc/$PID ]
-do
-  printf "\b${sp:i++%${#sp}:1}"
-done
-echo -e "${BBlue} Done${Color_Off}"
-printf "\n"
 
 # Install nginx
 yum install nginx -y -q &
@@ -57,7 +39,6 @@ done
 echo -e "${BBlue} Done${Color_Off}"
 printf "\n"
 
-yum install -y unzip wget
 cd ~
 wget -q https://github.com/iphuongtt/server-configs-nginx/archive/master.zip
 unzip -q master.zip && rm -f master.zip

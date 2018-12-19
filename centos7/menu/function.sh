@@ -25,3 +25,18 @@ update_system() {
 	echo -e "${BBlue} Done${Color_Off}"
 	printf "\n"
 }
+
+install_common_package() {
+	yum wget epel-release yum-utils http://rpms.remirepo.net/enterprise/remi-release-7.rpm unzip -y -q &
+	PID=$!
+	i=1
+	sp="/-\|"
+	#echo -n ' '
+	echo -e -n "${BGreen}Updating system...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+}
