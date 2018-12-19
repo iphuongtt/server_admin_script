@@ -14,6 +14,15 @@ install_nodejs() {
 				make
 				if [ $? -eq 0 ]; then
 					sudo make install
+					if [ $? -eq 0 ]; then
+						clear
+						echo "===================================================================================="
+						echo -e "         ${BGreen}INSTALL NODEJS SUCCESSFUL${Color_Off}"
+						echo "===================================================================================="
+						read -p "Press enter to continue"
+						server-admin
+						exit;
+					else
 				else
 					read -p "Press enter to continue"
 					server-admin
@@ -34,7 +43,6 @@ install_nodejs() {
 		server-admin
 		exit
 	fi
-	if [ $? -eq 0 ]; then
 }
 
 echo -e "You should go to\n"
@@ -57,3 +65,15 @@ done
 echo -e "${BBlue} Done${Color_Off}"
 printf "\n"
 
+install_nodejs &
+PID=$!
+i=1
+sp="/-\|"
+#echo -n ' '
+echo -e -n "${BGreen}Installing nodejs...${Color_Off} "
+while [ -d /proc/$PID ]
+do
+  printf "\b${sp:i++%${#sp}:1}"
+done
+echo -e "${BBlue} Done${Color_Off}"
+printf "\n"

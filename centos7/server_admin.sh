@@ -39,7 +39,8 @@ show_menus() {
 	echo -e "${BCyan}13. REMOVE ALL PHP${Color_Off}"
 	echo -e "${BRed}14. CHANGE YOUR IP SERVER${Color_Off}"
 	echo -e "${BCyan}15. INSTALL COMPOSER${Color_Off}"
-	echo -e "${BRed}16.  EXIT${Color_Off}"
+	echo -e "${BCyan}16. INSTALL NODEJS${Color_Off}"
+	echo -e "${BRed}17.  EXIT${Color_Off}"
 }
 
 read_options(){
@@ -61,7 +62,8 @@ read_options(){
 		13) /etc/server_admin/menu/remove_all_php; break ;;
 		14) /etc/server_admin/menu/change_ip; break ;;
 		15) /etc/server_admin/menu/install_composer; break ;;
-		16) exit 0;;
+		16) /etc/server_admin/menu/install_composer; break ;;
+		17) exit 0;;
 		*) echo -e "${RED}Error...${Color_Off}"
 	esac
 }
