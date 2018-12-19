@@ -62,7 +62,7 @@ read_options(){
 		13) /etc/server_admin/menu/remove_all_php; break ;;
 		14) /etc/server_admin/menu/change_ip; break ;;
 		15) /etc/server_admin/menu/install_composer; break ;;
-		16) /etc/server_admin/menu/install_composer; break ;;
+		16) /etc/server_admin/menu/install_nodejs; break ;;
 		17) exit 0;;
 		*) echo -e "${RED}Error...${Color_Off}"
 	esac
