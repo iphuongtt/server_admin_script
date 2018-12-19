@@ -23,6 +23,10 @@ install_nodejs() {
 						server-admin
 						exit;
 					else
+						read -p "Press enter to continue"
+						server-admin
+						exit
+					fi
 				else
 					read -p "Press enter to continue"
 					server-admin

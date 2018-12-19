@@ -45,7 +45,7 @@ show_menus() {
 
 read_options(){
 	local choice
-	read -p "Enter choice [ 1 - 16] " choice
+	read -p "Enter choice [ 1 - 17] " choice
 	case $choice in
 		1) /etc/server_admin/menu/create_database; break ;;
 		2) /etc/server_admin/menu/install_mariadb; break ;;
