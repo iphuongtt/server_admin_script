@@ -3,11 +3,13 @@
 clear
 
 . /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/global_var
 
 installed=0
 
 install_nodejs() {
-	tar -xzf /home/root/node-v* > /dev/null 2>&1 && cd /home/root/node-v*
+	mkdir /home/root/temp$current_time
+	tar -xzf /home/root/node-v* -C /home/root/temp$current_time > /dev/null 2>&1 && rm -rf /home/root/node-v* && cd /home/root/temp$current_time/node-v*
 	if [ $? -eq 0 ]; then
 		sudo yum install gcc gcc-c++ -y -q
 		if [ $? -eq 0 ]; then
@@ -64,7 +66,7 @@ do
   printf "\b${sp:i++%${#sp}:1}"
 done
 if [ $installed -eq 1 ]; then
-	rm -rf /home/root/node-v*
+	rm -rf /home/root/temp$current_time
 	echo -e "${BBlue} Done${Color_Off}"
 	printf "\n"
 	echo "===================================================================================="
@@ -74,7 +76,7 @@ if [ $installed -eq 1 ]; then
 	server-admin
 	exit;
 else
-	rm -rf /home/root/node-v*
+	rm -rf /home/root/temp$current_time
 	read -p "Press enter to continue"
 	server-admin
 	exit
