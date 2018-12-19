@@ -51,7 +51,7 @@ install_nodejs() {
 
 echo -e "You should go to\n"
 echo -e "${BBlue}https://nodejs.org/download/release/latest/${Color_Off}\n"
-echo "To get latest version of nodejs (.tar.gz file) \n"
+echo -e "To get latest version of nodejs (.tar.gz file) \n"
 
 echo -n -e "Paste url of nodejs latest build:: "
 read nodejs_url
@@ -60,7 +60,6 @@ wget -q -P /home/root $nodejs_url &
 PID=$!
 i=1
 sp="/-\|"
-#echo -n ' '
 echo -e -n "${BGreen}Downloading nodejs...${Color_Off} "
 while [ -d /proc/$PID ]
 do
@@ -73,7 +72,6 @@ install_nodejs &
 PID=$!
 i=1
 sp="/-\|"
-#echo -n ' '
 echo -e -n "${BGreen}Installing nodejs...${Color_Off} "
 while [ -d /proc/$PID ]
 do
