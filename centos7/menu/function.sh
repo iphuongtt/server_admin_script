@@ -1,7 +1,7 @@
 #!/bin/bash
 
-. /etc/server_admin/menu/color.sh
-. /etc/server_admin/menu/global_var
+. /home/root/server_admin_script/centos7/menu/color.sh
+. /home/root/server_admin_script/centos7/menu/global_var
 
 is_folder_exists() {
 	if [ -d $1 ]; then
