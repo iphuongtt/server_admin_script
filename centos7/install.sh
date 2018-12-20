@@ -1,9 +1,9 @@
 #!bin/bash
 clear
 
-. /etc/server_admin/menu/color.sh
-. /etc/server_admin/menu/global_var
-. /etc/server_admin/menu/function.sh
+. ~/server_admin_script/menu/color.sh
+. ~/server_admin_script/menu/global_var
+. ~/server_admin_script/menu/function.sh
 
 if [ $(id -u) != "0" ]; then
     printf "You need to be root to perform this command. Run \"sudo su\" to become root!\n"
