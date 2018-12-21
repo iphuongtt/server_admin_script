@@ -1,7 +1,12 @@
 #!/bin/bash
 
-. /home/root/server_admin_script/centos7/menu/color.sh
-. /home/root/server_admin_script/centos7/menu/global_var
+# Absolute path to this script, e.g. /home/user/bin/foo.sh
+SCRIPT=$(readlink -f "$0")
+# Absolute path this script is in, thus /home/user/bin
+SCRIPTPATH=$(dirname "$SCRIPT")
+
+. $SCRIPTPATH/color.sh
+. $SCRIPTPATH/global_var
 
 is_folder_exists() {
 	if [ -d $1 ]; then
