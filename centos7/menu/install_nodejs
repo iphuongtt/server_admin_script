@@ -30,4 +30,3 @@ install_nodejs() {
 
 installed_nvm=$(install_nvm)
 
-echo $installed_nvm
