@@ -41,9 +41,7 @@ done
 echo -e "${BBlue} Done${Color_Off}"
 printf "\n"
 
-echo $installed_nvm
-
-if [ $installed_nvm -eq 1 ]; then
+if [ $installed_nvm -eq 0 ]; then
 	install_nodejs &
 	installed_nodejs=$?
 	PID=$!
@@ -54,7 +52,7 @@ if [ $installed_nvm -eq 1 ]; then
 	do
 	  printf "\b${sp:i++%${#sp}:1}"
 	done
-	if [ $installed_nodejs -eq 1 ]; then
+	if [ $installed_nodejs -eq 0 ]; then
 		echo -e "${BBlue} Done${Color_Off}"
 		printf "\n"
 		echo "===================================================================================="
