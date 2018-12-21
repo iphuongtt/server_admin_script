@@ -16,7 +16,6 @@ update_system() {
 	PID=$!
 	i=1
 	sp="/-\|"
-	#echo -n ' '
 	echo -e -n "${BGreen}Updating system...${Color_Off} "
 	while [ -d /proc/$PID ]
 	do
@@ -31,8 +30,7 @@ install_common_package() {
 	PID=$!
 	i=1
 	sp="/-\|"
-	#echo -n ' '
-	echo -e -n "${BGreen}Updating system...${Color_Off} "
+	echo -e -n "${BGreen}Installing common packages...${Color_Off} "
 	while [ -d /proc/$PID ]
 	do
 	  printf "\b${sp:i++%${#sp}:1}"
