@@ -5,8 +5,8 @@ SCRIPT=$(readlink -f "$0")
 # Absolute path this script is in, thus /home/user/bin
 SCRIPTPATH=$(dirname "$SCRIPT")
 
-. $SCRIPTPATH/color.sh
-. $SCRIPTPATH/global_var
+. $SCRIPTPATH/menu/color.sh
+. $SCRIPTPATH/menu/global_var
 
 is_folder_exists() {
 	if [ -d $1 ]; then
