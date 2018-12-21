@@ -10,6 +10,7 @@ install_nvm() {
 	if [ $? -eq 0 ]; then
 		source ~/.bash_profile
 		if [ $? -eq 0 ]; then
+			echo "aaa"
 			return 1
 		else
 			return 0
