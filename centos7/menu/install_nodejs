@@ -10,12 +10,12 @@ install_nvm() {
 	if [ $? -eq 0 ]; then
 		source ~/.bash_profile
 		if [ $? -eq 0 ]; then
-			installed_nvm=1
+			return 1
 		else
-			installed_nvm=0
+			return 0
 		fi
 	else
-		installed_nvm=0	
+		return 0
 	fi
 }
 
