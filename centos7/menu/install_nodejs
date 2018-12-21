@@ -28,16 +28,6 @@ install_nodejs() {
 	fi
 }
 
-installed_nvm=$(install_nvm) &
-PID=$!
-i=1
-sp="/-\|"
-echo -e -n "${BGreen}Installing Node Version Manager...${Color_Off} "
-while [ -d /proc/$PID ]
-do
-  printf "\b${sp:i++%${#sp}:1}"
-done
-echo -e "${BBlue} Done${Color_Off}"
-printf "\n"
+installed_nvm=$(install_nvm)
 
 echo $installed_nvm
