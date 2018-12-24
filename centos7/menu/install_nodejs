@@ -6,24 +6,23 @@ clear
 . /etc/server_admin/menu/global_var
 . /etc/server_admin/menu/function.sh
 
-install_nvm() {
-	if ! is_folder_exists /usr/local/nvm; then
-		mkdir /usr/local/nvm
+get_user_account() {
+	echo -n "Enter user account, do you want to install nodejs: "
+	while read username
+	do
+	if [ "$username" != "" ]; then
+	    break
 	fi
-	wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | NVM_DIR=/usr/local/nvm bash
+	echo -n "Username should not be blank, enter your username: "
+	done
+}
+
+install_nvm() {
+	su -c $username -c wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 	if [ $? -eq 0 ]; then
-		cat > "/etc/profile.d/nvm.sh" <<END
-#!/usr/bin/env bash
-export NVM_DIR="/usr/local/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-END
+		su - $username -c source ~/.bash_profile
 		if [ $? -eq 0 ]; then
-			/etc/profile.d/nvm.sh
-			if [ $? -eq 0 ]; then
-				return 0
-			else
-				return 1
-			fi
+			return 0
 		else
 			return 1
 		fi
@@ -33,13 +32,15 @@ END
 }
 
 install_nodejs() {
-	nvm install node
+	su - $username -c nvm install node
 	if [ $? -eq 0 ]; then
 		return 0
 	else
 		return 1
 	fi
 }
+
+get_user_account
 
 install_nvm &
 installed_nvm=$?
