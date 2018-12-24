@@ -1,12 +1,7 @@
 #!/bin/bash
 
-# Absolute path to this script, e.g. /home/user/bin/foo.sh
-SCRIPT=$(readlink -f "$0")
-# Absolute path this script is in, thus /home/user/bin
-SCRIPTPATH=$(dirname "$SCRIPT")
-
-. $SCRIPTPATH/menu/color.sh
-. $SCRIPTPATH/menu/global_var
+. /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/global_var
 
 is_folder_exists() {
 	if [ -d $1 ]; then

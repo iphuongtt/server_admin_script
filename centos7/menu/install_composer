@@ -3,6 +3,7 @@
 clear
 
 . /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/verify_root
 
 download_composer() {
 	php -q -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &

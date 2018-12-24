@@ -3,7 +3,43 @@
 clear
 
 . /etc/server_admin/menu/color.sh
-. /etc/server_admin/menu/global_var
+. /etc/server_admin/menu/verify_root
+
+is_folder_exists() {
+	if [ -d $1 ]; then
+	   	return 0;
+	else
+		return 1;
+	fi
+}
+
+update_system() {
+	yum update -y -q &
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Updating system...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+}
+
+install_common_package() {
+	yum install wget epel-release yum-utils http://rpms.remirepo.net/enterprise/remi-release-7.rpm unzip -y -q &
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Installing common packages...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+}
 
 git clone -q https://github.com/iphuongtt/server_admin_script.git /var/server_admin_script &
 PID=$!
@@ -22,7 +58,14 @@ if [ $? -eq 1 ]; then
 	exit
 fi
 echo -e "${BGreen}Installing server-admin tool...${Color_Off}"
-bash /var/server_admin_script/centos7/install.sh
+
+. /var/server_admin_script/centos7/menu/global_var
+
+mkdir -p /etc/server_admin/menu/
+cp /var/server_admin_script/centos7/server_admin.sh /bin/server-admin && chmod +x /bin/server-admin
+cp /var/server_admin_script/centos7/menu/* /etc/server_admin/menu/
+chmod +x /etc/server_admin/menu/*
+
 if [ $? -eq 1 ]; then
 	echo -e "${BGreen}Deleting folder code...${Color_Off}"
 	rm -rf /var/server_admin_script
@@ -34,6 +77,8 @@ else
 	echo -e "${BGreen}Deleting folder source code...${Color_Off}"
 	rm -rf /var/server_admin_script
 	echo -e "${ICyan}Update successful!${Color_Off}"
+	update_system
+	install_common_package
 	read -p "Press enter to continue"
 	server-admin
 	exit

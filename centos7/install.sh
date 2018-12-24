@@ -8,11 +8,7 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 . $SCRIPTPATH/menu/color.sh
 . $SCRIPTPATH/menu/global_var
 . $SCRIPTPATH/menu/function.sh
-
-if [ $(id -u) != "0" ]; then
-    printf "You need to be root to perform this command. Run \"sudo su\" to become root!\n"
-    exit
-fi
+. $SCRIPTPATH/menu/verify_root
 
 mkdir -p /etc/server_admin/menu/
 cp $SCRIPTPATH/server_admin.sh /bin/server-admin && chmod +x /bin/server-admin

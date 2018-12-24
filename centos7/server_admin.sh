@@ -5,14 +5,6 @@ clear
 . /etc/server_admin/menu/color.sh
 
 installNginx="${BCyan}3.  INSTALL NGINX${Color_Off}"
-# check nginx is installed
-if [ -f /lib/systemd/system/nginx.service ]; then
-  installNginx="${BWhite}3.  INSTALL NGINX${Color_Off}"
-fi
-if [ $(id -u) != "0" ]; then
-    printf "You need to be root to perform this command. Run \"sudo su\" to become root!\n"
-    exit
-fi
 
 return_menu() {
 	server-admin

@@ -5,50 +5,24 @@ clear
 . /etc/server_admin/menu/color.sh
 . /etc/server_admin/menu/global_var
 . /etc/server_admin/menu/function.sh
-
-
-nvm_install_dir() {
-  if [ -n "$NVM_DIR" ]; then
-    printf %s "${NVM_DIR}"
-  elif [ -n "$XDG_CONFIG_HOME" ]; then
-    printf %s "${XDG_CONFIG_HOME/nvm}"
-  else
-    printf %s "$HOME/.nvm"
-  fi
-}
-
-get_user_account() {
-	echo -n "Enter user account, do you want to install nodejs: "
-	while read username
-	do
-	if [ "$username" != "" ]; then
-	    break
-	fi
-	echo -n "Username should not be blank, enter your username: "
-	done
-}
+. /etc/server_admin/menu/verify_none_root
 
 install_nvm() {
-	INSTALL_DIR="$(nvm_install_dir)"
-	if [ -d "$INSTALL_DIR/.git" ]; then
-    	return 0	
-   	else
-   		$(su - $username -c "wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash")
+	wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+	if [ $? -eq 0 ]; then
+		source ~/.bash_profile
 		if [ $? -eq 0 ]; then
-			$(su - $username -c "source ~/.bash_profile")
-			if [ $? -eq 0 ]; then
-				return 0
-			else
-				return 1
-			fi
+			return 0
 		else
-			return 1	
+			return 1
 		fi
-   	fi
+	else
+		return 1	
+	fi
 }
 
 install_nodejs() {
-	$(su - $username -c "nvm install node")
+	nvm install node
 	if [ $? -eq 0 ]; then
 		return 0
 	else

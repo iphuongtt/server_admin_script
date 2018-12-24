@@ -1,6 +1,7 @@
 #!/bin/bash
 
 . /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/verify_root
 
 enable_firewall() {
 	firewall-cmd -q --permanent --add-port=21/tcp

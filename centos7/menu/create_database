@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. /etc/server_admin/menu/verify_root
+
 try_time=0
 
 create_database()
