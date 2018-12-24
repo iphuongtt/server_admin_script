@@ -10,6 +10,7 @@ clear
 install_nvm() {
 	wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 	if [ $? -eq 0 ]; then
+		echo "bb"
 		source ~/.bash_profile
 		if [ $? -eq 0 ]; then
 			echo "aaa"
