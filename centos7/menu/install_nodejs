@@ -10,6 +10,7 @@ clear
 install_nvm() {
 	wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 	if [ $? -eq 0 ]; then
+		echo "aaa"
 		source ~/.bash_profile
 		if [ $? -eq 0 ]; then
 			return 0
@@ -29,8 +30,6 @@ install_nodejs() {
 		return 1
 	fi
 }
-
-get_user_account
 
 install_nvm &
 installed_nvm=$?

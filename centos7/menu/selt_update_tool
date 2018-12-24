@@ -53,6 +53,7 @@ while [ -d /proc/$PID ]
 do
   printf "\b${sp:i++%${#sp}:1}"
 done
+echo -e "${BBlue} Done${Color_Off}"
 printf "\n"
 if [ $? -eq 1 ]; then
 	echo -e "${BRed}Please check your internet connection...${Color_Off}"
