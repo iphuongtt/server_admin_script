@@ -40,6 +40,9 @@ install_common_package() {
 	echo -e "${BBlue} Done${Color_Off}"
 	printf "\n"
 }
+if ! is_folder_exists /var/server_admin_script; then
+	rm -rf /var/server_admin_script
+fi
 
 git clone -q https://github.com/iphuongtt/server_admin_script.git /var/server_admin_script &
 PID=$!
@@ -72,7 +75,7 @@ if [ $? -eq 1 ]; then
 	echo -e "${BRed}Please contact to developer to developer...${Color_Off}"
 	read -p "Press enter to continue"
 	server-admin
-	exit
+	exit;
 else
 	echo -e "${BGreen}Deleting folder source code...${Color_Off}"
 	rm -rf /var/server_admin_script
@@ -81,5 +84,5 @@ else
 	install_common_package
 	read -p "Press enter to continue"
 	server-admin
-	exit
+	exit;
 fi
