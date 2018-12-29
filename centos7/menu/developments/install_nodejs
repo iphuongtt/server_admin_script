@@ -1,0 +1,83 @@
+#!/bin/bash
+
+clear
+
+. /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/global_var
+. /etc/server_admin/menu/verify_root
+
+install_nodejs() {
+	mkdir /home/root/temp$current_time
+	tar -xzf /home/root/node-v* -C /home/root/temp$current_time && rm -rf /home/root/node-v* && cd /home/root/temp$current_time/node-v*
+	if [ $? -eq 0 ]; then
+		sudo yum install gcc gcc-c++ -y -q
+		if [ $? -eq 0 ]; then
+			./configure
+			if [ $? -eq 0 ]; then
+				make
+				if [ $? -eq 0 ]; then
+					sudo make install
+					if [ $? -eq 0 ]; then
+						installed=1
+					else
+						installed=0
+					fi
+				else
+					installed=0
+				fi
+			else
+				installed=0
+			fi
+		else
+			installed=0
+		fi
+	else
+		installed=0
+	fi
+}
+
+echo -e "You should go to\n"
+echo -e "${BBlue}https://nodejs.org/download/release/latest/${Color_Off}\n"
+echo -e "To get latest version of nodejs (.tar.gz file) \n"
+
+echo -n -e "Paste url of nodejs latest build:: "
+read nodejs_url
+
+wget -q -P /home/root $nodejs_url &
+PID=$!
+i=1
+sp="/-\|"
+echo -e -n "${BGreen}Downloading nodejs...${Color_Off} "
+while [ -d /proc/$PID ]
+do
+  printf "\b${sp:i++%${#sp}:1}"
+done
+echo -e "${BBlue} Done${Color_Off}"
+printf "\n"
+
+install_nodejs &
+installed=$?
+PID=$!
+i=1
+sp="/-\|"
+echo -e -n "${BGreen}Installing nodejs...${Color_Off} "
+while [ -d /proc/$PID ]
+do
+  printf "\b${sp:i++%${#sp}:1}"
+done
+if [ $installed -eq 1 ]; then
+	rm -rf /home/root/temp$current_time
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+	echo "===================================================================================="
+	echo -e "         ${BGreen}INSTALL NODEJS SUCCESSFUL${Color_Off}"
+	echo "===================================================================================="
+	read -p "Press enter to continue"
+	server-admin
+	exit;
+else
+	rm -rf /home/root/temp$current_time
+	read -p "Press enter to continue"
+	server-admin
+	exit
+fi
