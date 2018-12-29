@@ -45,7 +45,8 @@ show_root_menus() {
 	echo -e "${BCyan}4.  SYSTEMS${Color_Off}"
 	echo -e "${BCyan}5.  WEB SERVERS${Color_Off}"
 	echo -e "${BCyan}6.  UTILITIES${Color_Off}"
-	echo -e "${BRed}17.  EXIT${Color_Off}"
+	echo -e "${BCyan}7.  SELF UPDATE TOOL${Color_Off}"
+	echo -e "${BRed}8.  EXIT${Color_Off}"
 }
 
 read_root_menu_options() {
@@ -57,7 +58,8 @@ read_root_menu_options() {
 		3) /etc/server_admin/menu/systems/menu; break ;;
 		4) /etc/server_admin/menu/webservers/menu; break ;;
 		5) /etc/server_admin/menu/utilities/menu; break ;;
-		6) exit 0;;
+		6) /etc/server_admin/menu/selt_update_tool; break ;;
+		7) exit 0;;
 		*) echo -e "${RED}Error...${Color_Off}"
 	esac
 }
