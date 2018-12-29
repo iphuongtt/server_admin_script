@@ -1,6 +1,7 @@
 #!/bin/sh
 
 clear
+
 . /etc/server_admin/menu/color.sh
 
 return_menu() {
@@ -14,15 +15,29 @@ show_menus() {
 	echo -e "${BYellow} D E V E L O P M E N T - T O O L S ${Color_Off}"
 	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
 	echo -e "${BYellow}1.  INSTALL NODEJS${Color_Off}"
-	echo -e "${BYellow}2.  BACK TO ROOT MENU${Color_Off}"
-	echo -e "${BRed}3.  EXIT${Color_Off}"
+	echo -e "${BYellow}2.  INSTALL PHP${Color_Off}"
+	echo -e "${BYellow}3.  REMOVE PHP VERSION${Color_Off}"
+	echo -e "${BYellow}4.  INSTALL MARIADB 10.1${Color_Off}"
+	echo -e "${BYellow}5.  INSTALL COMPOSER${Color_Off}"
+	echo -e "${BYellow}6.  CREATE DATABASE${Color_Off}"
+	echo -e "${BYellow}7.  CREATE MYSQL USER${Color_Off}"
+	echo -e "${BYellow}8.  LIST DATABASES${Color_Off}"
+	echo -e "${BYellow}9.  BACK TO ROOT MENU${Color_Off}"
+	echo -e "${BRed}10.  EXIT${Color_Off}"
 }
 
 read_options(){
 	local choice
-	read -p "Enter choice [ 1 - 3] " choice
+	read -p "Enter choice [ 1 - 10] " choice
 	case $choice in
-		1) /etc/server_admin/menu/install_nodejs; break ;;
+		1) /etc/server_admin/menu/developments/install_nodejs; break ;;
+		1) /etc/server_admin/menu/developments/install_php; break ;;
+		1) /etc/server_admin/menu/developments/remove_all_php; break ;;
+		1) /etc/server_admin/menu/developments/install_mariadb; break ;;
+		1) /etc/server_admin/menu/developments/install_composer; break ;;
+		1) /etc/server_admin/menu/developments/create_database; break ;;
+		1) /etc/server_admin/menu/developments/create_user_mysql; break ;;
+		1) /etc/server_admin/menu/developments/list_databases; break ;;
 		2) server-admin; break ;;
 		3) exit 0;;
 		*) echo -e "${RED}Error...${Color_Off}"
