@@ -22,7 +22,7 @@ show_menus() {
 	echo -e "${BYellow}6.  CREATE DATABASE${Color_Off}"
 	echo -e "${BYellow}7.  CREATE MYSQL USER${Color_Off}"
 	echo -e "${BYellow}8.  LIST DATABASES${Color_Off}"
-	echo -e "${BYellow}9.  BACK TO ROOT MENU${Color_Off}"
+	echo -e "${BPurple}9.  BACK TO ROOT MENU${Color_Off}"
 	echo -e "${BRed}10.  EXIT${Color_Off}"
 }
 
