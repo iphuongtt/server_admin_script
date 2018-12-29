@@ -35,6 +35,33 @@ show_menus() {
 	echo -e "${BRed}17.  EXIT${Color_Off}"
 }
 
+show_root_menus() {
+	clear
+	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
+	echo -e "${BYellow} S E R V E R - A D M I N - M E N U ${Color_Off}"
+	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
+	echo -e "${BCyan}1.  DEVELOPMENTS${Color_Off}"
+	echo -e "${BCyan}2.  NETWORKS${Color_Off}"
+	echo -e "${BCyan}4.  SYSTEMS${Color_Off}"
+	echo -e "${BCyan}5.  WEB SERVERS${Color_Off}"
+	echo -e "${BCyan}6.  UTILITIES${Color_Off}"
+	echo -e "${BRed}17.  EXIT${Color_Off}"
+}
+
+read_root_menu_options() {
+	local choice
+	read -p "Enter choice [ 1 - 17] " choice
+	case $choice in
+		1) /etc/server_admin/menu/developments/menu; break ;;
+		2) /etc/server_admin/menu/networks/menu; break ;;
+		3) /etc/server_admin/menu/systems/menu; break ;;
+		4) /etc/server_admin/menu/webservers/menu; break ;;
+		5) /etc/server_admin/menu/utilities/menu; break ;;
+		6) exit 0;;
+		*) echo -e "${RED}Error...${Color_Off}"
+	esac
+}
+
 read_options(){
 	local choice
 	read -p "Enter choice [ 1 - 17] " choice
@@ -64,6 +91,6 @@ trap 'return_menu' SIGINT SIGQUIT SIGTSTP
 
 while true
 do
-	show_menus
-	read_options
+	show_root_menus
+	read_root_menu_options
 done

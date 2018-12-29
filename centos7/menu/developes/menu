@@ -1,0 +1,41 @@
+#!/bin/sh
+
+clear
+
+. /etc/server_admin/menu/color.sh
+
+installNginx="${BCyan}3.  INSTALL NGINX${Color_Off}"
+
+return_menu() {
+	/etc/server_admin/menu/developments/menu
+	exit
+}
+
+show_menus() {
+	clear
+	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
+	echo -e "${BYellow} D E V E L O P M E N T - T O O L S ${Color_Off}"
+	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
+	echo -e "${BCyan}1.  INSTALL NODEJS${Color_Off}"
+	echo -e "${BCyan}2.  BACK TO ROOT MENU${Color_Off}"
+	echo -e "${BRed}3.  EXIT${Color_Off}"
+}
+
+read_options(){
+	local choice
+	read -p "Enter choice [ 1 - 3] " choice
+	case $choice in
+		1) /etc/server_admin/menu/install_nodejs; break ;;
+		2) server-admin; break ;;
+		3) exit 0;;
+		*) echo -e "${RED}Error...${Color_Off}"
+	esac
+}
+
+trap 'return_menu' SIGINT SIGQUIT SIGTSTP
+
+while true
+do
+	show_menus
+	read_options
+done
