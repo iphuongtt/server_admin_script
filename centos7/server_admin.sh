@@ -42,16 +42,16 @@ show_root_menus() {
 	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
 	echo -e "${BCyan}1.  DEVELOPMENTS${Color_Off}"
 	echo -e "${BCyan}2.  NETWORKS${Color_Off}"
-	echo -e "${BCyan}4.  SYSTEMS${Color_Off}"
-	echo -e "${BCyan}5.  WEB SERVERS${Color_Off}"
-	echo -e "${BCyan}6.  UTILITIES${Color_Off}"
-	echo -e "${BCyan}7.  SELF UPDATE TOOL${Color_Off}"
-	echo -e "${BRed}8.  EXIT${Color_Off}"
+	echo -e "${BCyan}3.  SYSTEMS${Color_Off}"
+	echo -e "${BCyan}4.  WEB SERVERS${Color_Off}"
+	echo -e "${BCyan}5.  UTILITIES${Color_Off}"
+	echo -e "${BCyan}6.  SELF UPDATE TOOL${Color_Off}"
+	echo -e "${BRed}7.  EXIT${Color_Off}"
 }
 
 read_root_menu_options() {
 	local choice
-	read -p "Enter choice [ 1 - 17] " choice
+	read -p "Enter choice [ 1 - 7] " choice
 	case $choice in
 		1) /etc/server_admin/menu/developments/menu; break ;;
 		2) /etc/server_admin/menu/networks/menu; break ;;
