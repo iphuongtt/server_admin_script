@@ -3,8 +3,6 @@
 clear
 . /etc/server_admin/menu/color.sh
 
-installNginx="${BCyan}3.  INSTALL NGINX${Color_Off}"
-
 return_menu() {
 	/etc/server_admin/menu/developments/menu
 	exit
@@ -15,8 +13,8 @@ show_menus() {
 	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
 	echo -e "${BYellow} D E V E L O P M E N T - T O O L S ${Color_Off}"
 	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
-	echo -e "${BCyan}1.  INSTALL NODEJS${Color_Off}"
-	echo -e "${BCyan}2.  BACK TO ROOT MENU${Color_Off}"
+	echo -e "${BYellow}1.  INSTALL NODEJS${Color_Off}"
+	echo -e "${BYellow}2.  BACK TO ROOT MENU${Color_Off}"
 	echo -e "${BRed}3.  EXIT${Color_Off}"
 }
 
