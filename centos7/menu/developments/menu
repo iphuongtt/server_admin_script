@@ -31,15 +31,15 @@ read_options(){
 	read -p "Enter choice [ 1 - 10] " choice
 	case $choice in
 		1) /etc/server_admin/menu/developments/install_nodejs; break ;;
-		1) /etc/server_admin/menu/developments/install_php; break ;;
-		1) /etc/server_admin/menu/developments/remove_all_php; break ;;
-		1) /etc/server_admin/menu/developments/install_mariadb; break ;;
-		1) /etc/server_admin/menu/developments/install_composer; break ;;
-		1) /etc/server_admin/menu/developments/create_database; break ;;
-		1) /etc/server_admin/menu/developments/create_user_mysql; break ;;
-		1) /etc/server_admin/menu/developments/list_databases; break ;;
-		2) server-admin; break ;;
-		3) exit 0;;
+		2) /etc/server_admin/menu/developments/install_php; break ;;
+		3) /etc/server_admin/menu/developments/remove_all_php; break ;;
+		4) /etc/server_admin/menu/developments/install_mariadb; break ;;
+		5) /etc/server_admin/menu/developments/install_composer; break ;;
+		6) /etc/server_admin/menu/developments/create_database; break ;;
+		7) /etc/server_admin/menu/developments/create_user_mysql; break ;;
+		8) /etc/server_admin/menu/developments/list_databases; break ;;
+		9) server-admin; break ;;
+		10) exit 0;;
 		*) echo -e "${RED}Error...${Color_Off}"
 	esac
 }
