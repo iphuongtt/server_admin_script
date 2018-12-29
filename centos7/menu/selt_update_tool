@@ -67,8 +67,8 @@ echo -e "${BGreen}Installing server-admin tool...${Color_Off}"
 
 mkdir -p /etc/server_admin/menu/
 cp /var/server_admin_script/centos7/server_admin.sh /bin/server-admin && chmod +x /bin/server-admin
-cp /var/server_admin_script/centos7/menu/* /etc/server_admin/menu/
-chmod +x /etc/server_admin/menu/*
+cp -R /var/server_admin_script/centos7/menu/* /etc/server_admin/menu/
+chmod -R +x /etc/server_admin/menu/*
 
 if [ $? -eq 1 ]; then
 	echo -e "${BGreen}Deleting folder code...${Color_Off}"

@@ -47,8 +47,8 @@ install_common_package() {
 
 mkdir -p /etc/server_admin/menu/
 cp $SCRIPTPATH/server_admin.sh /bin/server-admin && chmod +x /bin/server-admin
-cp $SCRIPTPATH/menu/* /etc/server_admin/menu/
-chmod +x /etc/server_admin/menu/*
+cp -R $SCRIPTPATH/menu/* /etc/server_admin/menu/
+chmod -R +x /etc/server_admin/menu/*
 
 update_system
 
