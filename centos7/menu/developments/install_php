@@ -6,6 +6,7 @@ clear
 . /etc/server_admin/menu/function.sh
 . /etc/server_admin/menu/global_var
 . /etc/server_admin/menu/verify_root
+. /etc/server_admin/menu/developments/common
 
 config_firewall() {
 	firewall-cmd --permanent --zone=public --add-service=http -q
@@ -103,17 +104,11 @@ if [ $? -eq 0 ]; then
 		echo "===================================================================================="
 		echo -e "         ${BGreen}INSTALL PHP $php_version SUCCESSFUL${Color_Off}"
 		echo "===================================================================================="
-		read -p "Press enter to continue"
-		server-admin
-		exit;
+		back_to_menu
 	else
-		read -p "Press enter to continue"
-		server-admin
-		exit
+		back_to_menu
 	fi
 else
-	read -p "Press enter to continue"
-	server-admin
-	exit;
+	back_to_menu
 fi
 

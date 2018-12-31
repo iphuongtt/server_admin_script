@@ -6,6 +6,7 @@ clear
 . /etc/server_admin/menu/function.sh
 . /etc/server_admin/menu/global_var
 . /etc/server_admin/menu/verify_root
+. /etc/server_admin/menu/developments/common
 
 yum remove -y -q php* &
 PID=$!
@@ -26,11 +27,7 @@ if [ $? -eq 0 ]; then
 	echo "===================================================================================="
 	echo -e "         ${BGreen}REMOVED ALL PHP VERSION SUCCESSFUL${Color_Off}"
 	echo "===================================================================================="
-	read -p "Press enter to continue"
-	server-admin
-	exit;
+	back_to_menu
 else
-	read -p "Press enter to continue"
-	server-admin
-	exit;
+	back_to_menu
 fi

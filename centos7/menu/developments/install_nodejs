@@ -3,8 +3,10 @@
 clear
 
 . /etc/server_admin/menu/color.sh
-. /etc/server_admin/menu/global_var
+. /etc/server_admin/menu/global.sh
+. /etc/server_admin/menu/function.sh
 . /etc/server_admin/menu/verify_root
+. /etc/server_admin/menu/developments/common
 
 install_nodejs() {
 	mkdir /home/root/temp$current_time
@@ -72,12 +74,8 @@ if [ $installed -eq 1 ]; then
 	echo "===================================================================================="
 	echo -e "         ${BGreen}INSTALL NODEJS SUCCESSFUL${Color_Off}"
 	echo "===================================================================================="
-	read -p "Press enter to continue"
-	server-admin
-	exit;
+	back_to_menu
 else
 	rm -rf /home/root/temp$current_time
-	read -p "Press enter to continue"
-	server-admin
-	exit
+	back_to_menu
 fi

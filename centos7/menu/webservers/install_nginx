@@ -1,9 +1,10 @@
 #!/bin/bash
 
 . /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/global.sh
 . /etc/server_admin/menu/function.sh
-. /etc/server_admin/menu/global_var
 . /etc/server_admin/menu/verify_root
+. /etc/server_admin/menu/networks/common
 
 config_firewall() {
 	firewall-cmd --permanent --zone=public --add-service=http
@@ -61,4 +62,4 @@ echo -e "||||     \e[0;34m INSTALL NGINX SUCCESSFUL \e[0m     ||||"
 echo "========================================================="
 sleep 5
 
-server-admin
+back_to_menu

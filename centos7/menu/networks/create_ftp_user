@@ -1,8 +1,10 @@
 #!/bin/bash
 
 . /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/global.sh
 . /etc/server_admin/menu/function.sh
 . /etc/server_admin/menu/verify_root
+. /etc/server_admin/menu/networks/common
 
 get_user_name() {
 	echo -n "Enter ftp account's username then press [ENTER]: "
@@ -19,8 +21,7 @@ get_user_name() {
 			printf "\n"
 			get_user_name
 		else
-			server_admin
-			exit
+			back_to_menu
 		fi
 	fi 
 }
@@ -58,11 +59,7 @@ if [ $? -eq 0 ]; then
 	echo -e "         ${BGreen} USER: $username${Color_Off}"
 	echo -e "         ${BBlue} PASSWORD: $password${Color_Off}"
 	echo "===================================================================================="
-	read -p "Press enter to continue"
-	server-admin
-	exit;
+	back_to_menu
 else
-	read -p "Press enter to continue"
-	server-admin
-	exit;
+	back_to_menu
 fi

@@ -19,9 +19,9 @@ show_menus() {
 	echo -e "${BYellow}3.  REMOVE PHP VERSION${Color_Off}"
 	echo -e "${BYellow}4.  INSTALL MARIADB 10.1${Color_Off}"
 	echo -e "${BYellow}5.  INSTALL COMPOSER${Color_Off}"
-	echo -e "${BYellow}6.  CREATE DATABASE${Color_Off}"
+	echo -e "${BYellow}6.  CREATE MYSQL DATABASE${Color_Off}"
 	echo -e "${BYellow}7.  CREATE MYSQL USER${Color_Off}"
-	echo -e "${BYellow}8.  LIST DATABASES${Color_Off}"
+	echo -e "${BYellow}8.  BACKUP MYSQL DATABASES${Color_Off}"
 	echo -e "${BPurple}9.  BACK TO ROOT MENU${Color_Off}"
 	echo -e "${BRed}10.  EXIT${Color_Off}"
 }
@@ -35,9 +35,9 @@ read_options(){
 		3) /etc/server_admin/menu/developments/remove_all_php; break ;;
 		4) /etc/server_admin/menu/developments/install_mariadb; break ;;
 		5) /etc/server_admin/menu/developments/install_composer; break ;;
-		6) /etc/server_admin/menu/developments/create_database; break ;;
+		6) /etc/server_admin/menu/developments/create_mysql_database; break ;;
 		7) /etc/server_admin/menu/developments/create_user_mysql; break ;;
-		8) /etc/server_admin/menu/developments/list_databases; break ;;
+		8) /etc/server_admin/menu/developments/backup_mysql_databases; break ;;
 		9) server-admin; break ;;
 		10) exit 0;;
 		*) echo -e "${RED}Error...${Color_Off}"

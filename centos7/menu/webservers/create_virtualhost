@@ -1,9 +1,10 @@
 #!/bin/bash
 
 . /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/global.sh
 . /etc/server_admin/menu/function.sh
-. /etc/server_admin/menu/global_var
 . /etc/server_admin/menu/verify_root
+. /etc/server_admin/menu/webservers/common
 
 who=`who`
 username=`awk '{print $1;}' <<< "$who"` #Get Real username login
@@ -19,18 +20,14 @@ keyFilePathConvert=""
 
 if [ ! -f /lib/systemd/system/nginx.service ]; then
   echo -e "${BRed}ERROR: NGINX does not installed${Color_Off}"
-  read -p "Press enter to continue"
-  server-admin
-  exit;
+  back_to_menu
 fi
 
 checkdomain()
 {
 if [ ! -d $1 ]; then
   echo -e "${BRed}ERROR: Directory does not exists${Color_Off}"
-  read -p "Press enter to continue"
-  server-admin
-  exit;
+  back_to_menu
 fi
 }
 
@@ -49,9 +46,7 @@ if [ -f /etc/nginx/sites-enabled/$1 ]; then
 		rm -rf /etc/nginx/sites-enabled/$1
 		rm -rf /etc/nginx/sites-available/$1
 	else
-		read -p "Press enter to continue"
-		server-admin
-		exit
+		back_to_menu
 	fi 
 fi	
 }
@@ -85,9 +80,7 @@ crtFilePathConvert=`echo $crtFilePath | sed -r "s/\~/\/home\/$username/"`
 
 if [ ! -f $crtFilePathConvert ]; then
   echo -e "${BRed}ERROR: $crtFilePathConvert does not exit${Color_Off}"
-  read -p "Press enter to continue"
-  server-admin
-  exit;
+  back_to_menu
 fi
 
 echo -n -e "Path to ${BYellow}.key${Color_Off} file: "
@@ -97,9 +90,7 @@ keyFilePathConvert=`echo $keyFilePath | sed -r "s/\~/\/home\/$username/"`
 
 if [ ! -f $keyFilePathConvert ]; then
   echo -e "${BRed}ERROR: $keyFilePathConvert does not exit${Color_Off}"
-  read -p "Press enter to continue"
-  server-admin
-  exit;
+  back_to_menu
 fi
 }
 
@@ -112,16 +103,12 @@ if [[ $? -ne 0 ]]; then
 	echo -e "||||     ${BRed}ERRR:${Color_Off}     ||||"
 	echo "========================================================="
 	systemctl status nginx
-	read -p "Press enter to continue"
-	server-admin
-	exit
+	back_to_menu
 else
 	echo "========================================================="
 	echo -e "||||     \e[0;34m CREATE VIRTUAL HOST SUCCESSFUL \e[0m     ||||"
 	echo "========================================================="
-	read -p "Press enter to continue"
-	server-admin
-	exit
+	back_to_menu
 fi
 }
 
@@ -445,7 +432,7 @@ select opt in "${options[@]}" "EXIT"; do
 		  2) angular; break;;
 		  3) spa; break;;
 	    # End Menu
-	    $(( ${#options[@]}+1 )) ) server-admin; break;;
+	    $(( ${#options[@]}+1 )) ) back_to_menu; break;;
 	    *) echo "Please, chose again";continue;;
 
     esac

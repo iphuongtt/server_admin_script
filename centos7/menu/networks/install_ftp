@@ -1,7 +1,10 @@
 #!/bin/bash
 
 . /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/global.sh
+. /etc/server_admin/menu/function.sh
 . /etc/server_admin/menu/verify_root
+. /etc/server_admin/menu/networks/common
 
 enable_firewall() {
 	firewall-cmd -q --permanent --add-port=21/tcp
@@ -194,13 +197,10 @@ if [ $? -eq 0 ]; then
 	read -p "Do you want to create ftp account?  " -n 1 -r
 	if [[ $REPLY =~ ^[Yy]$ ]]; then
 		printf "\n"
-		/etc/server_admin/menu/create_ftp_user
+		/etc/server_admin/menu/networks/create_ftp_user
 	else
-		server-admin
-		exit
+		back_to_menu
 	fi
 else
-	read -p "Press enter to continue"
-	server-admin
-	exit;
+	back_to_menu
 fi

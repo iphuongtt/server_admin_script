@@ -1,10 +1,13 @@
 #!/bin/sh
 
+. /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/global.sh
+. /etc/server_admin/menu/function.sh
 . /etc/server_admin/menu/verify_root
+. /etc/server_admin/menu/networks/common
 
 printf "=========================================================================\n"
 printf "                             LIST VIRTUALHOST\n"
 printf "=========================================================================\n"
 grep -RiI server_name /etc/nginx/sites-enabled/ 
-read -p "Press enter to continue"
-server-admin
+back_to_menu

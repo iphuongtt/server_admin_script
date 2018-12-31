@@ -1,9 +1,10 @@
 #!/bin/bash
 
 . /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/global.sh
 . /etc/server_admin/menu/function.sh
-. /etc/server_admin/menu/global_var
 . /etc/server_admin/menu/verify_root
+. /etc/server_admin/menu/networks/common
 
 input_username() {
 	echo -n "Enter ftp account's username: "
@@ -20,8 +21,7 @@ input_username() {
 			printf "\n"
 			input_username
 		else
-			server-admin
-			exit
+			back_to_menu
 		fi
 	fi
 }
@@ -44,8 +44,7 @@ input_folder() {
 			printf "\n"
 			input_folder
 		else
-			server-admin
-			exit
+			back_to_menu
 		fi
 	fi 
 }
@@ -65,8 +64,7 @@ mount_folder_name() {
 			printf "\n"
 			mount_folder_name
 		else
-			server-admin
-			exit
+			back_to_menu
 		fi
 	fi
 }
@@ -83,8 +81,7 @@ if is_folder_exists /home/ftpuser/vftp/$username/$folderName; then
 		printf "\n"
 		mount_folder_name
 	else
-		server-admin
-		exit
+		back_to_menu
 	fi
 fi
 
@@ -101,16 +98,10 @@ if [ $? -eq 0 ]; then
 		echo "===================================================================================="
 		echo -e "         ${BGreen} Mounted: $pathConvert to /home/ftpuser/vftp/$username/$folderName ${Color_Off}"
 		echo "===================================================================================="
-		read -p "Press enter to continue"
-		server-admin
-		exit;
+		back_to_menu
 	else
-		read -p "Error, Press enter to continue"
-		server-admin
-		exit;
+		back_to_menu
 	fi
 else
-	read -p "Error, Press enter to continue"
-	server-admin
-	exit;
+	back_to_menu
 fi 

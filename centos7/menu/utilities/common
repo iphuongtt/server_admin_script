@@ -1,0 +1,7 @@
+#!/bin/bash
+
+back_to_menu() {
+	read -p "Press enter to continue"
+	/etc/server_admin/menu/utilities/menu
+	exit;	
+}

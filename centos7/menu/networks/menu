@@ -4,7 +4,7 @@ clear
 . /etc/server_admin/menu/color.sh
 
 return_menu() {
-	/etc/server_admin/menu/developments/menu
+	/etc/server_admin/menu/networks/menu
 	exit
 }
 
@@ -13,18 +13,26 @@ show_menus() {
 	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
 	echo -e "${BYellow} N E T W O R K - T O O L S ${Color_Off}"
 	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
-	echo -e "${BYellow}1.  INSTALL NODEJS${Color_Off}"
-	echo -e "${BYellow}2.  BACK TO ROOT MENU${Color_Off}"
-	echo -e "${BRed}3.  EXIT${Color_Off}"
+	echo -e "${BCyan}1.  CHANGE IP${Color_Off}"
+	echo -e "${BCyan}2.  INSTALL FTP SERVER${Color_Off}"
+	echo -e "${BCyan}3.  CREATE FTP USER${Color_Off}"
+	echo -e "${BCyan}4.  MOUNT FOLDER TO FTP${Color_Off}"
+	echo -e "${BCyan}5.  UNMOUNT FOLDER TO FTP${Color_Off}"
+	echo -e "${BPurple}6.  BACK TO ROOT MENU${Color_Off}"
+	echo -e "${BRed}7.  EXIT${Color_Off}"
 }
 
 read_options(){
 	local choice
 	read -p "Enter choice [ 1 - 3] " choice
 	case $choice in
-		1) /etc/server_admin/menu/install_nodejs; break ;;
-		2) server-admin; break ;;
-		3) exit 0;;
+		1) /etc/server_admin/menu/networks/change_ip; break ;;
+		2) /etc/server_admin/menu/networks/install_ftp; break ;;
+		3) /etc/server_admin/menu/networks/create_ftp_user; break ;;
+		4) /etc/server_admin/menu/networks/mount_folder_to_ftp; break ;;
+		5) /etc/server_admin/menu/networks/unmount_folder_to_ftp; break ;;
+		6) server-admin; break ;;
+		7) exit 0;;
 		*) echo -e "${RED}Error...${Color_Off}"
 	esac
 }

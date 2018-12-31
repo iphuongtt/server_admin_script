@@ -4,6 +4,7 @@
 . /etc/server_admin/menu/function.sh
 . /etc/server_admin/menu/global_var
 . /etc/server_admin/menu/verify_root
+. /etc/server_admin/menu/developments/common
 
 install_mysql() {
 	cat > "/etc/yum.repos.d/MariaDB.repo" <<END
@@ -43,6 +44,4 @@ echo "========================================================="
 echo -e "${BCyan} INSTALL MariaDB 10.1 SUCCESSFUL ${Color_Off}"
 echo "========================================================="
 
-read -p "Press enter to continue"
-server-admin
-exit;
+back_to_menu

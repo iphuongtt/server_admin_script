@@ -3,7 +3,10 @@
 clear
 
 . /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/global.sh
+. /etc/server_admin/menu/function.sh
 . /etc/server_admin/menu/verify_root
+. /etc/server_admin/menu/developments/common
 
 download_composer() {
 	php -q -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &
@@ -21,9 +24,7 @@ download_composer() {
 		printf "\n"
 		install_composer
 	else
-		read -p "Press enter to continue"
-		server-admin
-		exit;
+		back_to_menu
     fi
 }
 
@@ -41,13 +42,9 @@ install_composer() {
 	if [ $? -eq 0 ]; then
 		clear;
 		composer
-		read -p "Press enter to continue"
-		server-admin
-		exit;
+		back_to_menu
 	else
-		read -p "Press enter to continue"
-		server-admin
-		exit;
+		back_to_menu
     fi
 }
 
@@ -58,9 +55,8 @@ if [ ! -f /usr/local/bin/composer ]; then
 			/etc/server_admin/menu/install_php
 			exit
 		else
-			read -p "Can not install Composer. Press enter to continue"
-			server-admin
-			exit;	
+			echo "Can not install Composer"
+			back_to_menu
 		fi
 	else
 		download_composer
@@ -71,7 +67,5 @@ else
 	echo -e -n "${BGreen}Updating composer...${Color_Off} ";
 	printf "\n";
 	composer self-update
-	read -p "Press enter to continue"
-	server-admin
-	exit;	
+	back_to_menu
 fi
