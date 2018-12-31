@@ -1,7 +1,7 @@
 #!/bin/bash
 
 . /etc/server_admin/menu/color.sh
-. /etc/server_admin/menu/global.sh
+. /etc/server_admin/menu/global_var
 . /etc/server_admin/menu/function.sh
 . /etc/server_admin/menu/verify_root
 . /etc/server_admin/menu/developments/common
