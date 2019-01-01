@@ -7,59 +7,85 @@
 . /etc/server_admin/menu/networks/common
 
 config_firewall() {
-	firewall-cmd --permanent --zone=public --add-service=http
-	firewall-cmd --permanent --zone=public --add-service=https
-	firewall-cmd --reload
+	firewall-cmd --permanent --zone=public --add-service=http &
+	firewall-cmd --permanent --zone=public --add-service=https & 
+	firewall-cmd --reload &
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Configuring firewall...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
 }
 
-update_system
+install_nginx() {
+	# Install nginx
+	yum install nginx -y -q &
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Installing Nginx...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+}
 
-# Install nginx
-yum install nginx -y -q &
-PID=$!
-i=1
-sp="/-\|"
-#echo -n ' '
-echo -e -n "${BGreen}Installing Nginx...${Color_Off} "
-while [ -d /proc/$PID ]
-do
-  printf "\b${sp:i++%${#sp}:1}"
-done
-echo -e "${BBlue} Done${Color_Off}"
-printf "\n"
+config_nginx() {
+	cd ~ &
+	wget -q https://github.com/iphuongtt/server-configs-nginx/archive/master.zip &
+	unzip -q master.zip && rm -f master.zip &
+	cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup$current_time &
+	cp server-configs-nginx-master/nginx.conf /etc/nginx/nginx.conf &
+	cp server-configs-nginx-master/mime.types /etc/nginx/mime.types &
+	cp -R server-configs-nginx-master/sites-available /etc/nginx/ &
+	cp -R server-configs-nginx-master/sites-enabled /etc/nginx/ &
+	cp -R server-configs-nginx-master/h5bp /etc/nginx/ &
+	mkdir /etc/nginx/ssl &
+	# Delete server-configs-nginx-master
+	rm -rf ~/server-configs-nginx-master &
+	# Auto start nginx when server stared
+	systemctl enable nginx &
+	systemctl start nginx &
+	PID=$!
+	isSuccess=$?
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Configuring Nginx...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+	return $isSuccess
+}
 
-config_firewall &
-PID=$!
-i=1
-sp="/-\|"
-#echo -n ' '
-echo -e -n "${BGreen}Configuring firewall...${Color_Off} "
-while [ -d /proc/$PID ]
-do
-  printf "\b${sp:i++%${#sp}:1}"
-done
-echo -e "${BBlue} Done${Color_Off}"
-printf "\n"
-
-cd ~
-wget -q https://github.com/iphuongtt/server-configs-nginx/archive/master.zip
-unzip -q master.zip && rm -f master.zip
-cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup$current_time
-cp server-configs-nginx-master/nginx.conf /etc/nginx/nginx.conf
-cp server-configs-nginx-master/mime.types /etc/nginx/mime.types
-cp -R server-configs-nginx-master/sites-available /etc/nginx/
-cp -R server-configs-nginx-master/sites-enabled /etc/nginx/
-cp -R server-configs-nginx-master/h5bp /etc/nginx/
-mkdir /etc/nginx/ssl
-# Delete server-configs-nginx-master
-rm -rf ~/server-configs-nginx-master
-# Auto start nginx when server stared
-systemctl enable nginx
-systemctl start nginx
-
-echo "========================================================="
-echo -e "||||     \e[0;34m INSTALL NGINX SUCCESSFUL \e[0m     ||||"
-echo "========================================================="
-sleep 5
-
-back_to_menu
+if [ -f /lib/systemd/system/nginx.service ]; then
+	echo "========================================================="
+	echo -e "${BGreen}||||           NGINX already installed            ||||${Color_Off}"
+	echo "========================================================="
+	back_to_menu
+else
+	update_system
+	install_nginx
+	config_firewall
+	config_nginx
+	if [ $? -eq 0 ]; then		
+		echo "========================================================="
+		echo -e "${BGreen}||||     INSTALL NGINX SUCCESSFUL     ||||${Color_Off}"
+		echo "========================================================="
+		back_to_menu
+	else 
+		echo "========================================================="
+		echo -e "${BRed}||||     INSTALL NGINX ERROR     ||||${Color_Off}"
+		echo "========================================================="
+		back_to_menu
+	fi
+fi

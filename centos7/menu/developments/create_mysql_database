@@ -62,7 +62,6 @@ get_password() {
 	done
 }
 
-
 if [ "`systemctl is-active mariadb.service`" == "active" ]; then
 printf "=========================================================================\n"
 printf "                             Create Database\n"
