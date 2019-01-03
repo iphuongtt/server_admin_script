@@ -38,8 +38,9 @@ install_nginx() {
 }
 
 config_nginx() {
-	cd ~ &
-	wget -q https://github.com/iphuongtt/server-configs-nginx/archive/master.zip &
+	mkdir /home/root/temp$current_time &
+	wget -q https://github.com/iphuongtt/server-configs-nginx/archive/master.zip -P /home/root/temp$current_time &
+	cd /home/root/temp$current_time &
 	unzip -q master.zip && rm -f master.zip &
 	cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup$current_time &
 	cp server-configs-nginx-master/nginx.conf /etc/nginx/nginx.conf &
