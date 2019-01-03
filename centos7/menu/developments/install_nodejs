@@ -62,7 +62,7 @@ EOT
 install_nodejs() {
 	. $NVM_DIR/nvm.sh
 
-	nvm install node &
+	(nvm install node && source ~/.bashrc) &
 	PID=$!
 	i=1
 	sp="/-\|"
