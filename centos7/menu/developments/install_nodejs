@@ -63,9 +63,9 @@ install_nvm_from_git() {
   INSTALL_DIR="$(nvm_install_dir)"
 
   if [ -d "$INSTALL_DIR/.git" ]; then
-    install_new
-  else
     update
+  else
+    install_new
   fi
 }
 
