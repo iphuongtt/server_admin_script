@@ -62,7 +62,7 @@ EOT
 install_nodejs() {
 	. $NVM_DIR/nvm.sh
 
-	(nvm install node && source ~/.bashrc) &
+	nvm install node &
 	PID=$!
 	i=1
 	sp="/-\|"
@@ -89,5 +89,7 @@ install_nvm_from_git() {
 install_nvm_from_git
 
 install_nodejs
+
+echo -e -n "${BGreen}Please close your current terminal, open a new terminal, and type node -v to verify installation.${Color_Off} "
 
 back_to_menu

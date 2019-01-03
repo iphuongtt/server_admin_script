@@ -38,6 +38,6 @@ uninstallnode() {
 	printf "\n"
 }
 
-printf "Run commands:\n1. nvm deactivate \n2. nvm uninstall node"
+printf "Run commands:\n1. nvm deactivate \n2. nvm uninstall node\n"
 
 back_to_menu
