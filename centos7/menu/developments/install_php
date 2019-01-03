@@ -29,7 +29,7 @@ config_php() {
 	sed -i 's/group = apache/group = nginx/' /etc/php-fpm.d/www.conf
 	sed -i 's/listen.owner = nobody/listen.owner = nginx/' /etc/php-fpm.d/www.conf
 	sed -i 's/listen.group = nobody/listen.group = nginx/' /etc/php-fpm.d/www.conf
-	sed -i 's/listen = 127.0.0.1\:9000/listen = /var/run/php-fpm/php-fpm.sock/' /etc/php-fpm.d/www.conf
+	sed -i 's/listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm\/php-fpm.sock/' /etc/php-fpm.d/www.conf
 }
 clear
 
