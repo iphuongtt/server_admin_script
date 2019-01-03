@@ -8,24 +8,10 @@ clear
 . /etc/server_admin/menu/verify_root
 . /etc/server_admin/menu/systems/common
 
-echo -e "${BGreen}Current timezone:${Color_Off} \n"
-
-timedatectl
-
-read -p "Press enter to continue"
-
-echo -e "Input timezone to set:"
-read timezone
-
-timedatectl set-timezone $timezone && timedatectl
-
-read -p "Press enter to continue"
-
-yum install -y chrony
-systemctl enable chronyd
-
-cat > "/etc/chrony.conf" <<END
-
+install_chrony() {
+	yum install -y chrony &&
+	systemctl enable chronyd &&
+	(cat > "/etc/chrony.conf" <<END
 # Use public servers from the pool.ntp.org project.
 # Please consider joining the pool (http://www.pool.ntp.org/join.html).
 server 0.centos.pool.ntp.org iburst
@@ -66,9 +52,61 @@ logchange 0.5
 
 logdir /var/log/chrony
 END
+) &&
+	systemctl start chronyd &
+	PID=$!
+	i=1
+	sp="/-\|"
+	#echo -n ' '
+	echo -e -n "${BGreen}Installing chrony...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+}
 
-systemctl start chronyd
+install_ntpdate() {
+	yum install ntpdate -y &
+	PID=$!
+	i=1
+	sp="/-\|"
+	#echo -n ' '
+	echo -e -n "${BGreen}Installing ntpdate...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+}
+
+ajust_timezone() {
+	timedatectl list-timezones
+	echo -e "Input timezone to set:"
+	read timezone
+	timedatectl set-timezone $timezone && timedatectl
+	read -p "Press enter to continue"	
+}
+
+echo -e "${BGreen}Current timezone:${Color_Off} \n"
+
+timedatectl
+
+read -p "Press enter to continue"
+
+install_chrony
+
+install_ntpdate
+
+read -p "Do you want to ajust time zone ?  " -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+	ajust_timezone
+fi
 
 ntpdate pool.ntp.org
+
+timedatectl
 
 back_to_menu
