@@ -8,41 +8,38 @@ clear
 . /etc/server_admin/menu/verify_none_root
 . /etc/server_admin/menu/developments/common
 
-nvm_install_dir() {
-	if [ -n "$NVM_DIR" ]; then
-	printf %s "${NVM_DIR}"
-	elif [ -n "$XDG_CONFIG_HOME" ]; then
-	printf %s "${XDG_CONFIG_HOME/nvm}"
-	else
-	printf %s "$HOME/.nvm"
-	fi
+. $NVM_DIR/nvm.sh
+
+deactivatenode() {
+	command nvm deactivate &
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Deactivating nodejs...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
 }
 
-INSTALL_DIR="$(nvm_install_dir)"
-
-. $INSTALL_DIR/nvm.sh
-
-nvm deactivate &
-PID=$!
-i=1
-sp="/-\|"
-echo -e -n "${BGreen}Deactivating nodejs...${Color_Off} "
-while [ -d /proc/$PID ]
-do
-  printf "\b${sp:i++%${#sp}:1}"
-done
-echo -e "${BBlue} Done${Color_Off}"
+uninstallnode() {
+	command nvm uninstall node &
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Uninstalling nodejs...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
 	printf "\n"
-nvm uninstall node &
-PID=$!
-i=1
-sp="/-\|"
-echo -e -n "${BGreen}Uninstalling nodejs...${Color_Off} "
-while [ -d /proc/$PID ]
-do
-  printf "\b${sp:i++%${#sp}:1}"
-done
-echo -e "${BBlue} Done${Color_Off}"
-printf "\n"
+}
+
+deactivatenode
+
+uninstallnode
 
 back_to_menu
