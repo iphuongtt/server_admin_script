@@ -60,7 +60,7 @@ EOT
 }
 
 install_nodejs() {
-	$nvmdir = "$HOME/.nvm";
+	nvmdir="$HOME/.nvm";
 	if [ "$NVM_DIR" != "" ]; then
 		$nvmdir = $NVM_DIR
 	fi
