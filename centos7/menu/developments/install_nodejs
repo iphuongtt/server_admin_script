@@ -59,6 +59,22 @@ EOT
 	printf "\n" 
 }
 
+install_nodejs() {
+	. $NVM_DIR/nvm.sh
+
+	nvm install node &
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Installing Nodejs...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n" 
+}
+
 install_nvm_from_git() {
   local INSTALL_DIR
   INSTALL_DIR="$(nvm_install_dir)"
@@ -71,7 +87,4 @@ install_nvm_from_git() {
 }
 
 install_nvm_from_git
-
-. $NVM_DIR/nvm.sh
-
-nvm install node
+install_nodejs
