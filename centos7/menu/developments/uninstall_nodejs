@@ -11,7 +11,7 @@ clear
 . $NVM_DIR/nvm.sh
 
 deactivatenode() {
-	nvm deactivate &
+	nvm deactivate >/dev/null 2>&1 &
 	PID=$!
 	i=1
 	sp="/-\|"
@@ -25,7 +25,7 @@ deactivatenode() {
 }
 
 uninstallnode() {
-	nvm uninstall node &
+	nvm uninstall node >/dev/null 2>&1 &
 	PID=$!
 	i=1
 	sp="/-\|"
