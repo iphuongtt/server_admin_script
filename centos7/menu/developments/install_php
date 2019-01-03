@@ -17,7 +17,7 @@ config_firewall() {
 install_php() {
 	yum-config-manager --enable remi-php$php_install -q
 	yum --enablerepo=remi,remi-php$php_install install php-fpm php-common -y -q
-	yum --enablerepo=remi,remi-php$php_install install php-opcache php-pecl-apcu php-cli php-pear php-pdo php-mysqlnd php-pgsql php-pecl-mongodb php-pecl-redis php-pecl-memcache php-pecl-memcached php-gd php-mbstring php-mcrypt php-xml php-pecl-zip php-odbc -y -q
+	yum --enablerepo=remi,remi-php$php_install install php-opcache php-pecl-apcu php-cli php-pear php-pdo php-mysqlnd php-pgsql php-pecl-mongodb php-pecl-redis php-pecl-memcache php-pecl-memcached php-gd php-mbstring php-pecl-mcrypt php-xml php-pecl-zip php-odbc -y -q
 }
 config_php() {
 	cp /etc/php.ini /etc/php.ini.backup$current_time
@@ -32,9 +32,6 @@ config_php() {
 	sed -i 's/listen = 127.0.0.1:9000/listen = /var/run/php-fpm/php-fpm.sock/' /etc/php-fpm.d/www.conf
 }
 clear
-printf "=========================================================================\n"
-printf "Begin installation... \n"
-printf "=========================================================================\n"
 
 printf "Chose PHP version:\n"
 prompt="Enter your number [1-5]: "
