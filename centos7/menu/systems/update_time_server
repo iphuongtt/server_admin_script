@@ -9,8 +9,8 @@ clear
 . /etc/server_admin/menu/systems/common
 
 install_chrony() {
-	yum install -y chrony &&
-	systemctl enable chronyd &&
+	yum install -y -q chrony &&
+	systemctl enable chronyd -q &&
 	(cat > "/etc/chrony.conf" <<END
 # Use public servers from the pool.ntp.org project.
 # Please consider joining the pool (http://www.pool.ntp.org/join.html).
@@ -53,7 +53,7 @@ logchange 0.5
 logdir /var/log/chrony
 END
 ) &&
-	systemctl start chronyd &
+	systemctl start chronyd -q &
 	PID=$!
 	i=1
 	sp="/-\|"
@@ -68,7 +68,7 @@ END
 }
 
 install_ntpdate() {
-	yum install ntpdate -y &
+	yum install ntpdate -y -q &
 	PID=$!
 	i=1
 	sp="/-\|"
@@ -90,6 +90,21 @@ ajust_timezone() {
 	read -p "Press enter to continue"	
 }
 
+update_timeserver() {
+	ntpdate pool.ntp.org > /dev/null 2>&1 &
+	PID=$!
+	i=1
+	sp="/-\|"
+	#echo -n ' '
+	echo -e -n "${BGreen}Updating time server...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+}
+
 echo -e "${BGreen}Current timezone:${Color_Off} \n"
 
 timedatectl
@@ -105,7 +120,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	ajust_timezone
 fi
 
-ntpdate pool.ntp.org
+update_timeserver
 
 timedatectl
 
