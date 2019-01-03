@@ -4,7 +4,7 @@ clear
 . /etc/server_admin/menu/color.sh
 
 return_menu() {
-	/etc/server_admin/menu/networks/menu
+	/etc/server_admin/menu/systems/menu
 	exit
 }
 
