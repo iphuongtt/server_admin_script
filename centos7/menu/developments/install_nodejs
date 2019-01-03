@@ -87,4 +87,7 @@ install_nvm_from_git() {
 }
 
 install_nvm_from_git
+
 install_nodejs
+
+back_to_menu

@@ -1,0 +1,34 @@
+#!/bin/bash
+
+clear
+
+. /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/global_var
+. /etc/server_admin/menu/function.sh
+. /etc/server_admin/menu/verify_none_root
+. /etc/server_admin/menu/developments/common
+
+nvm deactivate &
+PID=$!
+i=1
+sp="/-\|"
+echo -e -n "${BGreen}Deactivating nodejs...${Color_Off} "
+while [ -d /proc/$PID ]
+do
+  printf "\b${sp:i++%${#sp}:1}"
+done
+echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+nvm uninstall node &
+PID=$!
+i=1
+sp="/-\|"
+echo -e -n "${BGreen}Uninstalling nodejs...${Color_Off} "
+while [ -d /proc/$PID ]
+do
+  printf "\b${sp:i++%${#sp}:1}"
+done
+echo -e "${BBlue} Done${Color_Off}"
+printf "\n"
+
+back_to_menu
