@@ -21,7 +21,7 @@ install_php() {
 }
 config_php() {
 	cp /etc/php.ini /etc/php.ini.backup$current_time
-	sed -i 's/cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php.ini # This causes the PHP interpreter to only try the literal path given and to stop processing if the file is not found.
+	sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php.ini # This causes the PHP interpreter to only try the literal path given and to stop processing if the file is not found.
 
 	# Config php-fpm
 	cp /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.conf.backup$current_time
@@ -29,7 +29,7 @@ config_php() {
 	sed -i 's/group = apache/group = nginx/' /etc/php-fpm.d/www.conf
 	sed -i 's/listen.owner = nobody/listen.owner = nginx/' /etc/php-fpm.d/www.conf
 	sed -i 's/listen.group = nobody/listen.group = nginx/' /etc/php-fpm.d/www.conf
-	sed -i 's/listen = 127.0.0.1:9000/listen = /var/run/php-fpm/php-fpm.sock/' /etc/php-fpm.d/www.conf
+	sed -i 's/listen = 127.0.0.1\:9000/listen = /var/run/php-fpm/php-fpm.sock/' /etc/php-fpm.d/www.conf
 }
 clear
 
