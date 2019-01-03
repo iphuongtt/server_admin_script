@@ -9,7 +9,7 @@ clear
 . /etc/server_admin/menu/systems/common
 
 install_chrony() {
-	yum install -y -q chrony &&
+	yum install -y -q chrony  > /dev/null 2>&1 &&
 	systemctl enable chronyd -q &&
 	(cat > "/etc/chrony.conf" <<END
 # Use public servers from the pool.ntp.org project.
@@ -68,7 +68,7 @@ END
 }
 
 install_ntpdate() {
-	yum install ntpdate -y -q &
+	yum install ntpdate -y -q  > /dev/null 2>&1 &
 	PID=$!
 	i=1
 	sp="/-\|"
@@ -119,6 +119,8 @@ read -p "Do you want to ajust time zone ?  " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 	ajust_timezone
 fi
+
+clear
 
 update_timeserver
 
