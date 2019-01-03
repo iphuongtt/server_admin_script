@@ -46,7 +46,7 @@ install_new() {
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 EOT
-) && source ~/.bashrc ) &
+) ) &
 	PID=$!
 	i=1
 	sp="/-\|"
@@ -60,7 +60,11 @@ EOT
 }
 
 install_nodejs() {
-	. $NVM_DIR/nvm.sh
+	$nvmdir = "$HOME/.nvm";
+	if [ "$NVM_DIR" != "" ]; then
+		$nvmdir = $NVM_DIR
+	fi
+	. $nvmdir/nvm.sh
 
 	nvm install node &
 	PID=$!
