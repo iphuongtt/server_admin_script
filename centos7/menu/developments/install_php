@@ -119,7 +119,7 @@ if [ ! -f /lib/systemd/system/nginx.service ]; then
 	read -p "You need to install Nginx to start php-fpm, Do you want to install Nginx?  " -n 1 -r
 	if [[ $REPLY =~ ^[Yy]$ ]]; then
 		printf "\n"
-		/etc/server_admin/menu/webservers/install_nginx
+		/etc/server_admin/menu/webservers/install_nginx install-php
 		start_install
 	else
 		start_install

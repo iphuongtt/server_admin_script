@@ -82,11 +82,19 @@ else
 		echo "========================================================="
 		echo -e "${BGreen}||||     INSTALL NGINX SUCCESSFUL     ||||${Color_Off}"
 		echo "========================================================="
-		back_to_menu
+		if [ "$1" == "install-php" ]; then
+			/etc/server_admin/menu/developments/install_php
+		else
+			back_to_menu
+		fi
 	else 
 		echo "========================================================="
 		echo -e "${BRed}||||     INSTALL NGINX ERROR     ||||${Color_Off}"
 		echo "========================================================="
-		back_to_menu
+		if [ "$1" == "install-php" ]; then
+			/etc/server_admin/menu/developments/install_php
+		else
+			back_to_menu
+		fi
 	fi
 fi
