@@ -33,10 +33,10 @@ function select_option {
     trap "cursor_blink_on; stty echo; printf '\n'; exit" 2
     cursor_blink_off
 
-    local selected=0
+    local selected=1
     while true; do
         # print options by overwriting the last lines
-        local idx=0
+        local idx=1
         for opt; do
             cursor_to $(($startrow + $idx))
             if [ $idx -eq $selected ]; then
@@ -51,9 +51,9 @@ function select_option {
         case `key_input` in
             enter) break;;
             up)    ((selected--));
-                   if [ $selected -lt 0 ]; then selected=$(($# - 1)); fi;;
+                   if [ $selected -lt 1 ]; then selected=$($#); fi;;
             down)  ((selected++));
-                   if [ $selected -ge $# ]; then selected=0; fi;;
+                   if [ $selected -ge ($# + 1) ]; then selected=1; fi;;
         esac
     done
 
@@ -65,37 +65,9 @@ function select_option {
     return $selected
 }
 
-clear
-
-installNginx="${BCyan}3.  INSTALL NGINX${Color_Off}"
-
 return_menu() {
 	server-admin
 	exit
-}
-
-show_menus() {
-	clear
-	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
-	echo -e "${BYellow} S E R V E R - A D M I N - M E N U ${Color_Off}"
-	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
-	echo -e "${BCyan}1.  CREATE DATABASE${Color_Off}"
-	echo -e "${BCyan}2.  INSTALL MARIADB 10.1${Color_Off}"
-	echo -e "${installNginx}"
-	echo -e "${BCyan}4.  CREATE VIRTUAL HOST${Color_Off}"
-	echo -e "${BCyan}5.  LIST ALL VIRTUAL HOST${Color_Off}"
-	echo -e "${BCyan}6.  BACKUP DATABASES${Color_Off}"
-	echo -e "${BCyan}7.  SELF UPDATE TOOL${Color_Off}"
-	echo -e "${BCyan}8.  INSTALL VSFTP${Color_Off}"
-	echo -e "${BCyan}9.  MOUNT FOLDER TO FPT ACCOUTN${Color_Off}"
-	echo -e "${BCyan}10. UNMOUNT FOLDER FROM FPT ACCOUTN${Color_Off}"
-	echo -e "${BCyan}11. CREATE FTP ACCOUNT${Color_Off}"
-	echo -e "${BCyan}12. INSTALL PHP${Color_Off}"
-	echo -e "${BCyan}13. REMOVE ALL PHP${Color_Off}"
-	echo -e "${BRed}14. CHANGE YOUR IP SERVER${Color_Off}"
-	echo -e "${BCyan}15. INSTALL COMPOSER${Color_Off}"
-	echo -e "${BCyan}16. INSTALL NODEJS${Color_Off}"
-	echo -e "${BRed}17.  EXIT${Color_Off}"
 }
 
 show_title() {
@@ -103,79 +75,29 @@ show_title() {
 	echo -e "${BYellow} S E R V E R - A D M I N - M E N U ${Color_Off}"
 	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
 }
-show_root_menus() {
-	clear
-	echo -e "${BCyan}1.  DEVELOPMENTS${Color_Off}"
-	echo -e "${BCyan}2.  NETWORKS${Color_Off}"
-	echo -e "${BCyan}3.  SYSTEMS${Color_Off}"
-	echo -e "${BCyan}4.  WEB SERVERS${Color_Off}"
-	echo -e "${BCyan}5.  UTILITIES${Color_Off}"
-	echo -e "${BCyan}6.  SELF UPDATE TOOL${Color_Off}"
-	echo -e "${BRed}7.  EXIT${Color_Off}"
+
+show_menu() {
+	show_title
+	options=("DEVELOPMENTS" "NETWORKS" "SYSTEMS" "WEB SERVERS" "UTILITIES" "SELF UPDATE TOOL" "EXIT")
+	select_option "${options[@]}"
+	choice=$?
+	read_options $choice	
 }
 
-read_root_menu_options() {
-	local choice
-	read -p "Enter choice [ 1 - 7] " choice
-	case $choice in
+read_options() {
+	echo $1
+	case $1 in
 		1) /etc/server_admin/menu/developments/menu; break ;;
 		2) /etc/server_admin/menu/networks/menu; break ;;
 		3) /etc/server_admin/menu/systems/menu; break ;;
 		4) /etc/server_admin/menu/webservers/menu; break ;;
 		5) /etc/server_admin/menu/utilities/menu; break ;;
 		6) /etc/server_admin/menu/selt_update_tool; break ;;
-		7) exit 0;;
-		*) echo -e "${RED}Error...${Color_Off}"
-	esac
-}
-
-read_options(){
-	local choice
-	read -p "Enter choice [ 1 - 17] " choice
-	case $choice in
-		1) /etc/server_admin/menu/create_database; break ;;
-		2) /etc/server_admin/menu/install_mariadb; break ;;
-		3) /etc/server_admin/menu/install_nginx; break ;;
-		4) /etc/server_admin/menu/create_virtualhost; break ;;
-		5) /etc/server_admin/menu/list_domain; break ;;
-		6) /etc/server_admin/menu/list_databases; break ;;
-		7) /etc/server_admin/menu/selt_update_tool; break ;;
-		8) /etc/server_admin/menu/install_ftp; break ;;
-		9) /etc/server_admin/menu/mount_folder_to_ftp; break ;;
-		10) /etc/server_admin/menu/unmount_folder_to_ftp; break ;;
-		11) /etc/server_admin/menu/create_ftp_user; break ;;
-		12) /etc/server_admin/menu/install_php; break ;;
-		13) /etc/server_admin/menu/remove_all_php; break ;;
-		14) /etc/server_admin/menu/change_ip; break ;;
-		15) /etc/server_admin/menu/install_composer; break ;;
-		16) /etc/server_admin/menu/install_nodejs; break ;;
-		17) exit 0;;
-		*) echo -e "${RED}Error...${Color_Off}"
-	esac
-}
-
-show_root_new_menu() {
-	show_title
-	options=("DEVELOPMENTS" "NETWORKS" "SYSTEMS" "WEB SERVERS" "UTILITIES" "SELF UPDATE TOOL" "EXIT")
-	select_option "${options[@]}"
-	choice=$?
-	action $choice	
-}
-
-action() {
-	echo $1
-	case $1 in
-		0) /etc/server_admin/menu/developments/menu; break ;;
-		1) /etc/server_admin/menu/networks/menu; break ;;
-		2) /etc/server_admin/menu/systems/menu; break ;;
-		3) /etc/server_admin/menu/webservers/menu; break ;;
-		4) /etc/server_admin/menu/utilities/menu; break ;;
-		5) /etc/server_admin/menu/selt_update_tool; break ;;
-		6) clear; exit 0;;
+		7) clear; exit 0;;
 		*) clear && show_root_new_menu
 	esac
 }
 
 clear
 trap 'return_menu' SIGINT SIGQUIT SIGTSTP
-show_root_new_menu
+show_menu

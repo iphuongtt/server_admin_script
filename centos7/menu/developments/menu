@@ -3,34 +3,15 @@
 clear
 
 . /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/function.sh
 
 return_menu() {
 	/etc/server_admin/menu/developments/menu
 	exit
 }
 
-show_menus() {
-	clear
-	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
-	echo -e "${BYellow} D E V E L O P M E N T - T O O L S ${Color_Off}"
-	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
-	echo -e "${BYellow}1.  INSTALL NODEJS${Color_Off}"
-	echo -e "${BYellow}2.  INSTALL PHP${Color_Off}"
-	echo -e "${BYellow}3.  REMOVE PHP VERSION${Color_Off}"
-	echo -e "${BYellow}4.  INSTALL MARIADB 10.1${Color_Off}"
-	echo -e "${BYellow}5.  INSTALL COMPOSER${Color_Off}"
-	echo -e "${BYellow}6.  CREATE MYSQL DATABASE${Color_Off}"
-	echo -e "${BYellow}7.  CREATE MYSQL USER${Color_Off}"
-	echo -e "${BYellow}8.  BACKUP MYSQL DATABASES${Color_Off}"
-	echo -e "${BYellow}9.  UNINSTALL NODEJS${Color_Off}"
-	echo -e "${BPurple}10.  BACK TO ROOT MENU${Color_Off}"
-	echo -e "${BRed}11.  EXIT${Color_Off}"
-}
-
 read_options(){
-	local choice
-	read -p "Enter choice [ 1 - 11] " choice
-	case $choice in
+	case $1 in
 		1) /etc/server_admin/menu/developments/install_nodejs; break ;;
 		2) /etc/server_admin/menu/developments/install_php; break ;;
 		3) /etc/server_admin/menu/developments/remove_all_php; break ;;
@@ -48,8 +29,7 @@ read_options(){
 
 trap 'return_menu' SIGINT SIGQUIT SIGTSTP
 
-while true
-do
-	show_menus
-	read_options
-done
+options=("INSTALL NODEJS" "INSTALL PHP" "REMOVE PHP VERSION" "INSTALL MARIADB 10.1" "INSTALL COMPOSER" "CREATE MYSQL DATABASE" "CREATE MYSQL USER" "BACKUP MYSQL DATABASES" "UNINSTALL NODEJS" "BACK TO ROOT MENU" "EXIT")
+show_menu "D E V E L O P M E N T - T O O L S" $options
+choice=$?
+read_options $choice

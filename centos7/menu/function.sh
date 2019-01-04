@@ -64,10 +64,10 @@ function select_option {
     trap "cursor_blink_on; stty echo; printf '\n'; exit" 2
     cursor_blink_off
 
-    local selected=0
+    local selected=1
     while true; do
         # print options by overwriting the last lines
-        local idx=0
+        local idx=1
         for opt; do
             cursor_to $(($startrow + $idx))
             if [ $idx -eq $selected ]; then
@@ -82,9 +82,9 @@ function select_option {
         case `key_input` in
             enter) break;;
             up)    ((selected--));
-                   if [ $selected -lt 0 ]; then selected=$(($# - 1)); fi;;
+                   if [ $selected -lt 1 ]; then selected=$($#); fi;;
             down)  ((selected++));
-                   if [ $selected -ge $# ]; then selected=0; fi;;
+                   if [ $selected -ge ($# + 1) ]; then selected=1; fi;;
         esac
     done
 
@@ -94,4 +94,19 @@ function select_option {
     cursor_blink_on
 
     return $selected
+}
+
+show_title() {
+	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
+	echo -e "${BYellow} $1 ${Color_Off}"
+	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
+}
+
+show_menu() {
+	title=$1
+	options=("${!2}")
+	show_title $title
+	select_option "${options[@]}"
+	choice=$?
+	return $choice
 }
