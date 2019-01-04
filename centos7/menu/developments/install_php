@@ -112,7 +112,8 @@ start_install() {
 	update_system &&
 	config_firewall &&
 	install_php &&
-	config_php
+	config_php &&
+	enable_php
 	return
 }
 

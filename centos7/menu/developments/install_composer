@@ -33,7 +33,6 @@ install_composer() {
 	PID=$!
 	i=1
 	sp="/-\|"
-	#echo -n ' '
 	echo -e -n "${BGreen}Installing composer...${Color_Off} "
 	while [ -d /proc/$PID ]
 	do
@@ -41,7 +40,7 @@ install_composer() {
 	done
 	if [ $? -eq 0 ]; then
 		clear;
-		composer
+		/usr/local/bin/composer
 		back_to_menu
 	else
 		back_to_menu
@@ -66,6 +65,6 @@ else
 	printf "\n";
 	echo -e -n "${BGreen}Updating composer...${Color_Off} ";
 	printf "\n";
-	composer self-update
+	/usr/local/bin/composer self-update
 	back_to_menu
 fi

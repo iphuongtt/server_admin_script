@@ -52,8 +52,8 @@ config_nginx() {
 	# Delete server-configs-nginx-master
 	rm -rf ~/server-configs-nginx-master &&
 	# Auto start nginx when server stared
-	systemctl enable nginx &&
-	systemctl start nginx
+	systemctl enable nginx > /dev/null 2>&1 &&
+	systemctl start nginx > /dev/null 2>&1
 	)
 	PID=$!
 	isSuccess=$?
