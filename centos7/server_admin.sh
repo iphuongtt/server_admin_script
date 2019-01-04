@@ -15,7 +15,7 @@ function select_option {
     cursor_blink_off() { printf "$ESC[?25l"; }
     cursor_to()        { printf "$ESC[$1;${2:-1}H"; }
     print_option()     { printf "   $1 "; }
-    print_selected()   { printf "  $ESC[7m $1 $ESC[27m"; }
+    print_selected()   { printf "  $BGreen $1 $Color_Off"; }
     get_cursor_row()   { IFS=';' read -sdR -p $'\E[6n' ROW COL; echo ${ROW#*[}; }
     key_input()        { read -s -n3 key 2>/dev/null >&2
                          if [[ $key = $ESC[A ]]; then echo up;    fi
@@ -159,7 +159,7 @@ show_root_new_menu() {
 	options=("DEVELOPMENTS" "NETWORKS" "SYSTEMS" "WEB SERVERS" "UTILITIES" "SELF UPDATE TOOL" "EXIT")
 	select_option "${options[@]}"
 	choice=$?
-	action choice	
+	action $choice	
 }
 
 action() {
@@ -171,7 +171,7 @@ action() {
 		3) /etc/server_admin/menu/webservers/menu; break ;;
 		4) /etc/server_admin/menu/utilities/menu; break ;;
 		5) /etc/server_admin/menu/selt_update_tool; break ;;
-		6) exit 0;;
+		6) clear; exit 0;;
 		*) clear && show_root_new_menu
 	esac
 }
