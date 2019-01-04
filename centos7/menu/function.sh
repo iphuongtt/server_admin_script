@@ -40,6 +40,7 @@ install_common_package() {
 }
 
 function select_option {
+	number_option=$(($# + 1))
     # little helpers for terminal print control and key input
     ESC=$( printf "\033")
     cursor_blink_on()  { printf "$ESC[?25h"; }
@@ -84,7 +85,7 @@ function select_option {
             up)    ((selected--));
                    if [ $selected -lt 1 ]; then selected=$($#); fi;;
             down)  ((selected++));
-                   if [ $selected -ge ($# + 1) ]; then selected=1; fi;;
+                   if [ $selected -ge $number_option ]; then selected=1; fi;;
         esac
     done
 
