@@ -52,7 +52,7 @@ function select_option {
         case `key_input` in
             enter) break;;
             up)    ((selected--));
-                   if [ $selected -lt 1 ]; then selected=$($#); fi;;
+                   if [ $selected -lt 1 ]; then selected=$#; fi;;
             down)  ((selected++));
                    if [ $selected -ge $number_option ]; then selected=1; fi;;
         esac
