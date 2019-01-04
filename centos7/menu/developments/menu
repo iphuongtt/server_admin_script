@@ -30,6 +30,6 @@ read_options(){
 trap 'return_menu' SIGINT SIGQUIT SIGTSTP
 
 options=("INSTALL NODEJS" "INSTALL PHP" "REMOVE PHP VERSION" "INSTALL MARIADB 10.1" "INSTALL COMPOSER" "CREATE MYSQL DATABASE" "CREATE MYSQL USER" "BACKUP MYSQL DATABASES" "UNINSTALL NODEJS" "BACK TO ROOT MENU" "EXIT")
-show_menu "D E V E L O P M E N T - T O O L S" $options
+show_menu "D E V E L O P M E N T - T O O L S" "${options[@]}"
 choice=$?
 read_options $choice

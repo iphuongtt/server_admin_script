@@ -86,7 +86,6 @@ show_menu() {
 }
 
 read_options() {
-	echo $1
 	case $1 in
 		1) /etc/server_admin/menu/developments/menu; break ;;
 		2) /etc/server_admin/menu/networks/menu; break ;;
