@@ -9,17 +9,43 @@ clear
 . /etc/server_admin/menu/developments/common
 
 config_firewall() {
-	firewall-cmd --permanent --zone=public --add-service=http -q
+	(firewall-cmd --permanent --zone=public --add-service=http -q
 	firewall-cmd --permanent --zone=public --add-service=https -q
-	firewall-cmd --reload -q
+	firewall-cmd --reload -q) &
+	ok=$?
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Configuring firewall...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+	return $ok
 }
 
 install_php() {
-	yum-config-manager --enable remi-php$php_install -q
-	yum --enablerepo=remi,remi-php$php_install install php-fpm php-common -y -q
+	(yum-config-manager --enable remi-php$php_install -q > /dev/null 2>&1 &&
+	yum --enablerepo=remi,remi-php$php_install install php-fpm php-common -y -q &&
 	yum --enablerepo=remi,remi-php$php_install install php-opcache php-pecl-apcu php-cli php-pear php-pdo php-mysqlnd php-pgsql php-pecl-mongodb php-pecl-redis php-pecl-memcache php-pecl-memcached php-gd php-mbstring php-pecl-mcrypt php-xml php-pecl-zip php-odbc -y -q
+	) &
+	ok=$?
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Install Php $php_version...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+	return $ok
 }
 config_php() {
+	(
 	cp /etc/php.ini /etc/php.ini.backup$current_time
 	sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php.ini # This causes the PHP interpreter to only try the literal path given and to stop processing if the file is not found.
 
@@ -30,82 +56,82 @@ config_php() {
 	sed -i 's/listen.owner = nobody/listen.owner = nginx/' /etc/php-fpm.d/www.conf
 	sed -i 's/listen.group = nobody/listen.group = nginx/' /etc/php-fpm.d/www.conf
 	sed -i 's/listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm\/php-fpm.sock/' /etc/php-fpm.d/www.conf
+	) &
+	ok=$?
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Configuring Php...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+	return $ok
 }
-clear
 
-printf "Chose PHP version:\n"
-prompt="Enter your number [1-5]: "
-php_version="7.1"; # Default PHP 7.1
-php_install="71"
-options=("PHP 7.0" "PHP 7.1" "PHP 7.2" "PHP 7.3")
-PS3="$prompt"
-select opt in "${options[@]}"; do 
-    case "$REPLY" in
-    1) php_version="7.0"; php_install="70"; break;;
-    2) php_version="7.1"; php_install="71"; break;;
-    3) php_version="7.2"; php_install="72"; break;;
-    4) php_version="7.3"; php_install="73"; break;;
-    # End Menu
-    $(( ${#options[@]}+1 )) ) server-admin; break;;
-    *) echo "Please, chose again";continue;;
-    esac
-done
+show_menu() {
+	printf "Chose PHP version:\n"
+	prompt="Enter your number [1-5]: "
+	php_version="7.1"; # Default PHP 7.1
+	php_install="71"
+	options=("PHP 7.0" "PHP 7.1" "PHP 7.2" "PHP 7.3")
+	PS3="$prompt"
+	select opt in "${options[@]}"; do 
+	    case "$REPLY" in
+	    1) php_version="7.0"; php_install="70"; break;;
+	    2) php_version="7.1"; php_install="71"; break;;
+	    3) php_version="7.2"; php_install="72"; break;;
+	    4) php_version="7.3"; php_install="73"; break;;
+	    # End Menu
+	    $(( ${#options[@]}+1 )) ) server-admin; break;;
+	    *) echo "Please, chose again";continue;;
+	    esac
+	done
+}
 
-update_system
+enable_php() {
+	(systemctl enable php-fpm -q && systemctl start php-fpm -q) &
+	ok=$?
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Starting Php...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+	return $ok
+}
 
-config_firewall &
-PID=$!
-i=1
-sp="/-\|"
-#echo -n ' '
-echo -e -n "${BGreen}Configuring firewall...${Color_Off} "
-while [ -d /proc/$PID ]
-do
-  printf "\b${sp:i++%${#sp}:1}"
-done
-echo -e "${BBlue} Done${Color_Off}"
-printf "\n"
+start_install() {
+	update_system &&
+	config_firewall &&
+	install_php &&
+	config_php
+	return
+}
 
-install_php &
-PID=$!
-i=1
-sp="/-\|"
-#echo -n ' '
-echo -e -n "${BGreen}Install Php $php_version...${Color_Off} "
-while [ -d /proc/$PID ]
-do
-  printf "\b${sp:i++%${#sp}:1}"
-done
-echo -e "${BBlue} Done${Color_Off}"
-printf "\n"
-
-# Config Php
-config_php &
-PID=$!
-i=1
-sp="/-\|"
-#echo -n ' '
-echo -e -n "${BGreen}Configuring Php...${Color_Off} "
-while [ -d /proc/$PID ]
-do
-  printf "\b${sp:i++%${#sp}:1}"
-done
-echo -e "${BBlue} Done${Color_Off}"
-printf "\n"
-
-systemctl enable php-fpm -q
-if [ $? -eq 0 ]; then
-	systemctl start php-fpm -q
-	if [ $? -eq 0 ]; then
-		clear
-		echo "===================================================================================="
-		echo -e "         ${BGreen}INSTALL PHP $php_version SUCCESSFUL${Color_Off}"
-		echo "===================================================================================="
-		back_to_menu
+if [ ! -f /lib/systemd/system/nginx.service ]; then
+	read -p "You need to install Nginx to start php-fpm, Do you want to install Nginx?  " -n 1 -r
+	if [[ $REPLY =~ ^[Yy]$ ]]; then
+		printf "\n"
+		/etc/server_admin/menu/webservers/install_nginx
+		start_install
 	else
-		back_to_menu
+		start_install
+		if [ $? -eq 0 ]; then
+			clear
+			echo "===================================================================================="
+			echo -e "         ${BGreen}INSTALL PHP $php_version SUCCESSFUL${Color_Off}"
+			echo "===================================================================================="
+			back_to_menu
+		else
+			echo -e "${BGreen}Install error${Color_Off}"
+			back_to_menu
+		fi
 	fi
-else
-	back_to_menu
 fi
-
