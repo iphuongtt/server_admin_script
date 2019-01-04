@@ -40,9 +40,9 @@ function select_option {
         for opt; do
             cursor_to $(($startrow + $idx))
             if [ $idx -eq $selected ]; then
-                print_selected "$opt"
+                print_selected "$idx. $opt"
             else
-                print_option "$opt"
+                print_option "$idx. $opt"
             fi
             ((idx++))
         done
@@ -154,23 +154,27 @@ read_options(){
 	esac
 }
 
+show_root_new_menu() {
+	show_title
+	options=("DEVELOPMENTS" "NETWORKS" "SYSTEMS" "WEB SERVERS" "UTILITIES" "SELF UPDATE TOOL" "EXIT")
+	select_option "${options[@]}"
+	choice=$?
+	action choice	
+}
+
 action() {
 	case $1 in
-		1) /etc/server_admin/menu/developments/menu; break ;;
-		2) /etc/server_admin/menu/networks/menu; break ;;
-		3) /etc/server_admin/menu/systems/menu; break ;;
-		4) /etc/server_admin/menu/webservers/menu; break ;;
-		5) /etc/server_admin/menu/utilities/menu; break ;;
-		6) /etc/server_admin/menu/selt_update_tool; break ;;
-		7) exit 0;;
-		*) echo -e "${RED}Error...${Color_Off}"
+		0) /etc/server_admin/menu/developments/menu; break ;;
+		1) /etc/server_admin/menu/networks/menu; break ;;
+		2) /etc/server_admin/menu/systems/menu; break ;;
+		3) /etc/server_admin/menu/webservers/menu; break ;;
+		4) /etc/server_admin/menu/utilities/menu; break ;;
+		5) /etc/server_admin/menu/selt_update_tool; break ;;
+		6) exit 0;;
+		*) show_root_new_menu
 	esac
 }
+
 clear
 trap 'return_menu' SIGINT SIGQUIT SIGTSTP
-
-show_title
-options=("DEVELOPMENTS" "NETWORKS" "SYSTEMS" "WEB SERVERS" "UTILITIES" "SELF UPDATE TOOL" "EXIT")
-select_option "${options[@]}"
-choice=$?
-action choice
+show_root_new_menu
