@@ -108,7 +108,7 @@ show_menu() {
 	local idx=0
 	local i=0
     for opt; do
-        if [ idx -gt 0 ]; then
+        if [[ idx -gt 0 ]]; then
         	options[i]=$opt
         	((i++))
         fi

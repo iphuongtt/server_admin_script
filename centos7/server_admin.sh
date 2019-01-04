@@ -40,7 +40,7 @@ function select_option {
         local idx=1
         for opt; do
             cursor_to $(($startrow + $idx))
-            if [ $idx -eq $selected ]; then
+            if [[ $idx -eq $selected ]]; then
                 print_selected "$idx. $opt"
             else
                 print_option "$idx. $opt"
