@@ -105,8 +105,16 @@ show_title() {
 
 show_menu() {
 	title=$1
-	options=("${!2}")
-	show_title $title
+	local idx=0
+	local i=0
+    for opt; do
+        if [ idx -gt 0 ]; then
+        	options[i]=$opt
+        	((i++))
+        fi
+        ((idx++))
+    done
+	show_title "$title"
 	select_option "${options[@]}"
 	choice=$?
 	return $choice
