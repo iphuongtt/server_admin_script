@@ -163,6 +163,7 @@ show_root_new_menu() {
 }
 
 action() {
+	echo $1
 	case $1 in
 		0) /etc/server_admin/menu/developments/menu; break ;;
 		1) /etc/server_admin/menu/networks/menu; break ;;
@@ -171,7 +172,7 @@ action() {
 		4) /etc/server_admin/menu/utilities/menu; break ;;
 		5) /etc/server_admin/menu/selt_update_tool; break ;;
 		6) exit 0;;
-		*) show_root_new_menu
+		*) clear && show_root_new_menu
 	esac
 }
 
