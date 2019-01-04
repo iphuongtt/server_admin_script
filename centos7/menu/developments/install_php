@@ -124,7 +124,6 @@ if [ ! -f /lib/systemd/system/nginx.service ]; then
 	else
 		start_install
 		if [ $? -eq 0 ]; then
-			clear
 			echo "===================================================================================="
 			echo -e "         ${BGreen}INSTALL PHP $php_version SUCCESSFUL${Color_Off}"
 			echo "===================================================================================="
@@ -133,5 +132,16 @@ if [ ! -f /lib/systemd/system/nginx.service ]; then
 			echo -e "${BGreen}Install error${Color_Off}"
 			back_to_menu
 		fi
+	fi
+else
+	start_install
+	if [ $? -eq 0 ]; then
+		echo "===================================================================================="
+		echo -e "         ${BGreen}INSTALL PHP $php_version SUCCESSFUL${Color_Off}"
+		echo "===================================================================================="
+		back_to_menu
+	else
+		echo -e "${BGreen}Install error${Color_Off}"
+		back_to_menu
 	fi
 fi
