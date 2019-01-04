@@ -108,6 +108,7 @@ enable_php() {
 }
 
 start_install() {
+	show_menu &&
 	update_system &&
 	config_firewall &&
 	install_php &&
@@ -120,7 +121,6 @@ if [ ! -f /lib/systemd/system/nginx.service ]; then
 	if [[ $REPLY =~ ^[Yy]$ ]]; then
 		printf "\n"
 		/etc/server_admin/menu/webservers/install_nginx install-php
-		start_install
 	else
 		start_install
 		if [ $? -eq 0 ]; then
