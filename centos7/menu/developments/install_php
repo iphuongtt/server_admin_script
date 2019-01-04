@@ -121,6 +121,7 @@ if [ ! -f /lib/systemd/system/nginx.service ]; then
 	if [[ $REPLY =~ ^[Yy]$ ]]; then
 		printf "\n"
 		/etc/server_admin/menu/webservers/install_nginx install-php
+		exit;
 	else
 		start_install
 		if [ $? -eq 0 ]; then

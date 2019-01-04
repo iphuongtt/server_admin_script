@@ -86,6 +86,7 @@ else
 		if [ "$1" == "install-php" ]; then
 			read -p "Press enter to install php"
 			/etc/server_admin/menu/developments/install_php
+			exit;
 		else
 			back_to_menu
 		fi
@@ -96,6 +97,7 @@ else
 		if [ "$1" == "install-php" ]; then
 			read -p "Press enter to install php"
 			/etc/server_admin/menu/developments/install_php
+			exit;
 		else
 			back_to_menu
 		fi

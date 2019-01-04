@@ -29,7 +29,7 @@ show_menus() {
 
 read_options(){
 	local choice
-	read -p "Enter choice [ 1 - 10] " choice
+	read -p "Enter choice [ 1 - 11] " choice
 	case $choice in
 		1) /etc/server_admin/menu/developments/install_nodejs; break ;;
 		2) /etc/server_admin/menu/developments/install_php; break ;;

@@ -198,6 +198,7 @@ if [ $? -eq 0 ]; then
 	if [[ $REPLY =~ ^[Yy]$ ]]; then
 		printf "\n"
 		/etc/server_admin/menu/networks/create_ftp_user
+		exit;
 	else
 		back_to_menu
 	fi
