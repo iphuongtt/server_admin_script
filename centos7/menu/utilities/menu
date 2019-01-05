@@ -1,37 +1,24 @@
 #!/bin/sh
 
 clear
+
 . /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/function.sh
 
 return_menu() {
 	/etc/server_admin/menu/utilities/menu
 	exit
 }
 
-show_menus() {
-	clear
-	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
-	echo -e "${BYellow} U T I L I T I E S - T O O L S ${Color_Off}"
-	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
-	echo -e "${BYellow}1.  INSTALL NODEJS${Color_Off}"
-	echo -e "${BYellow}2.  BACK TO ROOT MENU${Color_Off}"
-	echo -e "${BRed}3.  EXIT${Color_Off}"
-}
-
 read_options(){
-	local choice
-	read -p "Enter choice [ 1 - 2] " choice
-	case $choice in
-		1) server-admin; break ;;
+	case $1 in
+		1) server-admin;;
 		2) exit 0;;
-		*) echo -e "${RED}Error...${Color_Off}"
 	esac
 }
 
 trap 'return_menu' SIGINT SIGQUIT SIGTSTP
-
-while true
-do
-	show_menus
-	read_options
-done
+options=("BACK TO ROOT MENU" "EXIT")
+show_menu "U T I L I T I E S - T O O L S" "${options[@]}"
+choice=$?
+read_options $choice

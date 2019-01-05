@@ -12,18 +12,17 @@ return_menu() {
 
 read_options(){
 	case $1 in
-		1) /etc/server_admin/menu/developments/install_nodejs; exit ;;
-		2) /etc/server_admin/menu/developments/install_php; exit ;;
-		3) /etc/server_admin/menu/developments/remove_all_php; exit ;;
-		4) /etc/server_admin/menu/developments/install_mariadb; exit ;;
-		5) /etc/server_admin/menu/developments/install_composer; exit ;;
-		6) /etc/server_admin/menu/developments/create_mysql_database; exit ;;
-		7) /etc/server_admin/menu/developments/create_user_mysql; exit ;;
-		8) /etc/server_admin/menu/developments/backup_mysql_databases; exit ;;
-		9) /etc/server_admin/menu/developments/uninstall_nodejs; exit ;;
-		10) server-admin; exit ;;
+		1) /etc/server_admin/menu/developments/install_nodejs;;
+		2) /etc/server_admin/menu/developments/install_php;;
+		3) /etc/server_admin/menu/developments/remove_all_php;;
+		4) /etc/server_admin/menu/developments/install_mariadb;;
+		5) /etc/server_admin/menu/developments/install_composer;;
+		6) /etc/server_admin/menu/developments/create_mysql_database;;
+		7) /etc/server_admin/menu/developments/create_user_mysql;;
+		8) /etc/server_admin/menu/developments/backup_mysql_databases;;
+		9) /etc/server_admin/menu/developments/uninstall_nodejs;;
+		10) server-admin;;
 		11) exit 0;;
-		*) echo -e "${RED}Error...${Color_Off}"
 	esac
 }
 

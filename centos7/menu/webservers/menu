@@ -1,42 +1,27 @@
 #!/bin/sh
 
 clear
+
 . /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/function.sh
 
 return_menu() {
 	/etc/server_admin/menu/webservers/menu
 	exit
 }
 
-show_menus() {
-	clear
-	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
-	echo -e "${BYellow} W E B S E R V E R - T O O L S ${Color_Off}"
-	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
-	echo -e "${BBlue}1.  INSTALL NGINX${Color_Off}"
-	echo -e "${BBlue}2.  CREATE VIRTUAL HOST${Color_Off}"
-	echo -e "${BBlue}3.  LIST DOMAINS${Color_Off}"
-	echo -e "${BPurple}4.  BACK TO ROOT MENU${Color_Off}"
-	echo -e "${BRed}5.  EXIT${Color_Off}"
-}
-
 read_options(){
-	local choice
-	read -p "Enter choice [ 1 - 5] " choice
-	case $choice in
-		1) /etc/server_admin/menu/webservers/install_nginx; break ;;
-		2) /etc/server_admin/menu/webservers/create_virtualhost; break ;;
-		3) /etc/server_admin/menu/webservers/list_domain; break ;;
-		6) server-admin; break ;;
-		7) exit 0;;
-		*) echo -e "${RED}Error...${Color_Off}"
+	case $1 in
+		1) /etc/server_admin/menu/webservers/install_nginx;;
+		2) /etc/server_admin/menu/webservers/create_virtualhost;;
+		3) /etc/server_admin/menu/webservers/list_domain;;
+		4) server-admin;;
+		5) exit 0;;
 	esac
 }
 
 trap 'return_menu' SIGINT SIGQUIT SIGTSTP
-
-while true
-do
-	show_menus
-	read_options
-done
+options=("INSTALL NGINX" "CREATE VIRTUAL HOST" "LIST DOMAINS" "BACK TO ROOT MENU" "EXIT")
+show_menu "W E B S E R V E R - T O O L S" "${options[@]}"
+choice=$?
+read_options $choice

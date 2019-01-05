@@ -1,38 +1,25 @@
 #!/bin/sh
 
 clear
+
 . /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/function.sh
 
 return_menu() {
 	/etc/server_admin/menu/systems/menu
 	exit
 }
 
-show_menus() {
-	clear
-	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
-	echo -e "${BYellow} S Y S T E M - T O O L S ${Color_Off}"
-	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"
-	echo -e "${BBlue}1.  UPDATE TIME SERVER${Color_Off}"	
-	echo -e "${BPurple}2.  BACK TO ROOT MENU${Color_Off}"
-	echo -e "${BRed}3.  EXIT${Color_Off}"
-}
-
 read_options(){
-	local choice
-	read -p "Enter choice [ 1 - 2] " choice
-	case $choice in
-		1) /etc/server_admin/menu/systems/update_time_server; break ;;
-		2) server-admin; break ;;
+	case $1 in
+		1) /etc/server_admin/menu/systems/update_time_server;;
+		2) server-admin;;
 		3) exit 0;;
-		*) echo -e "${RED}Error...${Color_Off}"
 	esac
 }
 
 trap 'return_menu' SIGINT SIGQUIT SIGTSTP
-
-while true
-do
-	show_menus
-	read_options
-done
+options=("UPDATE TIME SERVER" "BACK TO ROOT MENU" "EXIT")
+show_menu "S Y S T E M - T O O L S" "${options[@]}"
+choice=$?
+read_options $choice
