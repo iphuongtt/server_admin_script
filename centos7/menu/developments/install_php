@@ -72,7 +72,7 @@ config_php() {
 	return $ok
 }
 
-read_options(){
+chose_version(){
 	case $1 in
 		1) php_version="7.0"; php_install="70";;
 	    2) php_version="7.1"; php_install="71";;
@@ -87,7 +87,7 @@ show_menu() {
 	options=("7.0" "7.1" "7.2" "7.3" "BACK")
 	show_menu "CHOSE PHP VERSION" "${options[@]}"
 	choice=$?
-	read_options $choice
+	chose_version $choice
 }
 
 enable_php() {
