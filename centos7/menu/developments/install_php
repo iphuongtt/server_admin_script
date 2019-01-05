@@ -81,7 +81,6 @@ chose_version(){
 		5) back_to_menu;;
 	esac
 }
-trap 'return_menu' SIGINT SIGQUIT SIGTSTP
 
 show_menu() {
 	options=("7.0" "7.1" "7.2" "7.3" "BACK")
