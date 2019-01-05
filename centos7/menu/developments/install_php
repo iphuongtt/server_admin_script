@@ -44,6 +44,7 @@ install_php() {
 	printf "\n"
 	return $ok
 }
+
 config_php() {
 	(
 	cp /etc/php.ini /etc/php.ini.backup$current_time
@@ -71,24 +72,22 @@ config_php() {
 	return $ok
 }
 
+read_options(){
+	case $1 in
+		1) php_version="7.0"; php_install="70";;
+	    2) php_version="7.1"; php_install="71";;
+	    3) php_version="7.2"; php_install="72";;
+	    4) php_version="7.3"; php_install="73";;
+		5) back_to_menu;;
+	esac
+}
+trap 'return_menu' SIGINT SIGQUIT SIGTSTP
+
 show_menu() {
-	printf "Chose PHP version:\n"
-	prompt="Enter your number [1-5]: "
-	php_version="7.1"; # Default PHP 7.1
-	php_install="71"
-	options=("PHP 7.0" "PHP 7.1" "PHP 7.2" "PHP 7.3")
-	PS3="$prompt"
-	select opt in "${options[@]}"; do 
-	    case "$REPLY" in
-	    1) php_version="7.0"; php_install="70"; break;;
-	    2) php_version="7.1"; php_install="71"; break;;
-	    3) php_version="7.2"; php_install="72"; break;;
-	    4) php_version="7.3"; php_install="73"; break;;
-	    # End Menu
-	    $(( ${#options[@]}+1 )) ) server-admin; break;;
-	    *) echo "Please, chose again";continue;;
-	    esac
-	done
+	options=("7.0" "7.1" "7.2" "7.3" "BACK")
+	show_menu "CHOSE PHP VERSION" "${options[@]}"
+	choice=$?
+	read_options $choice
 }
 
 enable_php() {
