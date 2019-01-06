@@ -11,7 +11,7 @@ try_time=0
 create_database() {
 	let try_time+=1
 	read -s root_password
-	mysql -u root -p $root_password < /tmp/config.temp
+	mysql -u root -p$root_password < /tmp/config.temp
 	if [[ $try_time > 3 ]]; then
 		echo "Too many attempts, try again later"
 		exit;

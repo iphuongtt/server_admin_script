@@ -202,6 +202,7 @@ validate_reply () {
 }
 
 prepare() {
+    clear
     touch $config $command
     chmod 600 $config $command
 }
