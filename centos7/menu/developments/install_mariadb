@@ -9,7 +9,7 @@
 clear
 
 install_mysql() {
-	((cat > "/etc/yum.repos.d/MariaDB.repo" <<END
+	cat > "/etc/yum.repos.d/MariaDB.repo" <<END
 [mariadb]
 
 name = MariaDB
@@ -20,11 +20,10 @@ gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 
 gpgcheck=1
 END
-) &&
+ &&
 	yum --enablerepo=remi install mariadb-server mariadb -y -q &&
 	systemctl enable mariadb.service &&
-	systemctl start mariadb.service 
-) &
+	systemctl start mariadb.service &
 	PID=$!
 	ok=$?
 	i=1
