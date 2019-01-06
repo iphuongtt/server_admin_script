@@ -23,104 +23,97 @@ if [ ! -f /lib/systemd/system/nginx.service ]; then
   back_to_menu
 fi
 
-checkdomain()
-{
-if [ ! -d $1 ]; then
-  echo -e "${BRed}ERROR: Directory does not exists${Color_Off}"
-  back_to_menu
-fi
+checkdomain() {
+  if [ ! -d $1 ]; then
+    echo -e "${BRed}ERROR: Directory does not exists${Color_Off}"
+    back_to_menu
+  fi
 }
 
-checkAndCreateSslDir()
-{
-if [ ! -d /etc/nginx/ssl ]; then
-  mkdir /etc/nginx/ssl
-fi	
+checkAndCreateSslDir() {
+  if [ ! -d /etc/nginx/ssl ]; then
+    mkdir /etc/nginx/ssl
+  fi	
 }
 
-checkDomainExists()
-{
-if [ -f /etc/nginx/sites-enabled/$1 ]; then
-	read -r -p "Domain Name $domainName already exists. Do you want to remove?:  "
-	if [[ $REPLY =~ ^[Yy]$ ]]; then
-		rm -rf /etc/nginx/sites-enabled/$1
-		rm -rf /etc/nginx/sites-available/$1
-	else
-		back_to_menu
-	fi 
-fi	
+checkDomainExists() {
+  if [ -f /etc/nginx/sites-enabled/$1 ]; then
+  	read -r -p "Domain Name $domainName already exists. Do you want to remove?:  "
+  	if [[ $REPLY =~ ^[Yy]$ ]]; then
+  		rm -rf /etc/nginx/sites-enabled/$1
+  		rm -rf /etc/nginx/sites-available/$1
+  	else
+  		back_to_menu
+  	fi 
+  fi	
 }
 
-inputParams()
-{
-echo -n "Port: "
-read port
-echo -n "Domain Name: "
-read domainName
-#fileConfigName=`$domainName | sed -r 's/(^|_|\s)([a-z])/\U\2/g'`
-fileConfigName="${domainName}.conf"
-checkDomainExists $fileConfigName
-echo -n "Root Directory: "
-read rootDirectory
-checkdomain $rootDirectory
+inputParams() {
+  echo -n "Port: "
+  read port
+  echo -n "Domain Name: "
+  read domainName
+  #fileConfigName=`$domainName | sed -r 's/(^|_|\s)([a-z])/\U\2/g'`
+  fileConfigName="${domainName}.conf"
+  checkDomainExists $fileConfigName
+  echo -n "Root Directory: "
+  read rootDirectory
+  checkdomain $rootDirectory
 }
 
-inputParamsSSL()
-{
-echo -n "Port SSL: "
-read portSSL
+inputParamsSSL() {
+  echo -n "Port SSL: "
+  read portSSL
 
-checkAndCreateSslDir
+  checkAndCreateSslDir
 
-echo -n -e "Path to ${BYellow}.crt${Color_Off} file: "
-read crtFilePath
+  echo -n -e "Path to ${BYellow}.crt${Color_Off} file: "
+  read crtFilePath
 
-crtFilePathConvert=`echo $crtFilePath | sed -r "s/\~/\/home\/$username/"`
+  crtFilePathConvert=`echo $crtFilePath | sed -r "s/\~/\/home\/$username/"`
 
 
-if [ ! -f $crtFilePathConvert ]; then
-  echo -e "${BRed}ERROR: $crtFilePathConvert does not exit${Color_Off}"
-  back_to_menu
-fi
+  if [ ! -f $crtFilePathConvert ]; then
+    echo -e "${BRed}ERROR: $crtFilePathConvert does not exit${Color_Off}"
+    back_to_menu
+  fi
 
-echo -n -e "Path to ${BYellow}.key${Color_Off} file: "
-read keyFilePath
+  echo -n -e "Path to ${BYellow}.key${Color_Off} file: "
+  read keyFilePath
 
-keyFilePathConvert=`echo $keyFilePath | sed -r "s/\~/\/home\/$username/"`
+  keyFilePathConvert=`echo $keyFilePath | sed -r "s/\~/\/home\/$username/"`
 
-if [ ! -f $keyFilePathConvert ]; then
-  echo -e "${BRed}ERROR: $keyFilePathConvert does not exit${Color_Off}"
-  back_to_menu
-fi
+  if [ ! -f $keyFilePathConvert ]; then
+    echo -e "${BRed}ERROR: $keyFilePathConvert does not exit${Color_Off}"
+    back_to_menu
+  fi
 }
 
-finalStep()
-{
-ln -s /etc/nginx/sites-available/$fileConfigName /etc/nginx/sites-enabled/$fileConfigName
-systemctl restart nginx
-if [[ $? -ne 0 ]]; then
-	echo "========================================================="
-	echo -e "||||     ${BRed}ERRR:${Color_Off}     ||||"
-	echo "========================================================="
-	systemctl status nginx
-	back_to_menu
-else
-	echo "========================================================="
-	echo -e "||||     \e[0;34m CREATE VIRTUAL HOST SUCCESSFUL \e[0m     ||||"
-	echo "========================================================="
-	back_to_menu
-fi
+finalStep() {
+  ln -s /etc/nginx/sites-available/$fileConfigName /etc/nginx/sites-enabled/$fileConfigName
+  systemctl restart nginx
+  if [[ $? -ne 0 ]]; then
+  	echo "========================================================="
+  	echo -e "||||     ${BRed}ERRR:${Color_Off}     ||||"
+  	echo "========================================================="
+  	systemctl status nginx
+  	back_to_menu
+  else
+  	echo "========================================================="
+  	echo -e "||||     \e[0;34m CREATE VIRTUAL HOST SUCCESSFUL \e[0m     ||||"
+  	echo "========================================================="
+  	back_to_menu
+  fi
 }
 
-php()
-{
-inputParams
+php() {
+  inputParams
 
-read -r -p "Do you want to setup SSL?:  "
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-	inputParamsSSL
-#SSL DOMAIN CONFIG
-	cat > "/etc/nginx/sites-available/${fileConfigName}" <<END
+  read -r -p "Do you want to setup SSL?:  "
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+	 inputParamsSSL
+  #SSL DOMAIN CONFIG
+	 cat > "/etc/nginx/sites-available/${fileConfigName}" <<END
 server {
   listen [::]:${port};
   listen ${port};
@@ -208,17 +201,16 @@ else
 	  gzip_disable "MSIE [1-6]\.";
 	}
 END
-fi 
-finalStep
+  fi 
+  finalStep
 }
 
-angular()
-{
-inputParams
+angular() {
+  inputParams
 
-read -r -p "Do you want to setup SSL?:  "
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-	inputParamsSSL
+  read -r -p "Do you want to setup SSL?:  "
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+	 inputParamsSSL
 
 	cat > "/etc/nginx/sites-available/${fileConfigName}" <<END
 server {
@@ -291,28 +283,27 @@ server {
   gzip_disable "MSIE [1-6]\.";
 }
 END
-fi 
-finalStep
+  fi 
+  finalStep
 }
 
-spa()
-{
-inputParams
+spa() {
+  inputParams
 
-locationServer="api"
-echo -n "Location of server api (default: api): "
-read locationServer
-if [ "$locationServer" != "" ]; then
-    locationServer="api"
-fi
+  locationServer="api"
+  echo -n "Location of server api (default: api): "
+  read locationServer
+  if [ "$locationServer" != "" ]; then
+      locationServer="api"
+  fi
 
-echo -n "Root Directory of api: "
-read rootDirectoryApi
-checkdomain $rootDirectoryApi
+  echo -n "Root Directory of api: "
+  read rootDirectoryApi
+  checkdomain $rootDirectoryApi
 
-read -r -p "Do you want to setup SSL?:  "
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-	inputParamsSSL
+  read -r -p "Do you want to setup SSL?:  "
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+  	inputParamsSSL
 
 	cat > "/etc/nginx/sites-available/${fileConfigName}" <<END
 server {
@@ -415,27 +406,26 @@ server {
   gzip_disable "MSIE [1-6]\.";
 }
 END
-fi 
-finalStep
+  fi 
+  finalStep
 }
 
-
 clear
-prompt="Which type virtual host do you want to create:"
-options=("PHP application" "Angular application" "SPA with PHP and Angular or ReactJs application") # End Options
 
-echo $prompt
-PS3="Select a number (1-4): "
-select opt in "${options[@]}" "EXIT"; do 
-    case "$REPLY" in
-	    1) php; break;;
-		  2) angular; break;;
-		  3) spa; break;;
-	    # End Menu
-	    $(( ${#options[@]}+1 )) ) back_to_menu; break;;
-	    *) echo "Please, chose again";continue;;
+chose_sub_menu() {
+  case $1 in
+    1) php;;
+    2) angular;;
+    3) spa;;
+    4) back_to_menu;;
+  esac
+}
 
-    esac
+show_sub_menu() {
+  options=("PHP application" "Angular application" "SPA with PHP and Angular or ReactJs application" "BACK") # End Options
+  show_menu "Which type virtual host do you want to create" "${options[@]}"
+  choice=$?
+  chose_sub_menu $choice
+}
 
-done
-
+show_sub_menu

@@ -10,7 +10,7 @@ return_menu() {
 	exit
 }
 
-read_options(){
+read_options() {
 	case $1 in
 		1) /etc/server_admin/menu/developments/install_nodejs;;
 		2) /etc/server_admin/menu/developments/install_php;;
