@@ -417,7 +417,7 @@ chose_sub_menu() {
     1) php;;
     2) angular;;
     3) spa;;
-    4) back_to_menu;;
+    4) back_to_menu_now;;
   esac
 }
 

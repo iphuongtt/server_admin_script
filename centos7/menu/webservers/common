@@ -5,3 +5,8 @@ back_to_menu() {
 	/etc/server_admin/menu/webservers/menu
 	exit;	
 }
+
+back_to_menu_now() {
+	/etc/server_admin/menu/webservers/menu
+	exit;		
+}

@@ -78,7 +78,7 @@ chose_version() {
 	    2) php_version="7.1"; php_install="71";;
 	    3) php_version="7.2"; php_install="72";;
 	    4) php_version="7.3"; php_install="73";;
-		5) back_to_menu;;
+		5) back_to_menu_now;;
 	esac
 }
 
