@@ -426,7 +426,8 @@ restore_database(){
           cleanup
           back_to_menu
       else
-          mysqldump --defaults-file=$config --databases $databaseName < $backupFileConvert &
+          mysql --defaults-file=$config $databaseName < $backupFileConvert &
+          ok=$?
           PID=$!
           i=1
           sp="/-\|"
@@ -436,7 +437,7 @@ restore_database(){
             printf "\b${sp:i++%${#sp}:1}"
           done
           printf "\n"
-          if [ $? -eq 0 ]; then
+          if [ $ok -eq 0 ]; then
               cleanup
               clear
               echo "===================================================================================="
