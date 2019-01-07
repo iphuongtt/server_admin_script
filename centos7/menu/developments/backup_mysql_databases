@@ -401,7 +401,6 @@ get_list_databases2(){
     fi  
 }
 
-
 backup_database(){
   clear
   readarray -t dirs < <(find /var/lib/mysql/ -maxdepth 1 -type d -printf '%P\n')
@@ -413,73 +412,60 @@ backup_database(){
             let index+=1
           fi
       done
+      databases[${#databases[@]}]="All databases"
+      show_menu "Chose database you want to backup" "${options[@]}"
+      choice=$?
+      databaseName=${databases[$databaseName-1]};
+      echo -n -e "Path to save backup folder: "
+      read backupDirPath
+      backupDirPathConvert=`echo $backupDirPath | sed -r "s/\~/\/home\/$username/"`
+
+      if [ ! -d $backupDirPathConvert ]; then
+          echo -e "${BRed}ERROR: $backupDirPathConvert does not exit${Color_Off}"
+          cleanup
+          back_to_menu
+      else
+          goodFolderName=`echo $backupDirPathConvert | sed "s/^\(.*\)\/$/\1/"`
+          backupFileName="$goodFolderName/$databaseName.$current_time.sql"
+          if [ "$databaseName" == "All databases" ]; then
+              backupFileName="$goodFolderName/all_databases.$current_time.sql"
+              mysqldump --defaults-file=$config --all-databases > $backupFileName &
+              PID=$!
+              i=1
+              sp="/-\|"
+              echo -e -n "${BGreen}Backuping database: $databaseName${Color_Off} "
+              while [ -d /proc/$PID ]
+              do
+                printf "\b${sp:i++%${#sp}:1}"
+              done
+              printf "\n"
+          else
+              mysqldump --defaults-file=$config --databases $databaseName > $backupFileName &
+              PID=$!
+              i=1
+              sp="/-\|"
+              echo -e -n "${BGreen}Backuping database: $databaseName${Color_Off} "
+              while [ -d /proc/$PID ]
+              do
+                printf "\b${sp:i++%${#sp}:1}"
+              done
+              printf "\n"
+          fi
+          if [ $? -eq 0 ]; then
+              cleanup
+              clear
+              echo "===================================================================================="
+              echo -e "         ${BGreen} BACKUP DATABASE: $databaseName SUCCESSFUL${Color_Off}"
+              echo -e "         ${BBlue} Your backup file: $backupFileName${Color_Off}"
+              echo "===================================================================================="
+              back_to_menu
+          fi
+      fi
+
+
       totalNumber=`expr ${#databases[@]} + 1`
       prompt="Chose database you want to backup:"
-      echo $prompt
-
-      databases[${#databases[@]}]="All databases"
-      let totalNumber+=1
-      PS3="Select a number (1-$totalNumber): "
-      select opt in "${databases[@]}" "EXIT"; do
-          if [ $REPLY -lt 1 -o $REPLY -gt $totalNumber ]; then
-            echo "Wrong number plese try again!"
-            cleanup
-          else
-            if [ $REPLY -eq $totalNumber ]; then
-              cleanup
-              back_to_menu
-            else
-              databaseName=${databases[REPLY-1]};
-              echo -n -e "Path to save backup folder: "
-              read backupDirPath
-
-              backupDirPathConvert=`echo $backupDirPath | sed -r "s/\~/\/home\/$username/"`
-
-              if [ ! -d $backupDirPathConvert ]; then
-                echo -e "${BRed}ERROR: $backupDirPathConvert does not exit${Color_Off}"
-                cleanup
-                back_to_menu
-              else
-                goodFolderName=`echo $backupDirPathConvert | sed "s/^\(.*\)\/$/\1/"`
-                backupFileName="$goodFolderName/$databaseName.$current_time.sql"
-                if [ "$databaseName" == "All databases" ]; then
-                  backupFileName="$goodFolderName/all_databases.$current_time.sql"
-                  mysqldump --defaults-file=$config --all-databases > $backupFileName &
-                  PID=$!
-                  i=1
-                  sp="/-\|"
-                  echo -e -n "${BGreen}Backuping database: $databaseName${Color_Off} "
-                  while [ -d /proc/$PID ]
-                  do
-                    printf "\b${sp:i++%${#sp}:1}"
-                  done
-                  printf "\n"
-                else
-                  mysqldump --defaults-file=$config --databases $databaseName > $backupFileName &
-                  PID=$!
-                  i=1
-                  sp="/-\|"
-                  echo -e -n "${BGreen}Backuping database: $databaseName${Color_Off} "
-                  while [ -d /proc/$PID ]
-                  do
-                    printf "\b${sp:i++%${#sp}:1}"
-                  done
-                  printf "\n"
-                fi
-                if [ $? -eq 0 ]; then
-                  cleanup
-                  clear
-                  echo "===================================================================================="
-                  echo -e "         ${BGreen} BACKUP DATABASE: $databaseName SUCCESSFUL${Color_Off}"
-                  echo -e "         ${BBlue} Your backup file: $backupFileName${Color_Off}"
-                  echo "===================================================================================="
-                  back_to_menu
-                fi
-              fi
-            fi
-            break;
-          fi
-      done      
+      echo $prompt      
   else
       echo " ... Failed!  Not critical, keep moving..."
   fi
