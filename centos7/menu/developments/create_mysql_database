@@ -65,26 +65,22 @@ get_password() {
 clear
 
 if [ "`systemctl is-active mariadb.service`" == "active" ]; then
-printf "=========================================================================\n"
-printf "                             Create Database\n"
-printf "=========================================================================\n"
+	printf "=========================================================================\n"
+	printf "                             Create Database\n"
+	printf "=========================================================================\n"
+	get_database_name
+	if [ -f /var/lib/mysql/$dataname/db.opt ]; then
+		read -p "Database $dataname already exists. Do you want to try a different name?:  " -n 1 -r
+		if [[ $REPLY =~ ^[Yy]$ ]]; then
+			get_database_name
+		else
+			exit
+		fi 
+	fi
 
-get_database_name
-
-if [ -f /var/lib/mysql/$dataname/db.opt ]; then
-	read -p "Database $dataname already exists. Do you want to try a different name?:  " -n 1 -r
-	if [[ $REPLY =~ ^[Yy]$ ]]; then
-		get_database_name
-	else
-		exit
-	fi 
-fi
-
-get_user_name
-
-get_password
-
-cat > "/tmp/config.temp" <<END
+	get_user_name
+	get_password
+	cat > "/tmp/config.temp" <<END
 CREATE DATABASE $dataname COLLATE utf8_general_ci;
 CREATE USER '$username'@'127.0.0.1' IDENTIFIED BY '$password';
 CREATE USER '$username'@'localhost' IDENTIFIED BY '$password';
@@ -93,11 +89,11 @@ GRANT ALL PRIVILEGES ON $dataname . * TO '$username'@'localhost';
 FLUSH PRIVILEGES;
 END
 
-echo -n "\nEnter mariadb root password then press [ENTER]: "
+	echo -n "\nEnter mariadb root password then press [ENTER]: "
 
-create_database
+	create_database
 
 else
 	echo "MariaDB not install or not start, please check again!!!"
-	exit
+	back_to_menu
 fi
