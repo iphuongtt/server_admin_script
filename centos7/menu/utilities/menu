@@ -13,7 +13,7 @@ return_menu() {
 read_options(){
 	case $1 in
 		1) server-admin;;
-		2) exit 0;;
+		2) clear; exit 0;;
 	esac
 }
 

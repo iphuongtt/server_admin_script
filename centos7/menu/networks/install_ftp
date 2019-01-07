@@ -6,6 +6,8 @@
 . /etc/server_admin/menu/verify_root
 . /etc/server_admin/menu/networks/common
 
+clear
+
 enable_firewall() {
 	firewall-cmd -q --permanent --add-port=21/tcp
 	firewall-cmd -q --reload

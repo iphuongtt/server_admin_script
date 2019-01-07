@@ -14,7 +14,7 @@ read_options(){
 	case $1 in
 		1) /etc/server_admin/menu/systems/update_time_server;;
 		2) server-admin;;
-		3) exit 0;;
+		3) clear; exit 0;;
 	esac
 }
 

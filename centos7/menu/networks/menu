@@ -18,7 +18,7 @@ read_options(){
 		4) /etc/server_admin/menu/networks/mount_folder_to_ftp;;
 		5) /etc/server_admin/menu/networks/unmount_folder_to_ftp;;
 		6) server-admin;;
-		7) exit 0;;
+		7) clear; exit 0;;
 	esac
 }
 

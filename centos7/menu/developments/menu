@@ -22,7 +22,7 @@ read_options() {
 		8) /etc/server_admin/menu/developments/backup_mysql_databases;;
 		9) /etc/server_admin/menu/developments/uninstall_nodejs;;
 		10) server-admin;;
-		11) exit 0;;
+		11) clear; exit 0;;
 	esac
 }
 

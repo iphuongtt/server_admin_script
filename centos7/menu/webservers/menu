@@ -16,7 +16,7 @@ read_options(){
 		2) /etc/server_admin/menu/webservers/create_virtualhost;;
 		3) /etc/server_admin/menu/webservers/list_domain;;
 		4) server-admin;;
-		5) exit 0;;
+		5) clear; exit 0;;
 	esac
 }
 
