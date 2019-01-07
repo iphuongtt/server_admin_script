@@ -411,6 +411,7 @@ backup_database(){
           fi
       done
       databases[${#databases[@]}]="All databases"
+      databases[${#databases[@]}]="Cancel"
       show_menu "Chose database you want to backup" "${databases[@]}"
       choice=$?
       databaseName=${databases[$choice-1]};
@@ -437,6 +438,8 @@ backup_database(){
                 printf "\b${sp:i++%${#sp}:1}"
               done
               printf "\n"
+          elif [ "$databaseName" == "Cancel" ]; then
+              back_to_menu
           else
               mysqldump --defaults-file=$config --databases $databaseName > $backupFileName &
               PID=$!

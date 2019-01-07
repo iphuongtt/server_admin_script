@@ -422,30 +422,34 @@ restore_database(){
           cleanup
           back_to_menu
       else
-          mysqldump --defaults-file=$config --databases $databaseName < $backupFileConvert &
-          PID=$!
-          i=1
-          sp="/-\|"
-          echo -e -n "${BGreen}Restoring database: $databaseName${Color_Off} "
-          while [ -d /proc/$PID ]
-          do
-            printf "\b${sp:i++%${#sp}:1}"
-          done
-          printf "\n"
-          if [ $? -eq 0 ]; then
-              cleanup
-              clear
-              echo "===================================================================================="
-              echo -e "         ${BGreen} RESTORE DATABASE: $databaseName SUCCESSFUL${Color_Off}"
-              echo -e "         ${BBlue} From backup file: $backupFileName${Color_Off}"
-              echo "===================================================================================="
+          if [ "$databaseName" == "Cancel" ]; then
               back_to_menu
           else
-              echo "===================================================================================="
-              echo -e "         ${BRed} RESTORE DATABASE: $databaseName ERROR${Color_Off}"
-              echo -e "         ${BRed} From backup file: $backupFileName${Color_Off}"
-              echo "===================================================================================="
-              back_to_menu
+              mysqldump --defaults-file=$config --databases $databaseName < $backupFileConvert &
+              PID=$!
+              i=1
+              sp="/-\|"
+              echo -e -n "${BGreen}Restoring database: $databaseName${Color_Off} "
+              while [ -d /proc/$PID ]
+              do
+                printf "\b${sp:i++%${#sp}:1}"
+              done
+              printf "\n"
+              if [ $? -eq 0 ]; then
+                  cleanup
+                  clear
+                  echo "===================================================================================="
+                  echo -e "         ${BGreen} RESTORE DATABASE: $databaseName SUCCESSFUL${Color_Off}"
+                  echo -e "         ${BBlue} From backup file: $backupFileName${Color_Off}"
+                  echo "===================================================================================="
+                  back_to_menu
+              else
+                  echo "===================================================================================="
+                  echo -e "         ${BRed} RESTORE DATABASE: $databaseName ERROR${Color_Off}"
+                  echo -e "         ${BRed} From backup file: $backupFileName${Color_Off}"
+                  echo "===================================================================================="
+                  back_to_menu
+              fi
           fi
       fi      
   else
