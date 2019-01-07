@@ -93,7 +93,7 @@ GRANT ALL PRIVILEGES ON $dataname . * TO '$username'@'localhost';
 FLUSH PRIVILEGES;
 END
 
-echo -n "Enter mariadb root password then press [ENTER]: "
+echo -n "\nEnter mariadb root password then press [ENTER]: "
 
 create_database
 
