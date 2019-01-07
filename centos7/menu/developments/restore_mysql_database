@@ -410,6 +410,7 @@ restore_database(){
             let index+=1
           fi
       done
+      databases[${#databases[@]}]="Cancel"
       show_menu "Chose database you want to restore" "${databases[@]}"
       choice=$?
       databaseName=${databases[$choice-1]};
