@@ -10,8 +10,6 @@ config=".my.cnf.$$"
 command=".mysql.$$"
 
 trap "interrupt" 1 2 3 6 15
-who=`who`
-username=`awk '{print $1;}' <<< "$who"` #Get Real username login
 rootpass=""
 echo_n=
 echo_c=
@@ -413,12 +411,12 @@ backup_database(){
           fi
       done
       databases[${#databases[@]}]="All databases"
-      show_menu "Chose database you want to backup" "${options[@]}"
+      show_menu "Chose database you want to backup" "${databases[@]}"
       choice=$?
-      databaseName=${databases[$databaseName-1]};
+      databaseName=${databases[$choice-1]};
       echo -n -e "Path to save backup folder: "
       read backupDirPath
-      backupDirPathConvert=`echo $backupDirPath | sed -r "s/\~/\/home\/$username/"`
+      backupDirPathConvert=`echo $backupDirPath | sed -r "s/\~/\/home\/$logon_username/"`
 
       if [ ! -d $backupDirPathConvert ]; then
           echo -e "${BRed}ERROR: $backupDirPathConvert does not exit${Color_Off}"
