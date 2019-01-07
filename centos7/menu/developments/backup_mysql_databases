@@ -416,7 +416,7 @@ backup_database(){
       choice=$?
       databaseName=${databases[$choice-1]};
       if [[ "$databaseName" == "Cancel" ]]; then
-        back_to_menu
+        back_to_menu_now
       fi
       echo -n -e "Path to save backup folder: "
       read backupDirPath
