@@ -22,14 +22,15 @@ read_options() {
 		8) /etc/server_admin/menu/developments/backup_mysql_databases;;
 		9) /etc/server_admin/menu/developments/restore_mysql_database;;
 		10) /etc/server_admin/menu/developments/uninstall_nodejs;;
-		11) server-admin;;
-		12) clear; exit 0;;
+		11) /etc/server_admin/menu/developments/setup_to_connect_mssql;;
+		12) server-admin;;
+		13) clear; exit 0;;
 	esac
 }
 
 trap 'return_menu' SIGINT SIGQUIT SIGTSTP
 
-options=("INSTALL NODEJS" "INSTALL PHP" "REMOVE PHP VERSION" "INSTALL MARIADB 10.1" "INSTALL COMPOSER" "CREATE MYSQL DATABASE" "CREATE MYSQL USER" "BACKUP MYSQL DATABASES" "RESTORE MYSQL DATABASES" "UNINSTALL NODEJS" "BACK TO ROOT MENU" "EXIT")
+options=("INSTALL NODEJS" "INSTALL PHP" "REMOVE PHP VERSION" "INSTALL MARIADB 10.1" "INSTALL COMPOSER" "CREATE MYSQL DATABASE" "CREATE MYSQL USER" "BACKUP MYSQL DATABASES" "RESTORE MYSQL DATABASES" "UNINSTALL NODEJS" "SETUP TO CONNECT MSSQL" "BACK TO ROOT MENU" "EXIT")
 show_menu "D E V E L O P M E N T - T O O L S" "${options[@]}"
 choice=$?
 read_options $choice
