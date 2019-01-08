@@ -76,6 +76,7 @@ else
 END
 
 	sudo odbcinst -i -s -f /tmp/$current_time/template_dsn.ini -l
+	rm -rf /tmp/$current_time
 	clear
 	echo -e "${BBlue}Successful \n${Color_Off}"
 	show_help
