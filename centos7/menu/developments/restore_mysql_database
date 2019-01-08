@@ -17,7 +17,6 @@ basedir=
 defaults_file=
 defaults_extra_file=
 no_defaults=
-current_time=`date '+%Y-%m-%d_%H_%M_%S'`
 
 parse_arg()
 {
@@ -426,8 +425,8 @@ restore_database(){
           cleanup
           back_to_menu
       else
-          mysql --defaults-file=$config $databaseName < $backupFileConvert &
-          ok=$?
+          logFile="/tmp/${current_time}.log"
+          mysql --defaults-file=$config $databaseName < $backupFileConvert 2>&1 | tee $logFile &
           PID=$!
           i=1
           sp="/-\|"
@@ -436,8 +435,8 @@ restore_database(){
           do
             printf "\b${sp:i++%${#sp}:1}"
           done
-          printf "\n"
-          if [ $ok -eq 0 ]; then
+          check_command_error $logFile
+          if [[ $? -eq 0 ]]; then
               cleanup
               clear
               echo "===================================================================================="

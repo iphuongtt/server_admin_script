@@ -119,3 +119,13 @@ show_menu() {
 	choice=$?
 	return $choice
 }
+
+function check_command_error() {
+    if [ "`cat $1 | grep ERROR`" != "" ]
+    then
+      return 1
+    else
+      return 0
+    fi
+    rm -rf $1
+}
