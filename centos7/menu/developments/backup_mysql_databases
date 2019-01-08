@@ -429,9 +429,10 @@ backup_database(){
       else
           goodFolderName=`echo $backupDirPathConvert | sed "s/^\(.*\)\/$/\1/"`
           backupFileName="$goodFolderName/$databaseName.$current_time.sql"
+          logFile="/tmp/${current_time}.log"
           if [[ "$databaseName" == "All databases" ]]; then
               backupFileName="$goodFolderName/all_databases.$current_time.sql"
-              mysqldump --defaults-file=$config --all-databases > $backupFileName &
+              mysqldump --defaults-file=$config --all-databases > $backupFileName 2>&1 | tee $logFile &
               PID=$!
               i=1
               sp="/-\|"
@@ -442,7 +443,7 @@ backup_database(){
               done
               printf "\n"
           else
-              mysqldump --defaults-file=$config --databases $databaseName > $backupFileName &
+              mysqldump --defaults-file=$config --databases $databaseName > $backupFileName 2>&1 | tee $logFile &
               PID=$!
               i=1
               sp="/-\|"
@@ -453,12 +454,19 @@ backup_database(){
               done
               printf "\n"
           fi
-          if [ $? -eq 0 ]; then
+          check_command_error $logFile
+          if [ $? -eq 0 ]
+          then
               cleanup
               clear
               echo "===================================================================================="
               echo -e "         ${BGreen} BACKUP DATABASE: $databaseName SUCCESSFUL${Color_Off}"
               echo -e "         ${BBlue} Your backup file: $backupFileName${Color_Off}"
+              echo "===================================================================================="
+              back_to_menu
+          else
+              echo "===================================================================================="
+              echo -e "         ${BGreen} BACKUP DATABASE: $databaseName ERROR${Color_Off}"
               echo "===================================================================================="
               back_to_menu
           fi
