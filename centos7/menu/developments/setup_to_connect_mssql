@@ -15,7 +15,7 @@ show_help() {
 	echo -e "${Purple}In laravel you need to config in config/database.php:${Color_Off}"
 	echo -e "    '${Yellow}sqlsrv${Color_Off}' => [\n        '${Yellow}driver${Color_Off}' => '${Green}sqlsrv${Color_Off}',\n        '${Yellow}host${Color_Off}' => env('${Green}DB_HOST${Color_Off}', '${ip_server}'),\n        '${Yellow}port${Color_Off}' => env('${Green}DB_PORT${Color_Off}', '1433'),\n        '${Yellow}database${Color_Off}' => env('${Green}DB_DATABASE${Color_Off}', 'database'),\n        '${Yellow}username${Color_Off}' => env('${Green}DB_USERNAME${Color_Off}', 'username'),\n        '${Yellow}password${Color_Off}' => env('${Green}DB_PASSWORD${Color_Off}', 'password'),\n        '${Yellow}charset${Color_Off}' => '${Green}utf8${Color_Off}',\n        '${Yellow}prefix${Color_Off}' => '',\n        '${Yellow}odbc_datasource_name${Color_Off}' => '${Red}Driver={ODBC Driver 11 for SQL Server};Server=192.168.1.192,${Color_Off}'.env('${Green}DB_PORT${Color_Off}', '1433').'${Red};Database=database${Color_Off}',\n        '${Yellow}odbc${Color_Off}' => ${Green}true${Color_Off},\n     ],"
 }
-if [ -d /etc/odbc.ini ]
+if [ -f /etc/odbc.ini ]
 then
 	show_help
 else
