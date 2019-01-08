@@ -44,6 +44,7 @@ install_common_package() {
 	echo -e "${BBlue} Done${Color_Off}"
 	printf "\n"
 }
+clear
 
 mkdir -p /etc/server_admin/menu/
 cp $SCRIPTPATH/server_admin.sh /bin/server-admin && chmod +x /bin/server-admin
@@ -53,3 +54,8 @@ chmod -R +x /etc/server_admin/menu/*
 update_system
 
 install_common_package
+
+echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
+echo -e "${BYellow} INSTALL SERVER ADMIN SCRIPT SUCCESSFUL ${Color_Off}"
+echo -e "Type: ${BYellow}server-admin or${Color_Off} ${BRed}sudo server-admin${Color_Off} to start"
+echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
