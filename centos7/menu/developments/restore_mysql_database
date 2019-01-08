@@ -441,13 +441,13 @@ restore_database(){
               clear
               echo "===================================================================================="
               echo -e "         ${BGreen} RESTORE DATABASE: $databaseName SUCCESSFUL${Color_Off}"
-              echo -e "         ${BBlue} From backup file: $backupFileName${Color_Off}"
+              echo -e "         ${BBlue} From backup file: $backupFileConvert${Color_Off}"
               echo "===================================================================================="
               back_to_menu
           else
               echo "===================================================================================="
               echo -e "         ${BRed} RESTORE DATABASE: $databaseName ERROR${Color_Off}"
-              echo -e "         ${BRed} From backup file: $backupFileName${Color_Off}"
+              echo -e "         ${BRed} From backup file: $backupFileConvert${Color_Off}"
               echo "===================================================================================="
               back_to_menu
           fi
