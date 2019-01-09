@@ -119,10 +119,10 @@ php() {
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
         inputParamsSSL
-        cp /etc/server_admin/templates/php_app.ssl.conf /etc/nginx/sites-available/$fileConfigName
+        cp /etc/server_admin/templates/php.ssl.conf /etc/nginx/sites-available/$fileConfigName
         replace_info_ssl
     else
-        cp /etc/server_admin/templates/php_app.conf /etc/nginx/sites-available/$fileConfigName
+        cp /etc/server_admin/templates/php.conf /etc/nginx/sites-available/$fileConfigName
     fi
     replace_info
     finalStep
