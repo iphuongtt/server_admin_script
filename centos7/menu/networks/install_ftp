@@ -148,48 +148,15 @@ END
 #Backup vsftpd.conf
 cp /etc/vsftpd/vsftpd.conf /etc/vsftpd/vsftpd.conf.origin
 echo '' > /etc/vsftpd/vsftpd.conf
-cat > "/etc/vsftpd/vsftpd.conf" <<END
-listen=YES
-#Disallow anonymous logins; this allows unidentified users to access files via FTP. Ensure that the anonymous_enable setting to NO:
-anonymous_enable=NO
-#Enable local users to login, this will allow your regular user accounts to function as FTP accounts. Change the local_enable setting to YES:
-local_enable=YES
-#If you want local user to be able to write to a directory, then change the write_enable setting to YES:
-write_enable=YES
-local_umask=022
-nopriv_user=ftpuser
-virtual_use_local_privs=YES
-guest_enable=YES
-#local_root=/home/ftpuser/vftp
-#Local users will be ‘chroot jailed’ and they will be denied access to any other part of the server. Set the chroot_local_user setting to YES:
-chroot_local_user=YES
-allow_writeable_chroot=YES
-ls_recurse_enable=YES
-pam_service_name=vsftpd.virtual
-## Home Directory for virtual users
-user_sub_token=\$USER
-local_root=/home/ftpuser/vftp/\$USER
-max_clients=5
-hide_ids=YES
-chroot_list_enable=NO
-userlist_deny=YES
-userlist_file=/etc/vsftpd/user_list
-guest_enable=YES
-guest_username=ftpuser
-user_config_dir=/etc/vsftpd/vsftpd_user_conf
-pasv_enable=YES
-pasv_min_port=10090
-pasv_max_port=10100
-pasv_address=$server_ip
-END
-
+rm -rf /etc/vsftpd/vsftpd.conf
+cp /etc/server_admin/templates/vsftpd.conf /etc/vsftpd/vsftpd.conf
+sed -i 's/@@server_ip@@/\$server_ip/g' /etc/nginx/sites-available/$fileConfigName
 
 printf "\n"
 finish &
 PID=$!
 i=1
 sp="/-\|"
-#echo -n ' '
 echo -e -n "${BGreen}Configuring vsftpd...${Color_Off} "
 while [ -d /proc/$PID ]
 do

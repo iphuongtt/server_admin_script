@@ -16,7 +16,8 @@ keyFilePath=""
 rootDirectory=""
 crtFilePathConvert=""
 keyFilePathConvert=""
-
+locationServer=""
+rootDirectoryApi=""
 
 if [ ! -f /lib/systemd/system/nginx.service ]; then
   echo -e "${BRed}ERROR: NGINX does not installed${Color_Off}"
@@ -33,7 +34,7 @@ checkdomain() {
 checkAndCreateSslDir() {
   if [ ! -d /etc/nginx/ssl ]; then
     mkdir /etc/nginx/ssl
-  fi	
+  fi
 }
 
 checkDomainExists() {
@@ -44,8 +45,20 @@ checkDomainExists() {
   		rm -rf /etc/nginx/sites-available/$1
   	else
   		back_to_menu
-  	fi 
-  fi	
+  	fi
+  fi
+}
+
+replace_info_ssl() {
+    sed -i 's/@@crtFilePathConvert@@/\$crtFilePathConvert/g' /etc/nginx/sites-available/$fileConfigName
+    sed -i 's/@@keyFilePathConvert@@/\$keyFilePathConvert/g' /etc/nginx/sites-available/$fileConfigName
+}
+
+replace_info() {
+    sed -i 's/@@port@@/\$port/g' /etc/nginx/sites-available/$fileConfigName
+    sed -i 's/@@domainName@@/\$domainName/g' /etc/nginx/sites-available/$fileConfigName
+    sed -i 's/@@domainName@@/\$domainName/g' /etc/nginx/sites-available/$fileConfigName
+    sed -i 's/@@rootDirectory@@/\$rootDirectory/g' /etc/nginx/sites-available/$fileConfigName
 }
 
 inputParams() {
@@ -62,31 +75,25 @@ inputParams() {
 }
 
 inputParamsSSL() {
-  echo -n "Port SSL: "
-  read portSSL
-
-  checkAndCreateSslDir
-
-  echo -n -e "Path to ${BYellow}.crt${Color_Off} file: "
-  read crtFilePath
-
-  crtFilePathConvert=`echo $crtFilePath | sed -r "s/\~/\/home\/$username/"`
-
-
-  if [ ! -f $crtFilePathConvert ]; then
-    echo -e "${BRed}ERROR: $crtFilePathConvert does not exit${Color_Off}"
-    back_to_menu
-  fi
-
-  echo -n -e "Path to ${BYellow}.key${Color_Off} file: "
-  read keyFilePath
-
-  keyFilePathConvert=`echo $keyFilePath | sed -r "s/\~/\/home\/$username/"`
-
-  if [ ! -f $keyFilePathConvert ]; then
-    echo -e "${BRed}ERROR: $keyFilePathConvert does not exit${Color_Off}"
-    back_to_menu
-  fi
+    echo -n "Port SSL: "
+    read portSSL
+    checkAndCreateSslDir
+    echo -n -e "Path to ${BYellow}.crt${Color_Off} file: "
+    read crtFilePath
+    crtFilePathConvert=`echo $crtFilePath | sed -r "s/\~/\/home\/$username/"`
+    if [ ! -f $crtFilePathConvert ]
+    then
+        echo -e "${BRed}ERROR: $crtFilePathConvert does not exit${Color_Off}"
+        back_to_menu
+    fi
+    echo -n -e "Path to ${BYellow}.key${Color_Off} file: "
+    read keyFilePath
+    keyFilePathConvert=`echo $keyFilePath | sed -r "s/\~/\/home\/$username/"`
+    if [ ! -f $keyFilePathConvert ]
+    then
+        echo -e "${BRed}ERROR: $keyFilePathConvert does not exit${Color_Off}"
+        back_to_menu
+    fi
 }
 
 finalStep() {
@@ -100,314 +107,70 @@ finalStep() {
   	back_to_menu
   else
   	echo "========================================================="
-  	echo -e "||||     \e[0;34m CREATE VIRTUAL HOST SUCCESSFUL \e[0m     ||||"
+  	echo -e "||||     ${BGreen} CREATE VIRTUAL HOST SUCCESSFUL ${Color_Off}     ||||"
   	echo "========================================================="
   	back_to_menu
   fi
 }
 
 php() {
-  inputParams
-
-  read -r -p "Do you want to setup SSL?:  "
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-	 inputParamsSSL
-  #SSL DOMAIN CONFIG
-	 cat > "/etc/nginx/sites-available/${fileConfigName}" <<END
-server {
-  listen [::]:${port};
-  listen ${port};
-  server_name ${domainName} www.${domainName};
-  return 301 https://${domainName}\$request_uri;
-}
-
-server {
-  listen [::]:${portSSL} ssl http2;
-  listen ${portSSL} ssl http2;
-  server_name www.${domainName};
-  include h5bp/directive-only/ssl.conf;
-  return 301 https://${domainName}\$request_uri;
-}
-
-server {
-  listen [::]:${portSSL} ssl http2;
-  listen ${portSSL} ssl http2;
-  server_name ${domainName};
-  index index.php index.html index.htm;
-  include h5bp/directive-only/ssl.conf;
-  root $rootDirectory
-  location / {
-  	try_files \$uri \$uri/ /index.php?\$args;
-  }
-  charset utf-8;
-  error_page 404 /404.html;
-  error_page 500 502 503 504 /50x.html;
-  location = /50x.html {
-    root $rootDirectory;
-  }
-  location ~ \.php\$ {
-    try_files \$uri =404;
-    fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
-    fastcgi_index index.php;
-    fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
-    include fastcgi_params;
-  }
-  location ~ /\.ht {
-    deny all;
-  }
-  include h5bp/basic.conf;
-  ssl_certificate      $crtFilePathConvert;
-  ssl_certificate_key  $keyFilePathConvert;
-  gzip on;
-  gzip_vary on;
-  gzip_min_length 10240;
-  gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml;
-  gzip_disable "MSIE [1-6]\.";
-}
-END
-else
-	cat > "/etc/nginx/sites-available/${fileConfigName}" <<END
-	server {
-	  listen [::]:${port};
-	  listen ${port};
-	  server_name www.${domainName};
-	  return 301 \$scheme://${domainName}\$request_uri;
-	}
-
-	server {
-	  listen [::]:${port};
-	  listen ${port};
-	  server_name ${domainName};
-	  index index.php index.html index.htm;
-	  root ${rootDirectory};
-	  charset utf-8;
-	  error_page 404 /404.html;
-	  error_page 500 502 503 504 /50x.html;
-	  location ~ \.php\$ {
-	    try_files \$uri =404;
-	    fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
-	    fastcgi_index index.php;
-	    fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
-	    include fastcgi_params;
-	  }
-	  location ~ /\.ht {
-	    deny all;
-	  }
-	  include h5bp/basic.conf;
-	  gzip on;
-	  gzip_vary on;
-	  gzip_min_length 10240;
-	  gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml;
-	  gzip_disable "MSIE [1-6]\.";
-	}
-END
-  fi 
-  finalStep
+    inputParams
+    read -r -p "Do you want to setup SSL?:  "
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        inputParamsSSL
+        cp /etc/server_admin/templates/php_app.ssl.conf /etc/nginx/sites-available/$fileConfigName
+        replace_info_ssl
+    else
+        cp /etc/server_admin/templates/php_app.conf /etc/nginx/sites-available/$fileConfigName
+    fi
+    replace_info
+    finalStep
 }
 
 angular() {
-  inputParams
-
-  read -r -p "Do you want to setup SSL?:  "
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-	 inputParamsSSL
-
-	cat > "/etc/nginx/sites-available/${fileConfigName}" <<END
-server {
-  listen [::]:${port};
-  listen ${port};
-  server_name ${domainName} www.${domainName};
-  return 301 https://${domainName}\$request_uri;
-}
-server {
-  listen [::]:${portSSL} ssl http2;
-  listen ${portSSL} ssl http2;
-  server_name www.${domainName};
-  include h5bp/directive-only/ssl.conf;
-  return 301 https://${domainName}\$request_uri;
-}
-
-server {
-  listen [::]:${portSSL} ssl http2;
-  listen ${portSSL} ssl http2;
-  server_name ${domainName};
-  index index.html index.htm;
-  include h5bp/directive-only/ssl.conf;
-  root $rootDirectory;
-  charset utf-8;
-  error_page 404 /404.html;
-  include h5bp/basic.conf;
-  location ~ /\.ht {
-    deny all;
-  }
-  location ~ /\.php {
-    deny all;
-  }
-  ssl_certificate      $crtFilePathConvert;
-  ssl_certificate_key  $keyFilePathConvert;
-  gzip on;
-  gzip_vary on;
-  gzip_min_length 10240;
-  gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml;
-  gzip_disable "MSIE [1-6]\.";
-}
-END
-else
-	cat > "/etc/nginx/sites-available/${fileConfigName}" <<END
-server {
-  listen [::]:${port};
-  listen ${port};
-  server_name www.${domainName};
-  return 301 \$scheme://${domainName}\$request_uri;
-}
-server {
-  listen [::]:${port};
-  listen ${port};
-  server_name ${domainName};
-  index index.html index.htm;
-  root ${rootDirectory};
-  charset utf-8;
-  error_page 404 /404.html;
-  error_page 500 502 503 504 /50x.html;
-  location ~ /\.ht {
-    deny all;
-  }
-  location ~ /\.php {
-    deny all;
-  }
-  include h5bp/basic.conf;
-  gzip on;
-  gzip_vary on;
-  gzip_min_length 10240;
-  gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml;
-  gzip_disable "MSIE [1-6]\.";
-}
-END
-  fi 
-  finalStep
+    inputParams
+    read -r -p "Do you want to setup SSL?:  "
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+	    inputParamsSSL
+        cp /etc/server_admin/templates/angular.ssl.conf /etc/nginx/sites-available/$fileConfigName
+        replace_info_ssl
+    else
+        cp /etc/server_admin/templates/angular.conf /etc/nginx/sites-available/$fileConfigName
+    fi
+    replace_info
+    finalStep
 }
 
 spa() {
-  inputParams
+    inputParams
 
-  locationServer="api"
-  echo -n "Location of server api (default: api): "
-  read locationServer
-  if [ "$locationServer" != "" ]; then
+    locationServer="api"
+    echo -n "Location of server api (default: api): "
+    read locationServer
+    if [ "$locationServer" != "" ]; then
       locationServer="api"
-  fi
+    fi
 
-  echo -n "Root Directory of api: "
-  read rootDirectoryApi
-  checkdomain $rootDirectoryApi
+    echo -n "Root Directory of api: "
+    read rootDirectoryApi
+    checkdomain $rootDirectoryApi
 
-  read -r -p "Do you want to setup SSL?:  "
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-  	inputParamsSSL
+    read -r -p "Do you want to setup SSL?:  "
 
-	cat > "/etc/nginx/sites-available/${fileConfigName}" <<END
-server {
-  listen [::]:${port};
-  listen ${port};
-  server_name ${domainName} www.${domainName};
-  return 301 https://${domainName}\$request_uri;
-}
-server {
-  listen [::]:${portSSL} ssl http2;
-  listen ${portSSL} ssl http2;
-  server_name www.${domainName};
-  include h5bp/directive-only/ssl.conf;
-  return 301 https://${domainName}\$request_uri;
-}
-server {
-  listen [::]:${portSSL} ssl http2;
-  listen ${portSSL} ssl http2;
-  server_name ${domainName};
-  root ${rootDirectory};
-  index index.php index.html index.htm;
-  index index.php index.html index.htm;
-  location / {
-    try_files \$uri \$uri/ /index.html;
-  }
-  location ^~ /${locationServer} {
-     alias ${rootDirectoryApi};
-     try_files \$uri \$uri/ @api;
-     location ~ \.php {
-        try_files \$uri =404;
-        fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
-        fastcgi_index index.php;
-        fastcgi_param SCRIPT_FILENAME \$request_filename;
-        include fastcgi_params;
-    }
-  }
-  location @api {
-    rewrite /${locationServer}/(.*)$ /${locationServer}/index.php?/\$1 last;
-  }
-  location ~ /\.ht {
-    deny all;
-  }
-  include h5bp/directive-only/ssl.conf;
-  charset utf-8;
-  error_page 404 /404.html;
-  error_page 500 502 503 504 /50x.html;
-  include h5bp/basic.conf;
-  ssl_certificate      $crtFilePathConvert;
-  ssl_certificate_key  $keyFilePathConvert;
-  gzip on;
-  gzip_vary on;
-  gzip_min_length 10240;
-  gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml;
-  gzip_disable "MSIE [1-6]\.";
-}
-END
-else
-	cat > "/etc/nginx/sites-available/${fileConfigName}" <<END
-server {
-  # don't forget to tell on which port this server listens
-  listen [::]:${port};
-  listen ${port};
-  server_name www.${domainName};
-  return 301 \$scheme://${domainName}\$request_uri;
-}
-server {
-  listen [::]:${port};
-  listen ${port};
-  server_name ${domainName};
-  root ${rootDirectory};
-  index index.php index.html index.htm;
-  location / {
-    try_files \$uri \$uri/ /index.html;
-  }
-  location ^~ /${locationServer} {
-     alias ${rootDirectoryApi};
-     try_files \$uri \$uri/ @api;
-     location ~ \.php {
-        try_files \$uri =404;
-        fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
-        fastcgi_index index.php;
-        fastcgi_param SCRIPT_FILENAME \$request_filename;
-        include fastcgi_params;
-    }
-  }
-  location @api {
-    rewrite /${locationServer}/(.*)$ /${locationServer}/index.php?/\$1 last;
-  }
-  location ~ /\.ht {
-    deny all;
-  }
-  charset utf-8;
-  error_page 404 /404.html;
-  error_page 500 502 503 504 /50x.html;
-  include h5bp/basic.conf;
-  gzip on;
-  gzip_vary on;
-  gzip_min_length 10240;
-  gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml;
-  gzip_disable "MSIE [1-6]\.";
-}
-END
-  fi 
-  finalStep
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        inputParamsSSL
+        cp /etc/server_admin/templates/spa.ssl.conf /etc/nginx/sites-available/$fileConfigName
+        replace_info_ssl
+    else
+        cp /etc/server_admin/templates/spa.conf /etc/nginx/sites-available/$fileConfigName
+    fi
+    replace_info
+    sed -i 's/@@locationServer@@/\$locationServer/g' /etc/nginx/sites-available/$fileConfigName
+    sed -i 's/@@rootDirectoryApi@@/\$rootDirectoryApi/g' /etc/nginx/sites-available/$fileConfigName
+    finalStep
 }
 
 clear
