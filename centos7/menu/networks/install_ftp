@@ -6,6 +6,8 @@
 . /etc/server_admin/menu/verify_root
 . /etc/server_admin/menu/networks/common
 
+active_zone=`firewall-cmd --get-active-zones 2>&1 | head -n 1`
+
 clear
 
 enable_firewall() {
