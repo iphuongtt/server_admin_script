@@ -50,15 +50,15 @@ checkDomainExists() {
 }
 
 replace_info_ssl() {
-    sed -i 's/@@crtFilePathConvert@@/$crtFilePathConvert/g' /etc/nginx/sites-available/$fileConfigName
-    sed -i 's/@@keyFilePathConvert@@/$keyFilePathConvert/g' /etc/nginx/sites-available/$fileConfigName
+    sed -i "s/@@crtFilePathConvert@@/${crtFilePathConvert}/g" /etc/nginx/sites-available/$fileConfigName
+    sed -i "s/@@keyFilePathConvert@@/${keyFilePathConvert}/g" /etc/nginx/sites-available/$fileConfigName
 }
 
 replace_info() {
-    sed -i 's/@@port@@/$port/g' /etc/nginx/sites-available/$fileConfigName
-    sed -i 's/@@domainName@@/$domainName/g' /etc/nginx/sites-available/$fileConfigName
-    sed -i 's/@@domainName@@/$domainName/g' /etc/nginx/sites-available/$fileConfigName
-    sed -i 's/@@rootDirectory@@/$rootDirectory/g' /etc/nginx/sites-available/$fileConfigName
+    sed -i "s/@@port@@/${port}/g" /etc/nginx/sites-available/$fileConfigName
+    sed -i "s/@@domainName@@/${domainName}/g" /etc/nginx/sites-available/$fileConfigName
+    sed -i "s/@@domainName@@/${domainName}/g" /etc/nginx/sites-available/$fileConfigName
+    sed -i "s/@@rootDirectory@@/${rootDirectory}/g" /etc/nginx/sites-available/$fileConfigName
 }
 
 inputParams() {
@@ -168,8 +168,8 @@ spa() {
         cp /etc/server_admin/templates/spa.conf /etc/nginx/sites-available/$fileConfigName
     fi
     replace_info
-    sed -i 's/@@locationServer@@/$locationServer/g' /etc/nginx/sites-available/$fileConfigName
-    sed -i 's/@@rootDirectoryApi@@/$rootDirectoryApi/g' /etc/nginx/sites-available/$fileConfigName
+    sed -i "s/@@locationServer@@/${locationServer}/g" /etc/nginx/sites-available/$fileConfigName
+    sed -i "s/@@rootDirectoryApi@@/${rootDirectoryApi}/g" /etc/nginx/sites-available/$fileConfigName
     finalStep
 }
 
