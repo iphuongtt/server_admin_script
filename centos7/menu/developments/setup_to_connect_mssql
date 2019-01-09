@@ -9,7 +9,6 @@
 clear
 
 show_help() {
-	echo -e "${BBlue}Connection to mssql is already setup \n${Color_Off}"
 	echo -e "${Purple}Test: \n${Color_Off}"
 	echo -e "${Green}    isql -v MSODBC user_name password ${Color_Off}		     Connect to mssql server with user name and password\n"
 	echo -e "${Purple}In laravel you need to config in config/database.php:${Color_Off}"
@@ -17,6 +16,7 @@ show_help() {
 }
 if [ -f /etc/odbc.ini ]
 then
+	echo -e "${BBlue}Connection to mssql is already setup \n${Color_Off}"
 	show_help
 else
 	mkdir -p /tmp/$current_time
