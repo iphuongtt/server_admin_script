@@ -10,6 +10,7 @@ clear
 
 enable_firewall() {
 	firewall-cmd -q --permanent --add-port=21/tcp
+	firewall-cmd -q --permanent --zone=$active_zone --add-port=10090-10100/tcp
 	firewall-cmd -q --reload
 }
 
@@ -174,6 +175,10 @@ userlist_file=/etc/vsftpd/user_list
 guest_enable=YES
 guest_username=ftpuser
 user_config_dir=/etc/vsftpd/vsftpd_user_conf
+pasv_enable=YES
+pasv_min_port=10090
+pasv_max_port=10100
+pasv_address=$server_ip
 END
 
 

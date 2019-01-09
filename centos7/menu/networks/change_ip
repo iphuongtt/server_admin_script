@@ -40,6 +40,11 @@ changeip()
 	ipaddr="$prefixIp$startNo"
 	sed -i -e "/IPADDR*/d" /etc/sysconfig/network-scripts/ifcfg-enp0s3
 	sed -i -e "$ a IPADDR=${ipaddr}" /etc/sysconfig/network-scripts/ifcfg-enp0s3
+	if [ -f /etc/vsftpd/vsftpd.conf ]
+	then
+		sed -i -e "/pasv_address=*/d" /etc/vsftpd/vsftpd.conf
+		sed -i -e "$ a pasv_address=${ipaddr}" /etc/vsftpd/vsftpd.conf
+	fi
 	systemctl restart network.service
 	if [[ $? -ne 0 ]]; then
 		echo "Ip ${ipaddr} has been used \n"
