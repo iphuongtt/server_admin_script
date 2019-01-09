@@ -14,6 +14,7 @@ portSSL=443
 crtFilePath=""
 keyFilePath=""
 rootDirectory=""
+rootDirectory2Rplace=""
 crtFilePathConvert=""
 keyFilePathConvert=""
 locationServer=""
@@ -58,7 +59,7 @@ replace_info() {
     sed -i "s/@@port@@/${port}/g" /etc/nginx/sites-available/$fileConfigName
     sed -i "s/@@domainName@@/${domainName}/g" /etc/nginx/sites-available/$fileConfigName
     sed -i "s/@@domainName@@/${domainName}/g" /etc/nginx/sites-available/$fileConfigName
-    sed -i "s/@@rootDirectory@@/${rootDirectory}/g" /etc/nginx/sites-available/$fileConfigName
+    sed -i "s/@@rootDirectory@@/${rootDirectory2Rplace}/g" /etc/nginx/sites-available/$fileConfigName
 }
 
 inputParams() {
@@ -72,6 +73,7 @@ inputParams() {
   echo -n "Root Directory: "
   read rootDirectory
   checkdomain $rootDirectory
+  rootDirectory2Rplace=`$rootDirectory | sed -r 's/\//\\\//g'`
 }
 
 inputParamsSSL() {
