@@ -73,7 +73,7 @@ inputParams() {
   echo -n "Root Directory: "
   read rootDirectory
   checkdomain $rootDirectory
-  rootDirectory2Rplace=`echo $rootDirectory | sed -r 's/\//\\\//g'`
+  rootDirectory2Rplace=$(echo $rootDirectory | sed 's_/_\\/_g')
 }
 
 inputParamsSSL() {
