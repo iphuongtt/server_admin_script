@@ -8,7 +8,7 @@
 
 config_firewall() {
 	firewall-cmd --permanent --zone=public --add-service=http &
-	firewall-cmd --permanent --zone=public --add-service=https & 
+	firewall-cmd --permanent --zone=public --add-service=https &
 	firewall-cmd --reload &
 	PID=$!
 	i=1
@@ -66,6 +66,8 @@ config_nginx() {
 	done
 	echo -e "${BBlue} Done${Color_Off}"
 	printf "\n"
+    #configured Nginx for external access
+    sudo setsebool -P httpd_can_network_connect 1
 	return $isSuccess
 }
 
@@ -79,7 +81,7 @@ else
 	install_nginx
 	config_firewall
 	config_nginx
-	if [ $? -eq 0 ]; then		
+	if [ $? -eq 0 ]; then
 		echo "========================================================="
 		echo -e "${BGreen}||||     INSTALL NGINX SUCCESSFUL     ||||${Color_Off}"
 		echo "========================================================="
@@ -90,7 +92,7 @@ else
 		else
 			back_to_menu
 		fi
-	else 
+	else
 		echo "========================================================="
 		echo -e "${BRed}||||     INSTALL NGINX ERROR     ||||${Color_Off}"
 		echo "========================================================="
