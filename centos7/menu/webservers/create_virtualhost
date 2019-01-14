@@ -27,7 +27,7 @@ fi
 
 checkdomain() {
   if [ ! -d $1 ]; then
-    echo -e "${BRed}ERROR: Directory does not exists${Color_Off}"
+    echo -e "${BRed}ERROR: $1 does not exists${Color_Off}"
     back_to_menu
   fi
 }
