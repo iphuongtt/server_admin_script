@@ -19,6 +19,7 @@ crtFilePathConvert=""
 keyFilePathConvert=""
 locationServer=""
 rootDirectoryApi=""
+rootDirectoryApi2Replace=""
 
 if [ ! -f /lib/systemd/system/nginx.service ]; then
   echo -e "${BRed}ERROR: NGINX does not installed${Color_Off}"
@@ -167,6 +168,7 @@ spa() {
     echo -n "Root Directory of api: "
     read rootDirectoryApi
     checkdomain $rootDirectoryApi
+    rootDirectoryApi2Replace=$(echo $rootDirectoryApi | sed 's_/_\\/_g')
 
     read -r -p "Do you want to setup SSL?:  "
 
@@ -180,7 +182,7 @@ spa() {
     fi
     replace_info
     sed -i "s/@@locationServer@@/${locationServer}/g" /etc/nginx/sites-available/$fileConfigName
-    sed -i "s/@@rootDirectoryApi@@/${rootDirectoryApi}/g" /etc/nginx/sites-available/$fileConfigName
+    sed -i "s/@@rootDirectoryApi@@/${rootDirectoryApi2Replace}/g" /etc/nginx/sites-available/$fileConfigName
     finalStep
 }
 
