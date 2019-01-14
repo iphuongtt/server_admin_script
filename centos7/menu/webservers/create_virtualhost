@@ -108,6 +108,15 @@ finalStep() {
   	systemctl status nginx
   	back_to_menu
   else
+    if [[ -d $rootDirectory ]]
+    then
+        chown -R nginx:nginx $rootDirectory
+    fi
+
+    if [[ -d $rootDirectoryApi ]]
+    then
+        chown -R nginx:nginx $rootDirectoryApi
+    fi
   	echo "========================================================="
   	echo -e "||||     ${BGreen} CREATE VIRTUAL HOST SUCCESSFUL ${Color_Off}     ||||"
   	echo "========================================================="
