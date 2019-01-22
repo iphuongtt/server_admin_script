@@ -12,34 +12,20 @@ is_folder_exists() {
 }
 
 update_system() {
-	yum update -y -q &
-	PID=$!
-	i=1
-	sp="/-\|"
-	echo -e -n "${BGreen}Updating system...${Color_Off} "
-	while [ -d /proc/$PID ]
-	do
-	  printf "\b${sp:i++%${#sp}:1}"
-	done
+	echo -e -n "${BGreen}Updating source...${Color_Off} "
+    apt-get update -y -q
 	echo -e "${BBlue} Done${Color_Off}"
 	printf "\n"
 }
 
 install_common_package() {
-	yum install wget epel-release yum-utils http://rpms.remirepo.net/enterprise/remi-release-7.rpm unzip -y -q   > /dev/null 2>&1 &
-	PID=$!
-	i=1
-	sp="/-\|"
 	echo -e -n "${BGreen}Installing common packages...${Color_Off} "
-	while [ -d /proc/$PID ]
-	do
-	  printf "\b${sp:i++%${#sp}:1}"
-	done
+    apt-get install wget unzip -y -q   > /dev/null 2>&1
 	echo -e "${BBlue} Done${Color_Off}"
 	printf "\n"
 }
 
-function select_option {
+select_option() {
 	number_option=$(($# + 1))
     # little helpers for terminal print control and key input
     ESC=$( printf "\033")
@@ -98,9 +84,9 @@ function select_option {
 }
 
 show_title() {
-	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
+	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"
 	echo -e "${BYellow} $1 ${Color_Off}"
-	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"	
+	echo -e "${BGreen}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${Color_Off}"
 }
 
 show_menu() {
@@ -120,7 +106,7 @@ show_menu() {
 	return $choice
 }
 
-function check_command_error() {
+check_command_error() {
     if [ "`cat $1 | grep ERROR`" != "" ]
     then
       return 1
