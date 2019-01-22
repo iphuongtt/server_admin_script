@@ -50,7 +50,7 @@ mkdir -p /etc/server_admin/menu/
 mkdir -p /etc/server_admin/templates/
 cp $SCRIPTPATH/server_admin.sh /bin/server-admin && chmod +x /bin/server-admin
 cp -R $SCRIPTPATH/menu/* /etc/server_admin/menu/
-cp -R $SCRIPTPATH/templates/* /etc/server_admin/templates/
+cp -R $SCRIPTPATH/../templates/* /etc/server_admin/templates/
 chmod -R +x /etc/server_admin/menu/*
 
 update_system
