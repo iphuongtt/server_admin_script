@@ -12,17 +12,31 @@ is_folder_exists() {
 }
 
 update_system() {
-	echo -e -n "${BGreen}Updating source...${Color_Off} "
-    apt-get update -y -q
-	echo -e "${BBlue} Done${Color_Off}"
-	printf "\n"
+    apt-get update -y -q &
+    PID=$!
+    i=1
+    sp="/-\|"
+    echo -e -n "${BGreen}Updating system...${Color_Off} "
+    while [ -d /proc/$PID ]
+    do
+      printf "\b${sp:i++%${#sp}:1}"
+    done
+    echo -e "${BBlue} Done${Color_Off}"
+    printf "\n"
 }
 
 install_common_package() {
-	echo -e -n "${BGreen}Installing common packages...${Color_Off} "
-    apt-get install wget unzip -y -q   > /dev/null 2>&1
-	echo -e "${BBlue} Done${Color_Off}"
-	printf "\n"
+    apt-get install wget unzip -y -q   > /dev/null 2>&1 &
+    PID=$!
+    i=1
+    sp="/-\|"
+    echo -e -n "${BGreen}Installing common packages...${Color_Off} "
+    while [ -d /proc/$PID ]
+    do
+      printf "\b${sp:i++%${#sp}:1}"
+    done
+    echo -e "${BBlue} Done${Color_Off}"
+    printf "\n"
 }
 
 select_option() {
