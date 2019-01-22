@@ -1,0 +1,147 @@
+#!/bin/sh
+
+clear
+
+. /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/function.sh
+. /etc/server_admin/menu/global_var
+. /etc/server_admin/menu/verify_root
+. /etc/server_admin/menu/developments/common
+
+config_firewall() {
+	(firewall-cmd --permanent --zone=public --add-service=http -q
+	firewall-cmd --permanent --zone=public --add-service=https -q
+	firewall-cmd --reload -q) &
+	ok=$?
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Configuring firewall...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+	return $ok
+}
+
+install_php() {
+	(yum-config-manager --enable remi-php$php_install -q > /dev/null 2>&1 &&
+	yum --enablerepo=remi,remi-php$php_install install php-fpm php-common -y -q &&
+	yum --enablerepo=remi,remi-php$php_install install php-opcache php-pecl-apcu php-cli php-pear php-pdo php-mysqlnd php-pgsql php-pecl-mongodb php-pecl-redis php-pecl-memcache php-pecl-memcached php-gd php-mbstring php-pecl-mcrypt php-xml php-pecl-zip php-odbc -y -q
+	) &
+	ok=$?
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Install Php $php_version...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+	return $ok
+}
+
+config_php() {
+	(
+	cp /etc/php.ini /etc/php.ini.backup$current_time
+	sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php.ini # This causes the PHP interpreter to only try the literal path given and to stop processing if the file is not found.
+
+	# Config php-fpm
+	cp /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.conf.backup$current_time
+	sed -i 's/user = apache/user = nginx/' /etc/php-fpm.d/www.conf
+	sed -i 's/group = apache/group = nginx/' /etc/php-fpm.d/www.conf
+	sed -i 's/listen.owner = nobody/listen.owner = nginx/' /etc/php-fpm.d/www.conf
+	sed -i 's/listen.group = nobody/listen.group = nginx/' /etc/php-fpm.d/www.conf
+	sed -i 's/listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm\/php-fpm.sock/' /etc/php-fpm.d/www.conf
+	) &
+	ok=$?
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Configuring Php...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+	return $ok
+}
+
+chose_version() {
+	case $1 in
+		1) php_version="7.0"; php_install="70";;
+	    2) php_version="7.1"; php_install="71";;
+	    3) php_version="7.2"; php_install="72";;
+	    4) php_version="7.3"; php_install="73";;
+		5) back_to_menu_now;;
+	esac
+}
+
+show_php_menu() {
+	options=("7.0" "7.1" "7.2" "7.3" "BACK")
+	show_menu "CHOSE PHP VERSION" "${options[@]}"
+	choice=$?
+	chose_version $choice
+}
+
+enable_php() {
+	(systemctl enable php-fpm -q && systemctl start php-fpm -q) &
+	ok=$?
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Starting Php...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+	return $ok
+}
+
+start_install() {
+	show_php_menu &&
+	update_system &&
+	config_firewall &&
+	install_php &&
+	config_php &&
+	enable_php
+	return
+}
+
+if [ ! -f /lib/systemd/system/nginx.service ]; then
+	read -p "You need to install Nginx to start php-fpm, Do you want to install Nginx?  " -n 1 -r
+	if [[ $REPLY =~ ^[Yy]$ ]]; then
+		printf "\n"
+		/etc/server_admin/menu/webservers/install_nginx install-php
+		exit;
+	else
+		start_install
+		if [ $? -eq 0 ]; then
+			echo "===================================================================================="
+			echo -e "         ${BGreen}INSTALL PHP $php_version SUCCESSFUL${Color_Off}"
+			echo "===================================================================================="
+			back_to_menu
+		else
+			echo -e "${BGreen}Install error${Color_Off}"
+			back_to_menu
+		fi
+	fi
+else
+	start_install
+	if [ $? -eq 0 ]; then
+		echo "===================================================================================="
+		echo -e "         ${BGreen}INSTALL PHP $php_version SUCCESSFUL${Color_Off}"
+		echo "===================================================================================="
+		back_to_menu
+	else
+		echo -e "${BGreen}Install error${Color_Off}"
+		back_to_menu
+	fi
+fi

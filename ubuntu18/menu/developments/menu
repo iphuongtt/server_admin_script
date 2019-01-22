@@ -1,0 +1,36 @@
+#!/bin/sh
+
+clear
+
+. /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/function.sh
+
+return_menu() {
+	/etc/server_admin/menu/developments/menu
+	exit
+}
+
+read_options() {
+	case $1 in
+		1) /etc/server_admin/menu/developments/install_nodejs;;
+		2) /etc/server_admin/menu/developments/install_php;;
+		3) /etc/server_admin/menu/developments/remove_all_php;;
+		4) /etc/server_admin/menu/developments/install_mariadb;;
+		5) /etc/server_admin/menu/developments/install_composer;;
+		6) /etc/server_admin/menu/developments/create_mysql_database;;
+		7) /etc/server_admin/menu/developments/create_user_mysql;;
+		8) /etc/server_admin/menu/developments/backup_mysql_databases;;
+		9) /etc/server_admin/menu/developments/restore_mysql_database;;
+		10) /etc/server_admin/menu/developments/uninstall_nodejs;;
+		11) /etc/server_admin/menu/developments/setup_to_connect_mssql;;
+		12) server-admin;;
+		13) clear; exit 0;;
+	esac
+}
+
+trap 'return_menu' SIGINT SIGQUIT SIGTSTP
+
+options=("INSTALL NODEJS" "INSTALL PHP" "REMOVE PHP VERSION" "INSTALL MARIADB 10.1" "INSTALL COMPOSER" "CREATE MYSQL DATABASE" "CREATE MYSQL USER" "BACKUP MYSQL DATABASES" "RESTORE MYSQL DATABASES" "UNINSTALL NODEJS" "SETUP TO CONNECT MSSQL" "BACK TO ROOT MENU" "EXIT")
+show_menu "D E V E L O P M E N T - T O O L S" "${options[@]}"
+choice=$?
+read_options $choice
