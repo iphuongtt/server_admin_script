@@ -87,12 +87,12 @@ show_menu() {
 
 read_options() {
     case $1 in
-        1) /etc/server_admin/menu/developments/menu; exit ;;
-        2) /etc/server_admin/menu/networks/menu; exit ;;
-        3) /etc/server_admin/menu/systems/menu; exit ;;
-        4) /etc/server_admin/menu/webservers/menu; exit ;;
-        5) /etc/server_admin/menu/utilities/menu; exit ;;
-        6) /etc/server_admin/menu/selt_update_tool; exit ;;
+        1) bash /etc/server_admin/menu/developments/menu; exit ;;
+        2) bash /etc/server_admin/menu/networks/menu; exit ;;
+        3) bash /etc/server_admin/menu/systems/menu; exit ;;
+        4) bash /etc/server_admin/menu/webservers/menu; exit ;;
+        5) bash /etc/server_admin/menu/utilities/menu; exit ;;
+        6) bash /etc/server_admin/menu/selt_update_tool; exit ;;
         7) clear; exit 0;;
         *) clear && show_root_new_menu
     esac

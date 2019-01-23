@@ -7,24 +7,18 @@
 . /etc/server_admin/menu/webservers/common
 
 config_firewall() {
-	firewall-cmd --permanent --zone=public --add-service=http &
-	firewall-cmd --permanent --zone=public --add-service=https &
-	firewall-cmd --reload &
-	PID=$!
-	i=1
-	sp="/-\|"
 	echo -e -n "${BGreen}Configuring firewall...${Color_Off} "
-	while [ -d /proc/$PID ]
-	do
-	  printf "\b${sp:i++%${#sp}:1}"
-	done
+    echo y | ufw enable
+	ufw app list
+    ufw allow 'Nginx Full'
+    ufw status
 	echo -e "${BBlue} Done${Color_Off}"
 	printf "\n"
 }
 
 install_nginx() {
 	# Install nginx
-	yum install nginx -y -q &
+	apt-get install nginx -y -q &
 	PID=$!
 	i=1
 	sp="/-\|"
@@ -67,7 +61,7 @@ config_nginx() {
 	echo -e "${BBlue} Done${Color_Off}"
 	printf "\n"
     #configured Nginx for external access
-    sudo setsebool -P httpd_can_network_connect 1
+    #sudo setsebool -P httpd_can_network_connect 1
 	return $isSuccess
 }
 
@@ -87,7 +81,7 @@ else
 		echo "========================================================="
 		if [ "$1" == "install-php" ]; then
 			read -p "Press enter to install php"
-			/etc/server_admin/menu/developments/install_php
+			bash /etc/server_admin/menu/developments/install_php
 			exit;
 		else
 			back_to_menu
@@ -98,7 +92,7 @@ else
 		echo "========================================================="
 		if [ "$1" == "install-php" ]; then
 			read -p "Press enter to install php"
-			/etc/server_admin/menu/developments/install_php
+			bash /etc/server_admin/menu/developments/install_php
 			exit;
 		else
 			back_to_menu

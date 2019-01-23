@@ -12,8 +12,8 @@ return_menu() {
 
 read_options() {
 	case $1 in
-		1) /etc/server_admin/menu/developments/install_php;;
-		2) /etc/server_admin/menu/developments/setup_to_connect_mssql;;
+		1) bash /etc/server_admin/menu/developments/install_php;;
+		2) bash /etc/server_admin/menu/developments/setup_to_connect_mssql;;
 		3) server-admin;;
 		4) clear; exit 0;;
 	esac
