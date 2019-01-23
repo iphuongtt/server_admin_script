@@ -6,21 +6,21 @@ clear
 . /etc/server_admin/menu/function.sh
 
 return_menu() {
-	/etc/server_admin/menu/webservers/menu
+	bash /etc/server_admin/menu/webservers/menu
 	exit
 }
 
 read_options(){
 	case $1 in
-		1) /etc/server_admin/menu/webservers/install_nginx;;
-		2) /etc/server_admin/menu/webservers/create_virtualhost;;
-		3) /etc/server_admin/menu/webservers/list_domain;;
+		1) bash /etc/server_admin/menu/webservers/install_nginx;;
+		2) bash /etc/server_admin/menu/webservers/create_virtualhost;;
+		3) bash /etc/server_admin/menu/webservers/list_domain;;
 		4) server-admin;;
 		5) clear; exit 0;;
 	esac
 }
 
-trap 'return_menu' SIGINT SIGQUIT SIGTSTP
+trap 'return_menu' INT QUIT TSTP
 options=("INSTALL NGINX" "CREATE VIRTUAL HOST" "LIST DOMAINS" "BACK TO ROOT MENU" "EXIT")
 show_menu "W E B S E R V E R - T O O L S" "${options[@]}"
 choice=$?

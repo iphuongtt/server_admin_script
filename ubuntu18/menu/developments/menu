@@ -6,7 +6,7 @@ clear
 . /etc/server_admin/menu/function.sh
 
 return_menu() {
-	/etc/server_admin/menu/developments/menu
+	bash /etc/server_admin/menu/developments/menu
 	exit
 }
 

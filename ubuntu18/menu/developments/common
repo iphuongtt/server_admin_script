@@ -2,11 +2,11 @@
 
 back_to_menu() {
 	read -p "Press enter to continue"
-	/etc/server_admin/menu/developments/menu
-	exit;	
+	bash /etc/server_admin/menu/developments/menu
+	exit;
 }
 
 back_to_menu_now() {
-	/etc/server_admin/menu/developments/menu
-	exit;		
+	bash /etc/server_admin/menu/developments/menu
+	exit;
 }

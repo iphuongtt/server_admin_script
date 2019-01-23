@@ -18,7 +18,7 @@ update_system() {
 	PID=$!
 	i=1
 	sp="/-\|"
-	echo -e -n "${BGreen}Updating system...${Color_Off} "
+	echo -e -n "${BGreen}Updating package database...${Color_Off} "
 	while [ -d /proc/$PID ]
 	do
 	  printf "\b${sp:i++%${#sp}:1}"
