@@ -18,31 +18,13 @@ is_folder_exists() {
 }
 
 update_system() {
-	yum update -y -q &
-	PID=$!
-	i=1
-	sp="/-\|"
 	echo -e -n "${BGreen}Updating system...${Color_Off} "
-	while [ -d /proc/$PID ]
-	do
-	  printf "\b${sp:i++%${#sp}:1}"
-	done
-	echo -e "${BBlue} Done${Color_Off}"
-	printf "\n"
+	dnf update -y
 }
 
 install_common_package() {
-	yum install wget epel-release yum-utils http://rpms.remirepo.net/enterprise/remi-release-7.rpm unzip -y -q &
-	PID=$!
-	i=1
-	sp="/-\|"
 	echo -e -n "${BGreen}Installing common packages...${Color_Off} "
-	while [ -d /proc/$PID ]
-	do
-	  printf "\b${sp:i++%${#sp}:1}"
-	done
-	echo -e "${BBlue} Done${Color_Off}"
-	printf "\n"
+	dnf install wget epel-release yum-utils unzip -y
 }
 clear
 
