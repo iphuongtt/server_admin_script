@@ -1,0 +1,25 @@
+#!/bin/sh
+
+clear
+
+. /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/function.sh
+
+return_menu() {
+	/etc/server_admin/menu/systems/menu
+	exit
+}
+
+read_options(){
+	case $1 in
+		1) /etc/server_admin/menu/systems/update_time_server;;
+		2) server-admin;;
+		3) clear; exit 0;;
+	esac
+}
+
+trap 'return_menu' SIGINT SIGQUIT SIGTSTP
+options=("UPDATE TIME SERVER" "BACK TO ROOT MENU" "EXIT")
+show_menu "S Y S T E M - T O O L S" "${options[@]}"
+choice=$?
+read_options $choice

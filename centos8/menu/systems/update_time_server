@@ -1,0 +1,129 @@
+#!/bin/sh
+
+clear
+
+. /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/global_var
+. /etc/server_admin/menu/function.sh
+. /etc/server_admin/menu/verify_root
+. /etc/server_admin/menu/systems/common
+
+install_chrony() {
+	yum install -y -q chrony  > /dev/null 2>&1 &&
+	systemctl enable chronyd -q &&
+	(cat > "/etc/chrony.conf" <<END
+# Use public servers from the pool.ntp.org project.
+# Please consider joining the pool (http://www.pool.ntp.org/join.html).
+server 0.centos.pool.ntp.org iburst
+server 1.centos.pool.ntp.org iburst
+server 2.centos.pool.ntp.org iburst
+server 3.centos.pool.ntp.org iburst
+
+# Ignore stratum in source selection.
+stratumweight 0
+
+# Record the rate at which the system clock gains/losses time.
+driftfile /var/lib/chrony/drift
+
+# Enable kernel RTC synchronization.
+rtcsync
+
+# In first three updates step the system clock instead of slew
+# if the adjustment is larger than 10 seconds.
+makestep 10 3
+
+# Listen for commands only on localhost.
+bindcmdaddress 127.0.0.1
+bindcmdaddress ::1
+
+keyfile /etc/chrony.keys
+
+# Specify the key used as password for chronyc.
+commandkey 1
+
+# Generate command key if missing.
+generatecommandkey
+
+# Disable logging of client accesses.
+noclientlog
+
+# Send a message to syslog if a clock adjustment is larger than 0.5 seconds.
+logchange 0.5
+
+logdir /var/log/chrony
+END
+) &&
+	systemctl start chronyd -q &
+	PID=$!
+	i=1
+	sp="/-\|"
+	#echo -n ' '
+	echo -e -n "${BGreen}Installing chrony...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+}
+
+install_ntpdate() {
+	yum install ntpdate -y -q  > /dev/null 2>&1 &
+	PID=$!
+	i=1
+	sp="/-\|"
+	#echo -n ' '
+	echo -e -n "${BGreen}Installing ntpdate...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+}
+
+ajust_timezone() {
+	timedatectl list-timezones
+	echo -e "Input timezone to set:"
+	read timezone
+	timedatectl set-timezone $timezone && timedatectl
+	read -p "Press enter to continue"	
+}
+
+update_timeserver() {
+	ntpdate pool.ntp.org > /dev/null 2>&1 &
+	PID=$!
+	i=1
+	sp="/-\|"
+	#echo -n ' '
+	echo -e -n "${BGreen}Updating time server...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+}
+
+echo -e "${BGreen}Current timezone:${Color_Off} \n"
+
+timedatectl
+
+read -p "Press enter to continue"
+
+install_chrony
+
+install_ntpdate
+
+read -p "Do you want to ajust time zone ?  " -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+	ajust_timezone
+fi
+
+clear
+
+update_timeserver
+
+timedatectl
+
+back_to_menu

@@ -1,0 +1,65 @@
+#!/bin/bash
+
+. /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/global_var
+. /etc/server_admin/menu/function.sh
+. /etc/server_admin/menu/verify_root
+. /etc/server_admin/menu/networks/common
+
+get_user_name() {
+	echo -n "Enter ftp account's username then press [ENTER]: "
+	while read username
+	do
+		if [ "$username" != "" ]; then
+		    break
+		fi
+		echo -n "Username should not be blank, enter your username: "
+	done
+	if is_folder_exists /home/ftpuser/vftp/$username; then
+		read -p "Username already exists. Do you want to try a different name?:  " -n 1 -r
+		if [[ $REPLY =~ ^[Yy]$ ]]; then
+			printf "\n"
+			get_user_name
+		else
+			back_to_menu
+		fi
+	fi 
+}
+
+get_password() {
+	echo -n "Enter ftp account's password then press [ENTER]: "
+	while read -s password
+	do
+	if [ "$password" != "" ]; then
+	    break
+	fi
+	echo -n "Password should not be blank, enter your password: "
+	done
+}
+
+get_user_name
+get_password
+
+cat > "/etc/vsftpd/user.txt" <<END
+$username
+$password
+END
+db_load -T -t hash -f /etc/vsftpd/user.txt /etc/vsftpd/vsftpd-virtual-user.db
+rm -rf /etc/vsftpd/user.txt
+chmod 600 /etc/vsftpd/vsftpd-virtual-user.db
+
+mkdir /home/ftpuser/vftp/$username
+chown -R ftpuser:ftp /home/ftpuser/vftp/$username
+chmod -R 755 /home/ftpuser/vftp/$username
+systemctl restart vsftpd
+
+if [ $? -eq 0 ]; then
+    clear
+	echo "===================================================================================="
+	echo -e "         ${BGreen} USER: $username${Color_Off}"
+	echo -e "         ${BBlue} PASSWORD: $password${Color_Off}"
+	echo "===================================================================================="
+	back_to_menu
+else
+	back_to_menu
+fi

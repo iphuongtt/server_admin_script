@@ -1,0 +1,43 @@
+#!/bin/bash
+
+clear
+
+. /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/global_var
+. /etc/server_admin/menu/function.sh
+. /etc/server_admin/menu/verify_none_root
+. /etc/server_admin/menu/developments/common
+
+. $NVM_DIR/nvm.sh
+
+deactivatenode() {
+	nvm deactivate >/dev/null 2>&1 &
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Deactivating nodejs...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+}
+
+uninstallnode() {
+	nvm uninstall node >/dev/null 2>&1 &
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Uninstalling nodejs...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+}
+
+printf "Run commands:\n1. nvm deactivate \n2. nvm uninstall node\n"
+
+back_to_menu

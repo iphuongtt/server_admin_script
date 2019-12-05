@@ -1,0 +1,99 @@
+#!/bin/bash
+
+. /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/global_var
+. /etc/server_admin/menu/function.sh
+. /etc/server_admin/menu/verify_root
+. /etc/server_admin/menu/developments/common
+
+try_time=0
+
+create_database() {
+	let try_time+=1
+	read -s root_password
+	mysql -u root -p$root_password < /tmp/config.temp
+	if [[ $try_time > 3 ]]; then
+		echo "Too many attempts, try again later"
+		exit;
+	fi
+
+	if [[ $? -ne 0 ]]; then
+		echo "Invalid root password, please try again: "
+		create_database
+	else
+		rm -f /tmp/config.temp
+		echo "Create database $dataname successful"
+		echo "==================="
+		echo -e "Detail: database name: \e[0;34m $dataname \e[0m , username: \e[0;34m $username \e[0m, password: \e[0;34m $password \e[0m"
+		back_to_menu
+	fi	
+}
+
+get_database_name() {
+	echo -n "Enter your database name then press [ENTER]: "
+	while read dataname
+	do
+	    if [ "$dataname" != "" ]; then
+	        break
+	    fi
+	    echo -n "Database name should not be blank, enter your database name: "
+	done
+}
+
+get_user_name() {
+	echo -n "Enter your username then press [ENTER]: "
+	while read username
+	do
+	if [ "$username" != "" ]; then
+	    break
+	fi
+	echo -n "Username should not be blank, enter your username: "
+	done
+}
+
+get_password() {
+	echo -n "Enter your password then press [ENTER]: "
+	while read -s password
+	do
+	if [ "$password" != "" ]; then
+	    break
+	fi
+	echo -n "Password should not be blank, enter your password: "
+	done
+}
+
+clear
+
+if [ "`systemctl is-active mariadb.service`" == "active" ]; then
+	printf "=========================================================================\n"
+	printf "                             Create Database\n"
+	printf "=========================================================================\n"
+	get_database_name
+	if [ -f /var/lib/mysql/$dataname/db.opt ]; then
+		read -p "Database $dataname already exists. Do you want to try a different name?:  " -n 1 -r
+		if [[ $REPLY =~ ^[Yy]$ ]]; then
+			get_database_name
+		else
+			exit
+		fi 
+	fi
+
+	get_user_name
+	get_password
+	cat > "/tmp/config.temp" <<END
+CREATE DATABASE $dataname DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+CREATE USER '$username'@'127.0.0.1' IDENTIFIED BY '$password';
+CREATE USER '$username'@'localhost' IDENTIFIED BY '$password';
+GRANT ALL PRIVILEGES ON $dataname . * TO '$username'@'127.0.0.1';
+GRANT ALL PRIVILEGES ON $dataname . * TO '$username'@'localhost';
+FLUSH PRIVILEGES;
+END
+	printf "\n"
+	echo -n "Enter mariadb root password then press [ENTER]: "
+
+	create_database
+
+else
+	echo "MariaDB not install or not start, please check again!!!"
+	back_to_menu
+fi

@@ -1,0 +1,29 @@
+#!/bin/sh
+
+clear
+
+. /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/function.sh
+
+return_menu() {
+	/etc/server_admin/menu/networks/menu
+	exit
+}
+
+read_options(){
+	case $1 in
+		1) /etc/server_admin/menu/networks/change_ip;;
+		2) /etc/server_admin/menu/networks/install_ftp;;
+		3) /etc/server_admin/menu/networks/create_ftp_user;;
+		4) /etc/server_admin/menu/networks/mount_folder_to_ftp;;
+		5) /etc/server_admin/menu/networks/unmount_folder_to_ftp;;
+		6) server-admin;;
+		7) clear; exit 0;;
+	esac
+}
+
+trap 'return_menu' SIGINT SIGQUIT SIGTSTP
+options=("CHANGE IP" "INSTALL FTP SERVER" "CREATE FTP USER" "MOUNT FOLDER TO FTP" "IUNMOUNT FOLDER TO FTP" "BACK TO ROOT MENU" "EXIT")
+show_menu "N E T W O R K - T O O L S" "${options[@]}"
+choice=$?
+read_options $choice

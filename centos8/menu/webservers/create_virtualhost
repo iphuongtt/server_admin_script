@@ -1,0 +1,207 @@
+#!/bin/bash
+
+. /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/global_var
+. /etc/server_admin/menu/function.sh
+. /etc/server_admin/menu/verify_root
+. /etc/server_admin/menu/webservers/common
+
+who=`who`
+username=`awk '{print $1;}' <<< "$who"` #Get Real username login
+port=80
+domainName=""
+portSSL=443
+crtFilePath=""
+keyFilePath=""
+rootDirectory=""
+rootDirectory2Rplace=""
+crtFilePathConvert=""
+keyFilePathConvert=""
+locationServer=""
+rootDirectoryApi=""
+rootDirectoryApi2Replace=""
+
+if [ ! -f /lib/systemd/system/nginx.service ]; then
+  echo -e "${BRed}ERROR: NGINX does not installed${Color_Off}"
+  back_to_menu
+fi
+
+checkdomain() {
+  if [ ! -d $1 ]; then
+    echo -e "${BRed}ERROR: $1 does not exists${Color_Off}"
+    back_to_menu
+  fi
+}
+
+checkAndCreateSslDir() {
+  if [ ! -d /etc/nginx/ssl ]; then
+    mkdir /etc/nginx/ssl
+  fi
+}
+
+checkDomainExists() {
+  if [ -f /etc/nginx/sites-enabled/$1 ]; then
+  	read -r -p "Domain Name $domainName already exists. Do you want to remove?:  "
+  	if [[ $REPLY =~ ^[Yy]$ ]]; then
+  		rm -rf /etc/nginx/sites-enabled/$1
+  		rm -rf /etc/nginx/sites-available/$1
+  	else
+  		back_to_menu
+  	fi
+  fi
+}
+
+replace_info_ssl() {
+    sed -i "s/@@crtFilePathConvert@@/${crtFilePathConvert}/g" /etc/nginx/sites-available/$fileConfigName
+    sed -i "s/@@keyFilePathConvert@@/${keyFilePathConvert}/g" /etc/nginx/sites-available/$fileConfigName
+}
+
+replace_info() {
+    sed -i "s/@@port@@/${port}/g" /etc/nginx/sites-available/$fileConfigName
+    sed -i "s/@@domainName@@/${domainName}/g" /etc/nginx/sites-available/$fileConfigName
+    sed -i "s/@@domainName@@/${domainName}/g" /etc/nginx/sites-available/$fileConfigName
+    sed -i "s/@@rootDirectory@@/${rootDirectory2Rplace}/g" /etc/nginx/sites-available/$fileConfigName
+}
+
+inputParams() {
+  echo -n "Port: "
+  read port
+  echo -n "Domain Name: "
+  read domainName
+  #fileConfigName=`$domainName | sed -r 's/(^|_|\s)([a-z])/\U\2/g'`
+  fileConfigName="${domainName}.conf"
+  checkDomainExists $fileConfigName
+  echo -n "Root Directory: "
+  read rootDirectory
+  checkdomain $rootDirectory
+  rootDirectory2Rplace=$(echo $rootDirectory | sed 's_/_\\/_g')
+}
+
+inputParamsSSL() {
+    echo -n "Port SSL: "
+    read portSSL
+    checkAndCreateSslDir
+    echo -n -e "Path to ${BYellow}.crt${Color_Off} file: "
+    read crtFilePath
+    crtFilePathConvert=`echo $crtFilePath | sed -r "s/\~/\/home\/$username/"`
+    if [ ! -f $crtFilePathConvert ]
+    then
+        echo -e "${BRed}ERROR: $crtFilePathConvert does not exit${Color_Off}"
+        back_to_menu
+    fi
+    echo -n -e "Path to ${BYellow}.key${Color_Off} file: "
+    read keyFilePath
+    keyFilePathConvert=`echo $keyFilePath | sed -r "s/\~/\/home\/$username/"`
+    if [ ! -f $keyFilePathConvert ]
+    then
+        echo -e "${BRed}ERROR: $keyFilePathConvert does not exit${Color_Off}"
+        back_to_menu
+    fi
+}
+
+finalStep() {
+  ln -s /etc/nginx/sites-available/$fileConfigName /etc/nginx/sites-enabled/$fileConfigName
+  systemctl restart nginx
+  if [[ $? -ne 0 ]]; then
+  	echo "========================================================="
+  	echo -e "||||     ${BRed}ERRR:${Color_Off}     ||||"
+  	echo "========================================================="
+  	systemctl status nginx
+  	back_to_menu
+  else
+    if [[ -d $rootDirectory ]]
+    then
+        chown -R nginx:nginx $rootDirectory
+    fi
+
+    if [[ -d $rootDirectoryApi ]]
+    then
+        chown -R nginx:nginx $rootDirectoryApi
+    fi
+  	echo "========================================================="
+  	echo -e "||||     ${BGreen} CREATE VIRTUAL HOST SUCCESSFUL ${Color_Off}     ||||"
+  	echo "========================================================="
+  	back_to_menu
+  fi
+}
+
+php() {
+    inputParams
+    read -r -p "Do you want to setup SSL?:  "
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        inputParamsSSL
+        cp /etc/server_admin/templates/php.ssl.conf /etc/nginx/sites-available/$fileConfigName
+        replace_info_ssl
+    else
+        cp /etc/server_admin/templates/php.conf /etc/nginx/sites-available/$fileConfigName
+    fi
+    replace_info
+    finalStep
+}
+
+angular() {
+    inputParams
+    read -r -p "Do you want to setup SSL?:  "
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+	    inputParamsSSL
+        cp /etc/server_admin/templates/angular.ssl.conf /etc/nginx/sites-available/$fileConfigName
+        replace_info_ssl
+    else
+        cp /etc/server_admin/templates/angular.conf /etc/nginx/sites-available/$fileConfigName
+    fi
+    replace_info
+    finalStep
+}
+
+spa() {
+    inputParams
+
+    locationServer="api"
+    echo -n "Location of server api (default: api): "
+    read locationServer
+    if [ "$locationServer" != "" ]; then
+      locationServer="api"
+    fi
+
+    echo -n "Root Directory of api: "
+    read rootDirectoryApi
+    checkdomain $rootDirectoryApi
+    rootDirectoryApi2Replace=$(echo $rootDirectoryApi | sed 's_/_\\/_g')
+
+    read -r -p "Do you want to setup SSL?:  "
+
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        inputParamsSSL
+        cp /etc/server_admin/templates/spa.ssl.conf /etc/nginx/sites-available/$fileConfigName
+        replace_info_ssl
+    else
+        cp /etc/server_admin/templates/spa.conf /etc/nginx/sites-available/$fileConfigName
+    fi
+    replace_info
+    sed -i "s/@@locationServer@@/${locationServer}/g" /etc/nginx/sites-available/$fileConfigName
+    sed -i "s/@@rootDirectoryApi@@/${rootDirectoryApi2Replace}/g" /etc/nginx/sites-available/$fileConfigName
+    finalStep
+}
+
+clear
+
+chose_sub_menu() {
+  case $1 in
+    1) php;;
+    2) angular;;
+    3) spa;;
+    4) back_to_menu_now;;
+  esac
+}
+
+show_sub_menu() {
+  options=("PHP application" "Angular application" "SPA with PHP and Angular or ReactJs application" "BACK") # End Options
+  show_menu "Which type virtual host do you want to create" "${options[@]}"
+  choice=$?
+  chose_sub_menu $choice
+}
+
+show_sub_menu

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+
+logon_username=` id -u -n`
+current_time=`date '+%Y-%m-%d_%H_%M_%S'`
+server_ip=`hostname -I`

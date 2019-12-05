@@ -1,0 +1,107 @@
+#!/bin/bash
+
+. /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/global_var
+. /etc/server_admin/menu/function.sh
+. /etc/server_admin/menu/verify_root
+. /etc/server_admin/menu/networks/common
+
+input_username() {
+	echo -n "Enter ftp account's username: "
+	while read username
+	do
+		if [ "$username" != "" ]; then
+		    break
+		fi
+		echo -n "Username should not be blank, enter your username: "
+	done
+	if ! is_folder_exists /home/ftpuser/vftp/$username; then
+		read -p "Account: $username does not exists. Do you want to try again?:  " -n 1 -r
+		if [[ $REPLY =~ ^[Yy]$ ]]; then
+			printf "\n"
+			input_username
+		else
+			back_to_menu
+		fi
+	fi
+}
+
+
+input_folder() {
+	echo -n "Enter folder path to mount: "
+	while read path
+	do
+		if [ "$path" != "" ]; then
+		    break
+		fi
+		echo -n "Path should not be blank, enter your path: "
+	done
+	pathConvert=`echo $path | sed -r "s/\~/\/home\/$logon_username/"`
+	if ! is_folder_exists $pathConvert; then
+		printf "\n"
+		read -p "$pathConvert does not exists. Do you want to try again?:  " -n 1 -r
+		if [[ $REPLY =~ ^[Yy]$ ]]; then
+			printf "\n"
+			input_folder
+		else
+			back_to_menu
+		fi
+	fi 
+}
+
+mount_folder_name() {
+	echo -n "Enter mount folder name: "
+	while read folderName
+	do
+		if [ "$folderName" != "" ]; then
+		    break
+		fi
+		echo -n "Path should not be blank, enter your folderName: "
+	done
+	if is_folder_exists /home/ftpuser/vftp/$username/$folderName; then
+		read -p "/home/ftpuser/vftp/$username/$folderName already exists. Do you want to mount with other name?:  " -n 1 -r
+		if [[ $REPLY =~ ^[Yy]$ ]]; then
+			printf "\n"
+			mount_folder_name
+		else
+			back_to_menu
+		fi
+	fi
+}
+
+input_username
+
+input_folder
+ 
+folderName=`basename $pathConvert`
+
+if is_folder_exists /home/ftpuser/vftp/$username/$folderName; then
+	read -p "/home/ftpuser/vftp/$username/$folderName already exists. Do you want to mount with other name?:  " -n 1 -r
+	if [[ $REPLY =~ ^[Yy]$ ]]; then
+		printf "\n"
+		mount_folder_name
+	else
+		back_to_menu
+	fi
+fi
+
+mkdir /home/ftpuser/vftp/$username/$folderName
+
+mount --bind $pathConvert /home/ftpuser/vftp/$username/$folderName
+
+chown -R ftpuser:ftp /home/ftpuser/vftp/$username/$folderName
+
+if [ $? -eq 0 ]; then
+	sed -i -e "$ a $pathConvert /home/ftpuser/vftp/$username/$folderName none bind 0 0" /etc/fstab
+	if [ $? -eq 0 ]; then
+		clear
+		echo "===================================================================================="
+		echo -e "         ${BGreen} Mounted: $pathConvert to /home/ftpuser/vftp/$username/$folderName ${Color_Off}"
+		echo "===================================================================================="
+		back_to_menu
+	else
+		back_to_menu
+	fi
+else
+	back_to_menu
+fi 

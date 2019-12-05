@@ -1,0 +1,83 @@
+#!/bin/bash
+
+. /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/function.sh
+. /etc/server_admin/menu/global_var
+. /etc/server_admin/menu/verify_root
+. /etc/server_admin/menu/developments/common
+
+clear
+
+show_help() {
+	echo -e "${Purple}Test: \n${Color_Off}"
+	echo -e "${Green}    isql -v MSODBC user_name password ${Color_Off}		     Connect to mssql server with user name and password\n"
+	echo -e "${Purple}In laravel you need to config in config/database.php:${Color_Off}"
+	echo -e "    '${Yellow}sqlsrv${Color_Off}' => [\n        '${Yellow}driver${Color_Off}' => '${Green}sqlsrv${Color_Off}',\n        '${Yellow}host${Color_Off}' => env('${Green}DB_HOST${Color_Off}', '${ip_server}'),\n        '${Yellow}port${Color_Off}' => env('${Green}DB_PORT${Color_Off}', '1433'),\n        '${Yellow}database${Color_Off}' => env('${Green}DB_DATABASE${Color_Off}', 'database'),\n        '${Yellow}username${Color_Off}' => env('${Green}DB_USERNAME${Color_Off}', 'username'),\n        '${Yellow}password${Color_Off}' => env('${Green}DB_PASSWORD${Color_Off}', 'password'),\n        '${Yellow}charset${Color_Off}' => '${Green}utf8${Color_Off}',\n        '${Yellow}prefix${Color_Off}' => '',\n        '${Yellow}odbc_datasource_name${Color_Off}' => '${Red}Driver={ODBC Driver 11 for SQL Server};Server=192.168.1.192,${Color_Off}'.env('${Green}DB_PORT${Color_Off}', '1433').'${Red};Database=database${Color_Off}',\n        '${Yellow}odbc${Color_Off}' => ${Green}true${Color_Off},\n     ],"
+}
+if [ -f /etc/odbc.ini ]
+then
+	echo -e "${BBlue}Connection to mssql is already setup \n${Color_Off}"
+	show_help
+else
+	mkdir -p /tmp/$current_time
+	cd /tmp/$current_time
+	curl -O "ftp://ftp.unixodbc.org/pub/unixODBC/unixODBC-2.3.7.tar.gz"
+	tar -xz -f unixODBC-2.3.7.tar.gz
+	cd unixODBC-2.3.7/
+	sudo yum install gcc -y
+	./configure --prefix=/usr --libdir=/usr/lib64 --sysconfdir=/etc --enable-gui=no --enable-drivers=no --enable-iconv --with-iconv-char-enc=UTF8 --with-iconv-ucode-enc=UTF16LE
+	sudo make
+	sudo make install
+	cd /usr/lib64/
+	sudo ln -s libodbccr.so.2 libodbccr.so.1
+	sudo ln -s libodbcinst.so.2 libodbcinst.so.1
+	sudo ln -s libodbc.so.2 libodbc.so.1
+	ls -l /usr/lib64/libodbc*
+	odbc_config --version --longodbcversion --cflags --ulen --libs --odbcinstini --odbcini
+	isql --version
+	cd /tmp/$current_time
+
+	git clone -q https://github.com/iphuongtt/server_admin_script.git /tmp/$current_time/server_admin_script &
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Downloading source code...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+	if [ $? -eq 1 ]; then
+		echo -e "${BRed}Please check your internet connection...${Color_Off}"
+		read -p "Press enter to continue"
+		server-admin
+		exit
+	fi
+	cd /tmp/$current_time/server_admin_script/libs
+	tar -xz -f msodbcsql-11.0.2270.0.tar.gz
+	cd msodbcsql-11.0.2270.0
+	sudo ./install.sh install --accept-license --force
+	ls -l /opt/microsoft/msodbcsql/lib64/
+	dltest /opt/microsoft/msodbcsql/lib64/libmsodbcsql-11.0.so.2270.0 SQLGetInstalledDrivers
+
+	echo -e "${BGreen}Input ip of database server${Color_Off}"
+	read ip_server
+
+	echo -e "${BGreen}Input port of sql server${Color_Off}"
+	read port
+
+	cat > "/tmp/${current_time}/template_dsn.ini" <<END
+[MSODBC]
+	Driver = ODBC Driver 11 for SQL Server
+	Description = MS ODBC
+	Trace = No
+	Server = ${ip_server},${port}
+END
+
+	sudo odbcinst -i -s -f /tmp/$current_time/template_dsn.ini -l
+	rm -rf /tmp/$current_time
+	clear
+	echo -e "${BBlue}Successful \n${Color_Off}"
+	show_help
+fi

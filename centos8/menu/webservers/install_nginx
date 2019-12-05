@@ -1,0 +1,107 @@
+#!/bin/bash
+
+. /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/global_var
+. /etc/server_admin/menu/function.sh
+. /etc/server_admin/menu/verify_root
+. /etc/server_admin/menu/webservers/common
+
+config_firewall() {
+	firewall-cmd --permanent --zone=public --add-service=http &
+	firewall-cmd --permanent --zone=public --add-service=https &
+	firewall-cmd --reload &
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Configuring firewall...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+}
+
+install_nginx() {
+	# Install nginx
+	yum install nginx -y -q &
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Installing Nginx...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+}
+
+config_nginx() {
+	(mkdir /var/temp$current_time &&
+	wget -q https://github.com/iphuongtt/server-configs-nginx/archive/master.zip -P /var/temp$current_time &&
+	cd /var/temp$current_time &&
+	unzip -q master.zip && rm -f master.zip &&
+	cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup$current_time &&
+	cp server-configs-nginx-master/nginx.conf /etc/nginx/nginx.conf &&
+	cp server-configs-nginx-master/mime.types /etc/nginx/mime.types &&
+	cp -R server-configs-nginx-master/sites-available /etc/nginx/ &&
+	cp -R server-configs-nginx-master/sites-enabled /etc/nginx/ &&
+	cp -R server-configs-nginx-master/h5bp /etc/nginx/ &&
+	mkdir /etc/nginx/ssl -p &&
+	# Delete server-configs-nginx-master
+	rm -rf ~/server-configs-nginx-master &&
+	# Auto start nginx when server stared
+	systemctl enable nginx > /dev/null 2>&1 &&
+	systemctl start nginx > /dev/null 2>&1
+	)
+	PID=$!
+	isSuccess=$?
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Configuring Nginx...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+    #configured Nginx for external access
+    sudo setsebool -P httpd_can_network_connect 1
+	return $isSuccess
+}
+
+if [ -f /lib/systemd/system/nginx.service ]; then
+	echo "========================================================="
+	echo -e "${BGreen}||||           NGINX already installed            ||||${Color_Off}"
+	echo "========================================================="
+	back_to_menu
+else
+	update_system
+	install_nginx
+	config_firewall
+	config_nginx
+	if [ $? -eq 0 ]; then
+		echo "========================================================="
+		echo -e "${BGreen}||||     INSTALL NGINX SUCCESSFUL     ||||${Color_Off}"
+		echo "========================================================="
+		if [ "$1" == "install-php" ]; then
+			read -p "Press enter to install php"
+			/etc/server_admin/menu/developments/install_php
+			exit;
+		else
+			back_to_menu
+		fi
+	else
+		echo "========================================================="
+		echo -e "${BRed}||||     INSTALL NGINX ERROR     ||||${Color_Off}"
+		echo "========================================================="
+		if [ "$1" == "install-php" ]; then
+			read -p "Press enter to install php"
+			/etc/server_admin/menu/developments/install_php
+			exit;
+		else
+			back_to_menu
+		fi
+	fi
+fi

@@ -1,0 +1,54 @@
+#!/bin/bash
+
+. /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/function.sh
+. /etc/server_admin/menu/global_var
+. /etc/server_admin/menu/verify_root
+. /etc/server_admin/menu/developments/common
+
+clear
+
+install_mysql() {
+	(cat > "/etc/yum.repos.d/MariaDB.repo" <<END
+[mariadb]
+
+name = MariaDB
+
+baseurl = http://yum.mariadb.org/10.1/centos7-amd64
+
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+
+gpgcheck=1
+END
+) &&
+	yum --enablerepo=remi install mariadb-server mariadb -y -q &&
+	systemctl enable mariadb.service &&
+	systemctl start mariadb.service &
+	PID=$!
+	ok=$?
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Installing Mysql...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+	return $ok
+}
+
+update_system
+
+install_mysql
+
+if [ $? -eq 0 ]; then
+	mysql_secure_installation
+
+	echo "========================================================="
+	echo -e "${BCyan} INSTALL MariaDB 10.1 SUCCESSFUL ${Color_Off}"
+	echo "========================================================="
+else
+	echo -e "${BRed} INSTALL MariaDB 10.1 ERROR ${Color_Off}"
+fi
+back_to_menu

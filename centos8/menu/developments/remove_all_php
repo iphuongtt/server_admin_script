@@ -1,0 +1,38 @@
+#!/bin/sh
+
+clear
+
+. /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/function.sh
+. /etc/server_admin/menu/global_var
+. /etc/server_admin/menu/verify_root
+. /etc/server_admin/menu/developments/common
+
+read -p "Do you really want to remove all php (type: i sure)?  "
+if [[ "$REPLY" == "i sure" ]]; then
+	yum remove -y -q php* &
+	PID=$!
+	i=1
+	sp="/-\|"
+	#echo -n ' '
+	echo -e -n "${BGreen}Removing all php version...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+
+
+	if [ $? -eq 0 ]; then
+		clear
+		echo "===================================================================================="
+		echo -e "         ${BGreen}REMOVED ALL PHP VERSION SUCCESSFUL${Color_Off}"
+		echo "===================================================================================="
+		back_to_menu
+	else
+		back_to_menu
+	fi
+else
+	back_to_menu
+fi

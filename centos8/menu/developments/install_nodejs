@@ -1,0 +1,99 @@
+#!/bin/bash
+
+clear
+
+. /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/global_var
+. /etc/server_admin/menu/function.sh
+. /etc/server_admin/menu/verify_none_root
+. /etc/server_admin/menu/developments/common
+
+nvm_install_dir() {
+	if [ -n "$NVM_DIR" ]; then
+	printf %s "${NVM_DIR}"
+	elif [ -n "$XDG_CONFIG_HOME" ]; then
+	printf %s "${XDG_CONFIG_HOME/nvm}"
+	else
+	printf %s "$HOME/.nvm"
+	fi
+}
+
+update() {
+    ((
+	  cd "$NVM_DIR"
+	  git fetch --tags origin
+	  git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)`
+	) && \. "$NVM_DIR/nvm.sh") &
+    PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}NVM is already installed in $INSTALL_DIR, trying to update using git...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n"
+}
+
+install_new() {
+	(export NVM_DIR="$HOME/.nvm" && (
+	  git clone https://github.com/creationix/nvm.git "$NVM_DIR"
+	  cd "$NVM_DIR"
+	  git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)`
+	) && \. "$NVM_DIR/nvm.sh" && (
+		cat <<EOT >> ~/.bashrc
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+EOT
+) ) &
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Installing NVM...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n" 
+}
+
+install_nodejs() {
+	nvmdir="$HOME/.nvm";
+	if [ "$NVM_DIR" != "" ]; then
+		$nvmdir = $NVM_DIR
+	fi
+	. $nvmdir/nvm.sh
+
+	nvm install node &
+	PID=$!
+	i=1
+	sp="/-\|"
+	echo -e -n "${BGreen}Installing Nodejs...${Color_Off} "
+	while [ -d /proc/$PID ]
+	do
+	  printf "\b${sp:i++%${#sp}:1}"
+	done
+	echo -e "${BBlue} Done${Color_Off}"
+	printf "\n" 
+}
+
+install_nvm_from_git() {
+  local INSTALL_DIR
+  INSTALL_DIR="$(nvm_install_dir)"
+
+  if [ -d "$INSTALL_DIR/.git" ]; then
+    update
+  else
+    install_new
+  fi
+}
+
+install_nvm_from_git
+
+install_nodejs
+
+echo -e -n "${BGreen}Please close your current terminal, open a new terminal, and type node -v to verify installation.${Color_Off} "
+
+back_to_menu

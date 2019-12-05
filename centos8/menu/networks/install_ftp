@@ -1,0 +1,183 @@
+#!/bin/bash
+
+. /etc/server_admin/menu/color.sh
+. /etc/server_admin/menu/global_var
+. /etc/server_admin/menu/function.sh
+. /etc/server_admin/menu/verify_root
+. /etc/server_admin/menu/networks/common
+
+active_zone=`firewall-cmd --get-active-zones 2>&1 | head -n 1`
+
+clear
+
+enable_firewall() {
+	firewall-cmd -q --permanent --add-port=21/tcp
+	firewall-cmd -q --permanent --zone=$active_zone --add-port=10090-10100/tcp
+	firewall-cmd -q --reload
+}
+
+install_vsftpd() {
+	if [ -f /lib/systemd/system/vsftpd.service ]; then
+	  	yum update -y -q vsftpd
+	else
+		yum install -y -q vsftpd
+	fi
+}
+
+create_user() {
+	if ! id -u ftpuser > /dev/null 2>&1; then
+	   	#Add ftp user
+		useradd ftpuser
+		passwd ftpuser
+	fi
+    #Add ftpuser to ftp group
+	usermod -a -G ftp ftpuser
+}
+
+
+
+yum update -y -q &
+PID=$!
+i=1
+sp="/-\|"
+#echo -n ' '
+echo -e -n "${BGreen}Updating system...${Color_Off} "
+while [ -d /proc/$PID ]
+do
+  printf "\b${sp:i++%${#sp}:1}"
+done
+echo -e "${BBlue} Done${Color_Off}"
+printf "\n"
+
+
+create_user &
+PID=$!
+i=1
+sp="/-\|"
+#echo -n ' '
+echo -e -n "${BGreen}Creating fpt user...${Color_Off} "
+while [ -d /proc/$PID ]
+do
+  printf "\b${sp:i++%${#sp}:1}"
+done
+echo -e "${BBlue} Done${Color_Off}"
+printf "\n"
+
+install_vsftpd &
+PID=$!
+i=1
+sp="/-\|"
+#echo -n ' '
+echo -e -n "${BGreen}Installing vsftpd...${Color_Off} "
+while [ -d /proc/$PID ]
+do
+  printf "\b${sp:i++%${#sp}:1}"
+done
+echo -e "${BBlue} Done${Color_Off}"
+printf "\n"
+
+enable_firewall &
+PID=$!
+i=1
+sp="/-\|"
+#echo -n ' '
+echo -e -n "${BGreen}Enabling firewall for vsftpd...${Color_Off} "
+while [ -d /proc/$PID ]
+do
+  printf "\b${sp:i++%${#sp}:1}"
+done
+echo -e "${BBlue} Done${Color_Off}"
+printf "\n"
+
+systemctl stop vsftpd
+
+get_user_name() {
+	echo -n "Enter ftp account's username then press [ENTER]: "
+	while read username
+	do
+	if [ "$username" != "" ]; then
+	    break
+	fi
+	echo -n "Username should not be blank, enter your username: "
+	done
+}
+
+get_password() {
+	echo -n "Enter ftp account's password then press [ENTER]: "
+	while read -s password
+	do
+	if [ "$password" != "" ]; then
+	    break
+	fi
+	echo -n "Password should not be blank, enter your password: "
+	done
+}
+
+finish() {
+	systemctl enable vsftpd -q
+	if [ $? -eq 1 ]; then
+		echo -e -n "${BRed}Enable vsftpd error${Color_Off} "
+        return 1
+    fi
+	if [ $? -eq 1 ]; then
+		echo -e -n "${BRed}Start vsftpd error${Color_Off} "
+        return 1
+    fi
+	setsebool -P ftpd_full_access on
+	if [ $? -eq 1 ]; then
+		echo -e -n "${BRed}Enable ftpd_full_access error${Color_Off} "
+        return 1
+    fi
+
+    if [ ! -d /home/ftpuser/vftp ]; then
+	  mkdir /home/ftpuser/vftp
+	fi
+	chown -R ftpuser:ftp /home/ftpuser/vftp/
+	chmod 755 -R /home/ftpuser/vftp
+	#Restart vsftpd
+	systemctl restart vsftpd
+	return 0
+}
+
+cat > "/etc/pam.d/vsftpd.virtual" <<END
+#%PAM-1.0
+auth required pam_userdb.so db=/etc/vsftpd/vsftpd-virtual-user
+account required pam_userdb.so db=/etc/vsftpd/vsftpd-virtual-user
+session required pam_loginuid.so
+END
+#Backup vsftpd.conf
+cp /etc/vsftpd/vsftpd.conf /etc/vsftpd/vsftpd.conf.origin
+echo '' > /etc/vsftpd/vsftpd.conf
+rm -rf /etc/vsftpd/vsftpd.conf
+cp /etc/server_admin/templates/vsftpd.conf /etc/vsftpd/vsftpd.conf
+sed -i 's/@@server_ip@@/\$server_ip/g' /etc/nginx/sites-available/$fileConfigName
+
+printf "\n"
+finish &
+PID=$!
+i=1
+sp="/-\|"
+echo -e -n "${BGreen}Configuring vsftpd...${Color_Off} "
+while [ -d /proc/$PID ]
+do
+  printf "\b${sp:i++%${#sp}:1}"
+done
+echo -e "${BBlue} Done${Color_Off}"
+printf "\n"
+
+if [ $? -eq 0 ]; then
+    clear
+	echo "===================================================================================="
+	echo -e "         INSTALL VSFTPD SUCCESSFUL"
+	echo "===================================================================================="
+	read -p "Do you want to create ftp account?  " -n 1 -r
+	if [[ $REPLY =~ ^[Yy]$ ]]; then
+		printf "\n"
+		/etc/server_admin/menu/networks/create_ftp_user
+		exit;
+	else
+		back_to_menu
+	fi
+else
+	back_to_menu
+fi
