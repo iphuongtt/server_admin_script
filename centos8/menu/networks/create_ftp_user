@@ -23,7 +23,7 @@ get_user_name() {
 		else
 			back_to_menu
 		fi
-	fi 
+	fi
 }
 
 get_password() {
@@ -58,6 +58,8 @@ if [ $? -eq 0 ]; then
 	echo "===================================================================================="
 	echo -e "         ${BGreen} USER: $username${Color_Off}"
 	echo -e "         ${BBlue} PASSWORD: $password${Color_Off}"
+    echo -e "         ${BYellow} Encryption: Use explicit FTP over TLS avaiable ${Color_Off}"
+    echo -e "         ${BYellow} Transfer: Passive ${Color_Off}"
 	echo "===================================================================================="
 	back_to_menu
 else

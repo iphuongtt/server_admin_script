@@ -150,7 +150,7 @@ cp /etc/vsftpd/vsftpd.conf /etc/vsftpd/vsftpd.conf.origin
 echo '' > /etc/vsftpd/vsftpd.conf
 rm -rf /etc/vsftpd/vsftpd.conf
 cp /etc/server_admin/templates/vsftpd.conf /etc/vsftpd/vsftpd.conf
-sed -i 's/@@server_ip@@/\$server_ip/g' /etc/nginx/sites-available/$fileConfigName
+sed -i 's/@@server_ip@@/\$server_ip/g' /etc/vsftpd/vsftpd.conf
 
 printf "\n"
 finish &

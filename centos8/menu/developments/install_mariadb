@@ -9,19 +9,16 @@
 clear
 
 install_mysql() {
-	(cat > "/etc/yum.repos.d/MariaDB.repo" <<END
+	(cat > "/etc/yum.repos.d/mariadb.repo" <<END
 [mariadb]
-
 name = MariaDB
-
-baseurl = http://yum.mariadb.org/10.1/centos7-amd64
-
+baseurl = http://yum.mariadb.org/10.4/centos8-amd64
 gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-
 gpgcheck=1
 END
 ) &&
-	yum --enablerepo=remi install mariadb-server mariadb -y -q &&
+    yum install -y boost-program-options &&
+    yum --disablerepo=AppStream install -y MariaDB-server MariaDB-client &&
 	systemctl enable mariadb.service &&
 	systemctl start mariadb.service &
 	PID=$!
@@ -46,9 +43,9 @@ if [ $? -eq 0 ]; then
 	mysql_secure_installation
 
 	echo "========================================================="
-	echo -e "${BCyan} INSTALL MariaDB 10.1 SUCCESSFUL ${Color_Off}"
+	echo -e "${BCyan} INSTALL MariaDB 10.4 SUCCESSFUL ${Color_Off}"
 	echo "========================================================="
 else
-	echo -e "${BRed} INSTALL MariaDB 10.1 ERROR ${Color_Off}"
+	echo -e "${BRed} INSTALL MariaDB 10.4 ERROR ${Color_Off}"
 fi
 back_to_menu
