@@ -32,7 +32,12 @@ install_php() {
     dnf install https://rpms.remirepo.net/enterprise/remi-release-8.rpm -y &&
     rpm -qa | grep remi &&
     dnf module list php &&
-    dnf module enable php:remi-$php_install &&
+    if [ $php_install -eq "" ]; then
+        dnf module enable php -y &&
+    else
+        dnf module enable php:remi-$php_install -y &&
+    fi
+
 	dnf install php-fpm php-common -y &&
 	dnf install php-opcache php-pecl-apcu php-cli php-pear php-pdo php-mysqlnd php-pgsql php-pecl-mongodb php-pecl-redis php-pecl-memcache php-pecl-memcached php-gd php-mbstring php-pecl-mcrypt php-xml php-pecl-zip php-odbc -y
 	) &
@@ -79,17 +84,16 @@ config_php() {
 
 chose_version() {
 	case $1 in
-		1) php_version="7.0"; php_install="7.0";;
-	    2) php_version="7.1"; php_install="7.1";;
-	    3) php_version="7.2"; php_install="7.2";;
-	    4) php_version="7.3"; php_install="7.3";;
+		1) php_version="7"; php_install="";;
+	    2) php_version="7.2"; php_install="7.2";;
+	    3) php_version="7.3"; php_install="7.3";;
         4) php_version="7.4"; php_install="7.4";;
 		5) back_to_menu_now;;
 	esac
 }
 
 show_php_menu() {
-	options=("7.0" "7.1" "7.2" "7.3" "7.4" "BACK")
+	options=("7" "7.2" "7.3" "7.4" "BACK")
 	show_menu "CHOSE PHP VERSION" "${options[@]}"
 	choice=$?
 	chose_version $choice
