@@ -37,7 +37,7 @@ install_php() {
     else
         dnf module enable php:remi-$php_install -y
     fi
-	dnf install php-fpm php-common -y
+	dnf install php php-fpm php-common -y
 	dnf install php-opcache php-pecl-apcu php-cli php-pear php-pdo php-mysqlnd php-pgsql php-pecl-mongodb php-pecl-redis php-pecl-memcache php-pecl-memcached php-gd php-mbstring php-pecl-mcrypt php-xml php-pecl-zip php-odbc -y
 }
 
