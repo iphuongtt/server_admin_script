@@ -27,32 +27,18 @@ config_firewall() {
 }
 
 install_php() {
-	(dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm -y &&
-    rpm -qa | grep epel &&
-    dnf install https://rpms.remirepo.net/enterprise/remi-release-8.rpm -y &&
-    rpm -qa | grep remi &&
-    dnf module list php &&
+    dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm -y
+    rpm -qa | grep epel
+    dnf install https://rpms.remirepo.net/enterprise/remi-release-8.rpm -y
+    rpm -qa | grep remi
+    dnf module list php
     if [ $php_install -eq "" ]; then
-        dnf module enable php -y &&
+        dnf module enable php -y
     else
-        dnf module enable php:remi-$php_install -y &&
+        dnf module enable php:remi-$php_install -y
     fi
-
-	dnf install php-fpm php-common -y &&
+	dnf install php-fpm php-common -y
 	dnf install php-opcache php-pecl-apcu php-cli php-pear php-pdo php-mysqlnd php-pgsql php-pecl-mongodb php-pecl-redis php-pecl-memcache php-pecl-memcached php-gd php-mbstring php-pecl-mcrypt php-xml php-pecl-zip php-odbc -y
-	) &
-	ok=$?
-	PID=$!
-	i=1
-	sp="/-\|"
-	echo -e -n "${BGreen}Install Php $php_version...${Color_Off} "
-	while [ -d /proc/$PID ]
-	do
-	  printf "\b${sp:i++%${#sp}:1}"
-	done
-	echo -e "${BBlue} Done${Color_Off}"
-	printf "\n"
-	return $ok
 }
 
 config_php() {
