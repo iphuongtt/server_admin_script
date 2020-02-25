@@ -24,7 +24,7 @@ config_firewall() {
 
 install_nginx() {
 	# Install nginx
-	yum install nginx -y -q &
+	dnf install nginx -y &
 	PID=$!
 	i=1
 	sp="/-\|"
