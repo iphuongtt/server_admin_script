@@ -27,9 +27,14 @@ config_firewall() {
 }
 
 install_php() {
-	(yum-config-manager --enable remi-php$php_install &&
-	yum --enablerepo=remi,remi-php$php_install install php-fpm php-common -y &&
-	yum --enablerepo=remi,remi-php$php_install install php-opcache php-pecl-apcu php-cli php-pear php-pdo php-mysqlnd php-pgsql php-pecl-mongodb php-pecl-redis php-pecl-memcache php-pecl-memcached php-gd php-mbstring php-pecl-mcrypt php-xml php-pecl-zip php-odbc -y
+	(dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm &&
+    rpm -qa | grep epel &&
+    dnf install https://rpms.remirepo.net/enterprise/remi-release-8.rpm &&
+    rpm -qa | grep remi &&
+    dnf module list php &&
+    dnf module enable php:remi-$php_install &&
+	dnf install php-fpm php-common -y &&
+	dnf install php-opcache php-pecl-apcu php-cli php-pear php-pdo php-mysqlnd php-pgsql php-pecl-mongodb php-pecl-redis php-pecl-memcache php-pecl-memcached php-gd php-mbstring php-pecl-mcrypt php-xml php-pecl-zip php-odbc -y
 	) &
 	ok=$?
 	PID=$!
@@ -74,11 +79,11 @@ config_php() {
 
 chose_version() {
 	case $1 in
-		1) php_version="7.0"; php_install="70";;
-	    2) php_version="7.1"; php_install="71";;
-	    3) php_version="7.2"; php_install="72";;
-	    4) php_version="7.3"; php_install="73";;
-        4) php_version="7.4"; php_install="74";;
+		1) php_version="7.0"; php_install="7.0";;
+	    2) php_version="7.1"; php_install="7.1";;
+	    3) php_version="7.2"; php_install="7.2";;
+	    4) php_version="7.3"; php_install="7.3";;
+        4) php_version="7.4"; php_install="7.4";;
 		5) back_to_menu_now;;
 	esac
 }
