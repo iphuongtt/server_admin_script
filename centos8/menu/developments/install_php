@@ -27,7 +27,7 @@ config_firewall() {
 }
 
 install_php() {
-	(yum-config-manager --enable remi-php$php_install > /dev/null 2>&1 &&
+	(yum-config-manager --enable remi-php$php_install &&
 	yum --enablerepo=remi,remi-php$php_install install php-fpm php-common -y &&
 	yum --enablerepo=remi,remi-php$php_install install php-opcache php-pecl-apcu php-cli php-pear php-pdo php-mysqlnd php-pgsql php-pecl-mongodb php-pecl-redis php-pecl-memcache php-pecl-memcached php-gd php-mbstring php-pecl-mcrypt php-xml php-pecl-zip php-odbc -y
 	) &
